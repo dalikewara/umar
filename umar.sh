@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.0.1"
+version="v1.0.2"
 
 umar="I am Umar ($version), your little Linux assistant. I can help you with the common tasks listed below.
 I will continue to be updated indefinitely, as my creator may need to add new features,
@@ -39,7 +39,8 @@ kill:Kill package(s) process
 search:Search for the given keyword(s) using a search engine
 install:Install package(s)
 remove:Remove package(s)
-upgrade:Upgrade package(s)"
+upgrade:Upgrade package(s)
+"
 
 umar() {
     if is_no_argument "$@"; then
@@ -50,31 +51,28 @@ $umar
         echo "$commands" | while IFS=: read -r _a _b; do
             printf "${color_green}%-15s ${color_reset}%s\n" "$_a" "$_b"
         done
-
-        echo "
-"
         
         exit 0
     fi
 
     if [ "$1" = "open" ]; then
         shift
-        open_i3wm $@
+        open_i3wm "$@"
     elif [ "$1" = "kill" ]; then
         shift
-        kill_process $@
+        kill_process "$@"
     elif [ "$1" = "search" ]; then
         shift
-        search_i3wm $@
+        search_i3wm "$@"
     elif [ "$1" = "install" ]; then
         shift
-        install $@
+        install "$@"
     elif [ "$1" = "remove" ]; then
         shift
-        remove $@
+        remove "$@"
     elif [ "$1" = "upgrade" ]; then
         shift
-        upgrade $@
+        upgrade "$@"
     elif [ "$1" = "version" ]; then
         echo "$version"
     elif [ "$1 $2" = "get smarter" ]; then
@@ -119,34 +117,34 @@ is_user_package_exist() {
 
 install_arch() {
     if is_arch; then
-        sudo pacman -S $@
+        sudo pacman -S "$@"
     fi
 }
 
 install_debian() {
     if is_debian; then
         sudo apt update
-        sudo apt install $@
+        sudo apt install "$@"
     fi
 }
 
 install_fedora() {
     if is_fedora; then
-        sudo dnf install $@
+        sudo dnf install "$@"
     fi
 }
 
 install_combine() {
-    install_arch $@
-    install_debian $@
-    install_fedora $@
+    install_arch "$@"
+    install_debian "$@"
+    install_fedora "$@"
 }
 
 install_needed() {
-    if is_package_exist $1; then
+    if is_package_exist "$1"; then
         echo ""
     else
-        if is_user_package_exist $1; then
+        if is_user_package_exist "$1"; then
             echo ""
         else
             echo "\"$1\" $package_not_installed"
@@ -159,7 +157,7 @@ install_needed() {
                     echo_exit "$package_is_needed"
                 fi
 
-                install_combine $1
+                install_combine "$1"
 
                 echo_exit "$package_needed_installed"
             fi
@@ -171,31 +169,31 @@ install_needed() {
 
 remove_arch() {
     if is_arch; then
-        sudo pacman -Rsd --cascade $@
+        sudo pacman -Rsd --cascade "$@"
     fi
 }
 
 remove_debian() {
     if is_debian; then
-        sudo apt autoremove --purge $@
+        sudo apt autoremove --purge "$@"
     fi
 }
 
 remove_fedora() {
     if is_fedora; then
-        sudo dnf remove $@
+        sudo dnf remove "$@"
     fi
 }
 
 remove_combine() {
-    remove_arch $@
-    remove_debian $@
-    remove_fedora $@
+    remove_arch "$@"
+    remove_debian "$@"
+    remove_fedora "$@"
 }
 
 upgrade_arch() {
     if is_arch; then
-        sudo pacman -Syu $@
+        sudo pacman -Syu "$@"
     fi
 }
 
@@ -203,28 +201,28 @@ upgrade_debian() {
     if is_debian; then
         sudo apt update
         sudo apt autoremove --purge
-        sudo apt upgrade $@
+        sudo apt upgrade "$@"
     fi
 }
 
 upgrade_fedora() {
     if is_fedora; then
-        sudo dnf upgrade $@
+        sudo dnf upgrade "$@"
     fi
 }
 
 upgrade_combine() {
-    upgrade_arch $@
-    upgrade_debian $@
-    upgrade_fedora $@
+    upgrade_arch "$@"
+    upgrade_debian "$@"
+    upgrade_fedora "$@"
 }
 
 exec_async_no_std_out() {
-    exec $@ > /dev/null 2>&1 &
+    exec "$@" > /dev/null 2>&1 &
 }
 
 exec_default() {
-    exec $@ 2> /dev/null
+    exec "$@" 2> /dev/null
 }
 
 i3wm_split_lr() {
@@ -241,14 +239,14 @@ i3wm_focus_l() {
 
 i3wm_exec_async_no_std_out_r() {
     i3wm_split_lr
-    exec_async_no_std_out $@
+    exec_async_no_std_out "$@"
     i3wm_focus_r
     i3wm_focus_l
 }
 
 i3wm_exec_default_r() {
     i3wm_split_lr
-    exec_default $@
+    exec_default "$@"
     i3wm_focus_r
     i3wm_focus_l
 }
@@ -316,14 +314,14 @@ kill_process() {
     echo "
 $command_kill_confirmation"
 
-    read b
+    read -r b
 
     if [ "$b" = "y" ]; then
-        while IFS= read -r line; do
+        echo "$a" | while IFS= read -r line; do
             if [ "$line" != "" ]; then
                 sudo kill -9 "$line" > /dev/null 2>&1
             fi
-        done <<< $a
+        done
 
         echo "$command_kill_confirmation_y"
 
@@ -346,7 +344,7 @@ install() {
         echo_exit "$command_install_empty"
     fi
 
-    install_combine $@
+    install_combine "$@"
 }
 
 remove() {
@@ -354,11 +352,11 @@ remove() {
         echo_exit "$command_remove_empty"
     fi
 
-    remove_combine $@
+    remove_combine "$@"
 }
 
 upgrade() {
-    upgrade_combine $@
+    upgrade_combine "$@"
 }
 
 get_smarter() {
