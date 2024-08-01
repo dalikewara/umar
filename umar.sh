@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.0.0"
+version="v1.0.1"
 
 umar="I am Umar ($version), your little Linux assistant. I can help you with the common tasks listed below.
 I will continue to be updated indefinitely, as my creator may need to add new features,
@@ -31,27 +31,24 @@ package_not_installed="is not installed. Do you want to install it? [N/y]"
 package_is_needed="I need that package to process the command"
 package_needed_installed="The required package(s) have been installed. Refresh the current console/terminal session and run the command again"
 
-commands=(
-    "get smarter:Once I’ve been installed, you can upgrade me to the latest version"
-    ":using this command"
-    "version:Show my current version"
-    "open:Open package(s)"
-    "kill:Kill package(s) process"
-    "search:Search for the given keyword(s) using a search engine"
-    "install:Install package(s)"
-    "remove:Remove package(s)"
-    "upgrade:Upgrade package(s)"
-)
+commands="get smarter:Once I’ve been installed, you can upgrade me to the latest version
+:using this command
+version:Show my current version
+open:Open package(s)
+kill:Kill package(s) process
+search:Search for the given keyword(s) using a search engine
+install:Install package(s)
+remove:Remove package(s)
+upgrade:Upgrade package(s)"
 
 umar() {
     if is_no_argument "$@"; then
         echo "
 $umar
 "
-        
-        for cmd in "${commands[@]}"; do
-            IFS=":" read -r name description <<< "$cmd"
-            printf "${color_green}%-15s ${color_reset}%s\n" "$name" "$description"
+
+        echo "$commands" | while IFS=: read -r _a _b; do
+            printf "${color_green}%-15s ${color_reset}%s\n" "$_a" "$_b"
         done
 
         echo "
