@@ -1,6 +1,6 @@
 #!/bin/sh
 
-repo_url="https://raw.githubusercontent.com/dalikewara/umar/main"
+repo_url="https://raw.githubusercontent.com/dalikewara/umar/master"
 script_name="umar.sh"
 install_dir="/usr/local/bin"
 target_name="umar"
