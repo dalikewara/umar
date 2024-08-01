@@ -7,7 +7,7 @@ Little Linux assistant.
 To install or upgrade **umar** to the latest version, run the following command:
 
 ```sh
-curl -L https://raw.githubusercontent.com/dalikewara/umar/main/install.sh | sh
+curl -L https://raw.githubusercontent.com/dalikewara/umar/master/install.sh | sh
 ```
 
 If you already have **umar** installed, simply run the following command to upgrade to the latest version:
