@@ -1,30 +1,15 @@
 #!/bin/sh
 
-version="v1.0.11"
-
-umar="I am Umar ($version), your little Linux assistant. I can help you with the common tasks listed below.
-I will continue to be updated indefinitely, as my creator may need to add new features,
-update my logic, fix issues, or make other changes. So, I may get smarter every day."
-invalid_command="Sorry, I can't understand your command"
-command_open_name_not_found="is not found!"
-command_kill_confirmation="All processes listed above will be terminated. Are you sure? [N/y]"
-command_kill_confirmation_y="All processes have been terminated!"
-command_kill_confirmation_n="Aborted!"
-command_test_http_no_url="Please provide me with a URL to test! Use this option: -u URL"
-
-kill_empty="You didn't provide any names to kill!"
-open_empty="You didn't provide any names to open!"
-install_empty="You didn't provide any names to install!"
-remove_empty="You didn't provide any names to remove!"
-show_empty="You didn't provide any names to show!"
-play_empty="You didn't provide any names to play!"
-
+version="v1.0.12"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
 de="unknown"
 user_package_dir="/usr/local/bin"
 color_green='\033[0;32m'
+color_cyan='\033[0;36m'
+color_blue='\033[0;34m'
+color_red='\033[0;31m'
 color_reset='\033[0m'
 repo_url="https://raw.githubusercontent.com/dalikewara/umar/master"
 script_name="umar.sh"
@@ -36,6 +21,23 @@ audio_player="mpg123"
 video_player="mpv"
 editor="vim"
 http_test_tool="siege"
+
+umar="I am Umar ($version), your little Linux assistant. I can help you with the common tasks listed below. \
+I will continue to be updated indefinitely, as my creator may need to add new features, \
+update my logic, fix issues, or make other changes. So, I may get smarter every day."
+invalid_command="Sorry, I can't understand your command"
+command_open_name_not_found="is not found!"
+command_kill_confirmation="All processes listed above will be terminated. Are you sure? [N/y]"
+command_kill_confirmation_y="All processes have been terminated!"
+command_kill_confirmation_n="Aborted!"
+command_test_http_no_url="Please provide me with a URL to test! Use this option: ${color_cyan}-u ${color_blue}URL${color_reset}"
+
+kill_empty="You didn't provide any names to kill!"
+open_empty="You didn't provide any names to open!"
+install_empty="You didn't provide any names to install!"
+remove_empty="You didn't provide any names to remove!"
+show_empty="You didn't provide any names to show!"
+play_empty="You didn't provide any names to play!"
 
 distro_is_unknown="Unknown distribution"
 package_not_installed="is not installed. Do you want to install it? [N/y]"
@@ -55,7 +57,9 @@ upgrade:Upgrade package(s)
 show image:Show image(s)
 play audio:Play audio(s)
 play video:Play video(s)
-test http:Test and benchmark http url -> \`-c NUM -r NUM -t SECONDS -u URL\`
+test http:Test and benchmark http url -> \`${color_cyan}-c ${color_blue}NUM ${color_cyan}-r ${color_blue}NUM ${color_cyan}-t \
+${color_blue}SECONDS ${color_cyan}-header ${color_blue}TEXT ${color_cyan}-userAgent ${color_blue}TEXT ${color_cyan}-contentType \
+${color_blue}TEXT ${color_cyan}-u ${color_blue}URL${color_reset}\`
 "
 
 umar() {
@@ -120,7 +124,7 @@ u_open() {
       else
         a="yes"
 
-        echo "\"$arg\" $command_open_name_not_found"
+        printf "${color_red}$arg ${color_reset}$command_open_name_not_found%s\n"
       fi
     fi
   done
@@ -227,12 +231,22 @@ u_test_http() {
   install_needed $http_test_tool
 
   a="10"
-  b="1"
-  c="1"
+  b=""
+  c=""
   d=""
+  e="X-HELLO:X-WORLD"
+  f=""
+  g=""
 
   while [ $# -gt 0 ]; do
     case "$1" in
+      -contentType*)
+        g="${1#-contentType}"
+        if [ -z "$g" ]; then
+          shift
+          g="$1"
+        fi
+        ;;
       -c*)
         a="${1#-c}"
         if [ -z "$a" ]; then
@@ -254,11 +268,25 @@ u_test_http() {
           c="$1"
         fi
         ;;
+      -userAgent*)
+        f="${1#-userAgent}"
+        if [ -z "$f" ]; then
+          shift
+          f="$1"
+        fi
+        ;;
       -u*)
         d="${1#-u}"
         if [ -z "$d" ]; then
           shift
           d="$1"
+        fi
+        ;;
+      -header*)
+        e="${1#-header}"
+        if [ -z "$e" ]; then
+          shift
+          e="$1"
         fi
         ;;
       *)
@@ -269,16 +297,29 @@ u_test_http() {
   done
 
   if [ "$d" = "" ]; then
-    echo_exit "$command_test_http_no_url"
+    printf_exit "$command_test_http_no_url"
   fi
 
-  exec_combine_default_with_std_out $http_test_tool -vb "-c$a" "-t${b}S" "-r$c" "$d"
+  if ! [ "$b" = "" ]; then
+     exec_combine_default_with_std_out $http_test_tool -vbp "-c$a" "-t${b}S" --header="$e" --user-agent="$f" --content-type="$g" "$d"
+  elif ! [ "$c" = "" ]; then
+     exec_combine_default_with_std_out $http_test_tool -vbp "-c$a" "-r$c" --header="$e" --user-agent="$f" --content-type="$g" "$d"
+  else
+    exec_combine_default_with_std_out $http_test_tool -vbp "-c$a" "-t10S" --header="$e" --user-agent="$f" --content-type="$g" "$d"
+  fi
 }
 
 # echo
 
 echo_exit() {
   echo "$1"
+  exit 0
+}
+
+# printf
+
+printf_exit() {
+  printf "$1%s\n"
   exit 0
 }
 
@@ -397,12 +438,12 @@ install_combine() {
 
 install_needed() {
   if is_package_exist "$1"; then
-    echo ""
+    return 0
   else
     if is_user_package_exist "$1"; then
-      echo ""
+      return 0
     else
-      echo "\"$1\" $package_not_installed"
+      printf "${color_red}$1 ${color_reset}$package_not_installed%s\n"
 
       read -r _a
 
