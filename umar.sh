@@ -1,19 +1,21 @@
 #!/bin/sh
 
-version="v1.0.3"
+version="v1.0.4"
 
 umar="I am Umar ($version), your little Linux assistant. I can help you with the common tasks listed below.
 I will continue to be updated indefinitely, as my creator may need to add new features,
 update my logic, fix issues, or make other changes. So, I may get smarter every day."
 invalid_command="Sorry, I can't understand your command"
-command_open_empty="You didn't provide any names to open!"
 command_open_name_not_found="is not found!"
-command_kill_empty="You didn't provide any names to kill!"
 command_kill_confirmation="All processes listed above will be terminated. Are you sure? [N/y]"
 command_kill_confirmation_y="All processes have been terminated!"
 command_kill_confirmation_n="Aborted!"
-command_install_empty="You didn't provide any names to install!"
-command_remove_empty="You didn't provide any names to remove!"
+
+kill_empty="You didn't provide any names to kill!"
+open_empty="You didn't provide any names to open!"
+install_empty="You didn't provide any names to install!"
+remove_empty="You didn't provide any names to remove!"
+show_empty="You didn't provide any names to show!"
 
 pid=$$
 search_url="https://www.google.com/search?q="
@@ -26,14 +28,15 @@ repo_url="https://raw.githubusercontent.com/dalikewara/umar/master"
 script_name="umar.sh"
 install_dir="/usr/local/bin"
 target_name="umar"
+browser="w3m"
+img_display="feh"
 
 distro_is_unknown="Unknown distribution"
 package_not_installed="is not installed. Do you want to install it? [N/y]"
 package_is_needed="I need that package to process the command"
 package_needed_installed="The required package(s) have been installed. Refresh the current console/terminal session and run the command again"
 
-commands="get smarter:Once I’ve been installed, you can upgrade me to the latest version
-:using this command
+commands="get smarter:Upgrade me to the latest version
 version:Show my current version
 open:Open package(s)
 kill:Kill package(s) process
@@ -41,20 +44,11 @@ search:Search for the given keyword(s) using a search engine
 install:Install package(s)
 remove:Remove package(s)
 upgrade:Upgrade package(s)
+show image:Show image
 "
 
 umar() {
-  if is_no_argument "$@"; then
-    echo "
-$umar
-"
-
-    echo "$commands" | while IFS=: read -r _a _b; do
-      printf "${color_green}%-15s ${color_reset}%s\n" "$_a" "$_b"
-    done
-
-    exit 0
-  fi
+  check_umar_empty "$@"
 
   if [ "$1" = "open" ]; then
     shift
@@ -78,15 +72,17 @@ $umar
     echo "$version"
   elif [ "$1 $2" = "get smarter" ]; then
     u_get_smarter
+  elif [ "$1 $2" = "show image" ]; then
+    shift
+    shift
+    u_show_image "$@"
   else
     echo_exit "$invalid_command"
   fi
 }
 
 u_open() {
-  if is_no_argument "$@"; then
-    echo_exit "$command_open_empty"
-  fi
+  check_open_empty "$@"
 
   a=""
 
@@ -110,9 +106,7 @@ u_open() {
 }
 
 u_kill_process() {
-  if is_no_argument "$@"; then
-    echo_exit "$command_kill_empty"
-  fi
+  check_kill_empty "$@"
 
   a=""
 
@@ -144,26 +138,18 @@ $command_kill_confirmation"
 }
 
 u_search() {
-  a="w3m"
-
-  install_needed $a
-  exec_combine_default $a "$search_url$(echo "$*" | sed 's/ /+/g')"
+  install_needed $browser
+  exec_combine_default $browser "$search_url$(echo "$*" | sed 's/ /+/g')"
   kill_combine
 }
 
 u_install() {
-  if is_no_argument "$@"; then
-    echo_exit "$command_install_empty"
-  fi
-
+  check_install_empty "$@"
   install_combine "$@"
 }
 
 u_remove() {
-  if is_no_argument "$@"; then
-    echo_exit "$command_remove_empty"
-  fi
-
+  check_remove_empty "$@"
   remove_combine "$@"
 }
 
@@ -189,10 +175,66 @@ u_get_smarter() {
   fi
 }
 
+u_show_image() {
+  check_show_empty "$@"
+  install_needed $img_display
+  exec_combine_async_no_std_out $img_display "$@"
+}
+
+# echo
+
 echo_exit() {
   echo "$1"
   exit 0
 }
+
+# check
+
+check_umar_empty() {
+  if is_no_argument "$@"; then
+    echo "
+$umar
+"
+
+    echo "$commands" | while IFS=: read -r _a _b; do
+      printf "${color_green}%-15s ${color_reset}%s\n" "$_a" "$_b"
+    done
+
+    exit 0
+  fi
+}
+
+check_kill_empty() {
+  if is_no_argument "$@"; then
+    echo_exit "$kill_empty"
+  fi
+}
+
+check_open_empty() {
+  if is_no_argument "$@"; then
+    echo_exit "$open_empty"
+  fi
+}
+
+check_install_empty() {
+  if is_no_argument "$@"; then
+    echo_exit "$install_empty"
+  fi
+}
+
+check_remove_empty() {
+  if is_no_argument "$@"; then
+    echo_exit "$remove_empty"
+  fi
+}
+
+check_show_empty() {
+  if is_no_argument "$@"; then
+    echo_exit "$show_empty"
+  fi
+}
+
+# is
 
 is_no_argument() {
   [ $# -eq 0 ]
@@ -225,6 +267,8 @@ is_package_exist() {
 is_user_package_exist() {
   test -f "$user_package_dir/$1"
 }
+
+# install
 
 install_arch() {
   if is_arch; then
@@ -280,6 +324,8 @@ install_needed() {
   fi
 }
 
+# remove
+
 remove_arch() {
   if is_arch; then
     sudo pacman -Rsd --cascade "$@"
@@ -303,6 +349,8 @@ remove_combine() {
   remove_debian "$@"
   remove_fedora "$@"
 }
+
+# upgrade
 
 upgrade_arch() {
   if is_arch; then
@@ -329,6 +377,8 @@ upgrade_combine() {
   upgrade_debian "$@"
   upgrade_fedora "$@"
 }
+
+# exec
 
 exec_async_no_std_out() {
   exec "$@" > /dev/null 2>&1 &
@@ -368,6 +418,8 @@ exec_combine_default() {
   fi
 }
 
+# kill
+
 kill_i3wm() {
   i3-msg kill > /dev/null 2>&1
 }
@@ -377,6 +429,8 @@ kill_combine() {
     kill_i3wm
   fi
 }
+
+# determine
 
 determine_distro() {
   if [ -f /etc/os-release ]; then
@@ -437,6 +491,8 @@ determine_de() {
 
   de="unknown"
 }
+
+# i3wm
 
 i3wm_split_lr() {
   i3-msg split h > /dev/null 2>&1
