@@ -1,11 +1,13 @@
 #!/bin/sh
 
-version="v1.0.12"
+version="v1.0.13"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
 de="unknown"
 user_package_dir="/usr/local/bin"
+config_dir="$HOME/.umar"
+config_run_list_filepath="$config_dir/run-list.cfg"
 color_green='\033[0;32m'
 color_cyan='\033[0;36m'
 color_blue='\033[0;34m'
@@ -31,6 +33,16 @@ command_kill_confirmation="All processes listed above will be terminated. Are yo
 command_kill_confirmation_y="All processes have been terminated!"
 command_kill_confirmation_n="Aborted!"
 command_test_http_no_url="Please provide me with a URL to test! Use this option: ${color_cyan}-u ${color_blue}URL${color_reset}"
+command_run_list_empty="No custom command has been set"
+command_run_set_name="Enter name..."
+command_run_set_name_contain_colon="Name can't contains a colon"
+command_run_set_name_exist="Name already exist"
+command_run_set_name_empty="Name can't be empty"
+command_run_set_description="Enter description..."
+command_run_set_description_contain_colon="Description can't contains a colon"
+command_run_set_command="Enter execution command..."
+command_run_set_command_empty="Execution command can't be empty"
+command_run_set_registered="OK"
 
 kill_empty="You didn't provide any names to kill!"
 open_empty="You didn't provide any names to open!"
@@ -38,6 +50,9 @@ install_empty="You didn't provide any names to install!"
 remove_empty="You didn't provide any names to remove!"
 show_empty="You didn't provide any names to show!"
 play_empty="You didn't provide any names to play!"
+run_empty="You didn't provide any names to run!"
+
+file_not_found="file is not found!"
 
 distro_is_unknown="Unknown distribution"
 package_not_installed="is not installed. Do you want to install it? [N/y]"
@@ -48,18 +63,22 @@ commands="get smarter:Upgrade me to the latest version
 version:Show my current version
 reveal:Reveal my source code
 --------------:--------------------------
+run:Run custom command(s)
+run list:Show registered custom command
+run set:Set new custom command
+--------------:--------------------------
 open:Open package(s)
 kill:Kill package(s) process
 search:Search for the given keyword(s) using a search engine
 install:Install package(s)
 remove:Remove package(s)
 upgrade:Upgrade package(s)
-show image:Show image(s)
-play audio:Play audio(s)
-play video:Play video(s)
 test http:Test and benchmark http url -> \`${color_cyan}-c ${color_blue}NUM ${color_cyan}-r ${color_blue}NUM ${color_cyan}-t \
 ${color_blue}SECONDS ${color_cyan}-header ${color_blue}TEXT ${color_cyan}-userAgent ${color_blue}TEXT ${color_cyan}-contentType \
 ${color_blue}TEXT ${color_cyan}-u ${color_blue}URL${color_reset}\`
+show image:Show image(s)
+play audio:Play audio(s)
+play video:Play video(s)
 "
 
 umar() {
@@ -87,6 +106,13 @@ umar() {
     echo "$version"
   elif [ "$1" = "reveal" ]; then
     u_reveal
+  elif [ "$1 $2" = "run list" ]; then
+    u_run_list
+  elif [ "$1 $2" = "run set" ]; then
+    u_run_set
+  elif [ "$1" = "run" ]; then
+    shift
+    u_run "$@"
   elif [ "$1 $2" = "get smarter" ]; then
     u_get_smarter
   elif [ "$1 $2" = "show image" ]; then
@@ -309,6 +335,85 @@ u_test_http() {
   fi
 }
 
+u_run() {
+  check_run_empty "$@"
+
+  read_config_run_list | while IFS=: read -r _a _b _c; do
+    if is_empty "$_a" && is_empty "$_b" && is_empty "$_c"; then
+      continue
+    fi
+
+    for arg in "$@"; do
+        if is_equal "$arg" "$_a"; then
+          printf "${color_green}$_a${color_reset} >_ ${color_cyan}$_c${color_reset}%s\n"
+          exec_combine_async_f_with_std_out "$_c"
+        fi
+    done
+  done
+}
+
+u_run_set() {
+  printf "%s" "$command_run_set_name "
+
+  read -r _a
+
+  if is_empty "$_a"; then
+    echo_exit "$command_run_set_name_empty"
+  fi
+
+  if is_contain "$_a" ":"; then
+    echo_exit "$command_run_set_name_contain_colon"
+  fi
+
+  _ae=$(read_config_run_list | while IFS=: read -r _a2 _ _; do
+    if is_equal "$_a" "$_a2"; then
+      echo_exit "exist"
+    fi
+  done)
+
+  if is_equal "$_ae" "exist"; then
+    echo_exit "$command_run_set_name_exist"
+  fi
+
+  printf "%s" "$command_run_set_description "
+
+  read -r _b
+
+  if is_contain "$_b" ":"; then
+    echo_exit "$command_run_set_description_contain_colon"
+  fi
+
+  printf "%s" "$command_run_set_command "
+
+  read -r _c
+
+  if is_empty "$_c"; then
+    echo_exit "$command_run_set_command_empty"
+  fi
+
+  _d=$(append_config_run_list "$_a:$_b:$_c")
+
+  write_config_run_list "$_d"
+
+  echo "$command_run_set_registered"
+}
+
+u_run_list() {
+  a="$(read_config_run_list)"
+
+  if is_empty "$a"; then
+    echo_exit "$command_run_list_empty"
+  fi
+
+  echo "$a" | while IFS=: read -r _a _b _c; do
+    if is_empty "$_a" && is_empty "$_b" && is_empty "$_c"; then
+      continue
+    fi
+
+    printf "${color_green}%-15s ${color_reset}%-30s ${color_cyan}%s${color_reset}\n" "$_a" "$_b" "$_c"
+  done
+}
+
 # echo
 
 echo_exit() {
@@ -375,6 +480,12 @@ check_play_empty() {
   fi
 }
 
+check_run_empty() {
+  if is_no_argument "$@"; then
+    echo_exit "$run_empty"
+  fi
+}
+
 # is
 
 is_no_argument() {
@@ -407,6 +518,26 @@ is_package_exist() {
 
 is_user_package_exist() {
   test -f "$user_package_dir/$1"
+}
+
+is_file_exist() {
+  [ -f "$1" ]
+}
+
+is_dir_exist() {
+  [ -d "$1" ]
+}
+
+is_empty() {
+  [ "$1" = "" ]
+}
+
+is_contain() {
+  echo "$1" | grep -q "$2"
+}
+
+is_equal() {
+  [ "$1" = "$2" ]
 }
 
 # install
@@ -525,9 +656,20 @@ exec_async_no_std_out() {
   exec "$@" > /dev/null 2>&1 &
 }
 
+exec_async_f_with_std_out() {
+  exec sh -c "$@" &
+}
+
 exec_async_no_std_out_i3wm() {
   i3wm_split_lr
   exec_async_no_std_out "$@"
+  i3wm_focus_r
+  i3wm_focus_l
+}
+
+exec_async_f_with_std_out_i3wm() {
+  i3wm_split_lr
+  exec_async_f_with_std_out "$@"
   i3wm_focus_r
   i3wm_focus_l
 }
@@ -559,6 +701,14 @@ exec_combine_async_no_std_out() {
     exec_async_no_std_out_i3wm "$@"
   else
     exec_async_no_std_out "$@"
+  fi
+}
+
+exec_combine_async_f_with_std_out() {
+  if is_de_i3wm; then
+    exec_async_f_with_std_out_i3wm "$@"
+  else
+    exec_async_f_with_std_out "$@"
   fi
 }
 
@@ -666,6 +816,57 @@ i3wm_focus_l() {
   i3-msg focus left > /dev/null 2>&1
 }
 
+# create
+
+create_dir() {
+  if ! is_dir_exist "$1"; then
+    mkdir "$1"
+  fi
+}
+
+create_file() {
+  if ! is_file_exist "$1"; then
+    touch "$1"
+  fi
+}
+
+create_config() {
+  create_dir "$config_dir"
+  create_file "$config_run_list_filepath"
+}
+
+# write
+
+write_to_file() {
+  echo "$1" > "$2"
+}
+
+write_config_run_list() {
+  write_to_file "$1" "$config_run_list_filepath"
+}
+
+# read
+
+read_file_content() {
+  if ! is_file_exist "$1"; then
+    printf_exit "${color_red}$1 ${color_reset}$file_not_found"
+  fi
+
+  cat "$1"
+}
+
+read_config_run_list() {
+  read_file_content "$config_run_list_filepath"
+}
+
+# append
+
+append_config_run_list() {
+  echo "$(read_config_run_list)
+$1"
+}
+
 determine_distro
 determine_de
+create_config
 umar "$@"
