@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.0.4"
+version="v1.0.5"
 
 umar="I am Umar ($version), your little Linux assistant. I can help you with the common tasks listed below.
 I will continue to be updated indefinitely, as my creator may need to add new features,
@@ -16,6 +16,7 @@ open_empty="You didn't provide any names to open!"
 install_empty="You didn't provide any names to install!"
 remove_empty="You didn't provide any names to remove!"
 show_empty="You didn't provide any names to show!"
+play_empty="You didn't provide any names to play!"
 
 pid=$$
 search_url="https://www.google.com/search?q="
@@ -30,6 +31,8 @@ install_dir="/usr/local/bin"
 target_name="umar"
 browser="w3m"
 img_display="feh"
+audio_player="mpg123"
+video_player="mpv"
 
 distro_is_unknown="Unknown distribution"
 package_not_installed="is not installed. Do you want to install it? [N/y]"
@@ -44,7 +47,9 @@ search:Search for the given keyword(s) using a search engine
 install:Install package(s)
 remove:Remove package(s)
 upgrade:Upgrade package(s)
-show image:Show image
+show image:Show image(s)
+play audio:Play audio(s)
+play video:Play video(s)
 "
 
 umar() {
@@ -76,6 +81,14 @@ umar() {
     shift
     shift
     u_show_image "$@"
+  elif [ "$1 $2" = "play audio" ]; then
+    shift
+    shift
+    u_play_audio "$@"
+  elif [ "$1 $2" = "play video" ]; then
+    shift
+    shift
+    u_play_video "$@"
   else
     echo_exit "$invalid_command"
   fi
@@ -181,6 +194,18 @@ u_show_image() {
   exec_combine_async_no_std_out $img_display "$@"
 }
 
+u_play_audio() {
+  check_play_empty "$@"
+  install_needed $audio_player
+  exec_combine_default $audio_player "$@"
+}
+
+u_play_video() {
+  check_play_empty "$@"
+  install_needed $video_player
+  exec_combine_default $video_player "$@"
+}
+
 # echo
 
 echo_exit() {
@@ -231,6 +256,12 @@ check_remove_empty() {
 check_show_empty() {
   if is_no_argument "$@"; then
     echo_exit "$show_empty"
+  fi
+}
+
+check_play_empty() {
+  if is_no_argument "$@"; then
+    echo_exit "$play_empty"
   fi
 }
 
