@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.0.8"
+version="v1.0.9"
 
 umar="I am Umar ($version), your little Linux assistant. I can help you with the common tasks listed below.
 I will continue to be updated indefinitely, as my creator may need to add new features,
@@ -33,6 +33,7 @@ browser="w3m"
 img_display="feh"
 audio_player="mpg123"
 video_player="mpv"
+editor="vim"
 
 distro_is_unknown="Unknown distribution"
 package_not_installed="is not installed. Do you want to install it? [N/y]"
@@ -41,6 +42,7 @@ package_needed_installed="The required package(s) have been installed. Refresh t
 
 commands="get smarter:Upgrade me to the latest version
 version:Show my current version
+reveal:Reveal my source code
 open:Open package(s)
 kill:Kill package(s) process
 search:Search for the given keyword(s) using a search engine
@@ -75,6 +77,8 @@ umar() {
     u_upgrade "$@"
   elif [ "$1" = "version" ]; then
     echo "$version"
+  elif [ "$1" = "reveal" ]; then
+    u_reveal
   elif [ "$1 $2" = "get smarter" ]; then
     u_get_smarter
   elif [ "$1 $2" = "show image" ]; then
@@ -204,6 +208,11 @@ u_play_video() {
   check_play_empty "$@"
   install_needed $video_player
   exec_combine_async_no_std_out $video_player "$@"
+}
+
+u_reveal() {
+  install_needed $editor
+  exec_combine_default $editor -R "$install_dir/$target_name"
 }
 
 # echo
