@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.0.9"
+version="v1.0.10"
 
 umar="I am Umar ($version), your little Linux assistant. I can help you with the common tasks listed below.
 I will continue to be updated indefinitely, as my creator may need to add new features,
@@ -10,6 +10,7 @@ command_open_name_not_found="is not found!"
 command_kill_confirmation="All processes listed above will be terminated. Are you sure? [N/y]"
 command_kill_confirmation_y="All processes have been terminated!"
 command_kill_confirmation_n="Aborted!"
+command_test_http_no_url="Please provide me with a URL to test! Use this option: -u URL"
 
 kill_empty="You didn't provide any names to kill!"
 open_empty="You didn't provide any names to open!"
@@ -34,6 +35,7 @@ img_display="feh"
 audio_player="mpg123"
 video_player="mpv"
 editor="vim"
+http_test_tool="siege"
 
 distro_is_unknown="Unknown distribution"
 package_not_installed="is not installed. Do you want to install it? [N/y]"
@@ -52,6 +54,7 @@ upgrade:Upgrade package(s)
 show image:Show image(s)
 play audio:Play audio(s)
 play video:Play video(s)
+test http:Test and benchmark http url -> \`-c NUM -r NUM -t SECONDS -u URL\`
 "
 
 umar() {
@@ -93,6 +96,10 @@ umar() {
     shift
     shift
     u_play_video "$@"
+  elif [ "$1 $2" = "test http" ]; then
+    shift
+    shift
+    u_test_http "$@"
   else
     echo_exit "$invalid_command"
   fi
@@ -213,6 +220,58 @@ u_play_video() {
 u_reveal() {
   install_needed $editor
   exec_combine_default $editor -R "$install_dir/$target_name"
+}
+
+u_test_http() {
+  install_needed $http_test_tool
+
+  a="10"
+  b="1"
+  c="1"
+  d=""
+
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -c*)
+        a="${1#-c}"
+        if [ -z "$a" ]; then
+          shift
+          a="$1"
+        fi
+        ;;
+      -t*)
+        b="${1#-t}"
+        if [ -z "$b" ]; then
+          shift
+          b="$1"
+        fi
+        ;;
+      -r*)
+        c="${1#-r}"
+        if [ -z "$c" ]; then
+          shift
+          c="$1"
+        fi
+        ;;
+      -u*)
+        d="${1#-u}"
+        if [ -z "$d" ]; then
+          shift
+          d="$1"
+        fi
+        ;;
+      *)
+        usage
+        ;;
+    esac
+    shift
+  done
+
+  if [ "$d" = "" ]; then
+    echo_exit "$command_test_http_no_url"
+  fi
+
+  exec_combine_default_with_std_out $http_test_tool -vb "-c$a" "-t${b}S" "-r$c" "$d"
 }
 
 # echo
