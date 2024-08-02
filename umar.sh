@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.0.10"
+version="v1.0.11"
 
 umar="I am Umar ($version), your little Linux assistant. I can help you with the common tasks listed below.
 I will continue to be updated indefinitely, as my creator may need to add new features,
@@ -45,6 +45,7 @@ package_needed_installed="The required package(s) have been installed. Refresh t
 commands="get smarter:Upgrade me to the latest version
 version:Show my current version
 reveal:Reveal my source code
+--------------:--------------------------
 open:Open package(s)
 kill:Kill package(s) process
 search:Search for the given keyword(s) using a search engine
