@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.0.7"
+version="v1.0.8"
 
 umar="I am Umar ($version), your little Linux assistant. I can help you with the common tasks listed below.
 I will continue to be updated indefinitely, as my creator may need to add new features,
@@ -203,7 +203,7 @@ u_play_audio() {
 u_play_video() {
   check_play_empty "$@"
   install_needed $video_player
-  exec_combine_default $video_player "$@"
+  exec_combine_async_no_std_out $video_player "$@"
 }
 
 # echo
