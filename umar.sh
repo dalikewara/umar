@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.0.5"
+version="v1.0.6"
 
 umar="I am Umar ($version), your little Linux assistant. I can help you with the common tasks listed below.
 I will continue to be updated indefinitely, as my creator may need to add new features,
@@ -197,7 +197,7 @@ u_show_image() {
 u_play_audio() {
   check_play_empty "$@"
   install_needed $audio_player
-  exec_combine_default $audio_player "$@"
+  exec_combine_default_with_std_out $audio_player "$@"
 }
 
 u_play_video() {
@@ -426,9 +426,20 @@ exec_default() {
   exec "$@" 2> /dev/null
 }
 
+exec_default_with_std_out() {
+  exec "$@"
+}
+
 exec_default_i3wm() {
   i3wm_split_lr
   exec_default "$@"
+  i3wm_focus_r
+  i3wm_focus_l
+}
+
+exec_default_i3wm_with_std_out() {
+  i3wm_split_lr
+  exec_default_with_std_out "$@"
   i3wm_focus_r
   i3wm_focus_l
 }
@@ -446,6 +457,14 @@ exec_combine_default() {
     exec_default_i3wm "$@"
   else
     exec_default "$@"
+  fi
+}
+
+exec_combine_default_with_std_out() {
+  if is_de_i3wm; then
+    exec_default_i3wm_with_std_out "$@"
+  else
+    exec_default_with_std_out "$@"
   fi
 }
 
