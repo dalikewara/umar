@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.0.13"
+version="v1.0.14"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -682,6 +682,10 @@ exec_default_with_std_out() {
   exec "$@"
 }
 
+exec_default_f_with_std_out() {
+  exec sh -c "$@"
+}
+
 exec_default_i3wm() {
   i3wm_split_lr
   exec_default "$@"
@@ -689,9 +693,16 @@ exec_default_i3wm() {
   i3wm_focus_l
 }
 
-exec_default_i3wm_with_std_out() {
+exec_default_with_std_out_i3wm() {
   i3wm_split_lr
   exec_default_with_std_out "$@"
+  i3wm_focus_r
+  i3wm_focus_l
+}
+
+exec_default_f_with_std_out_i3wm() {
+  i3wm_split_lr
+  exec_default_f_with_std_out "$@"
   i3wm_focus_r
   i3wm_focus_l
 }
@@ -722,9 +733,17 @@ exec_combine_default() {
 
 exec_combine_default_with_std_out() {
   if is_de_i3wm; then
-    exec_default_i3wm_with_std_out "$@"
+    exec_default_with_std_out_i3wm "$@"
   else
     exec_default_with_std_out "$@"
+  fi
+}
+
+exec_combine_default_f_with_std_out() {
+  if is_de_i3wm; then
+    exec_default_f_with_std_out_i3wm "$@"
+  else
+    exec_default_f_with_std_out "$@"
   fi
 }
 
