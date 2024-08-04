@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.0.15"
+version="v1.0.16"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -410,7 +410,7 @@ u_run_list() {
       continue
     fi
 
-    printf "${color_green}%-15s ${color_reset}%-30s ${color_cyan}%s${color_reset}\n" "$_a" "$_b" "$_c"
+    printf "${color_green}%-20s ${color_reset}%-30s ${color_cyan}%s${color_reset}\n" "$_a" "$_b" "$_c"
   done
 }
 
