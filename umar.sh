@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.0.14"
+version="v1.0.15"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -175,7 +175,7 @@ u_kill_process() {
   echo "
 $command_kill_confirmation"
 
-  read -r b
+  read -r b < /dev/tty
 
   if [ "$b" = "y" ]; then
     echo "$a" | while IFS= read -r line; do
@@ -355,7 +355,7 @@ u_run() {
 u_run_set() {
   printf "%s" "$command_run_set_name "
 
-  read -r _a
+  read -r _a < /dev/tty
 
   if is_empty "$_a"; then
     echo_exit "$command_run_set_name_empty"
@@ -377,7 +377,7 @@ u_run_set() {
 
   printf "%s" "$command_run_set_description "
 
-  read -r _b
+  read -r _b < /dev/tty
 
   if is_contain "$_b" ":"; then
     echo_exit "$command_run_set_description_contain_colon"
@@ -385,7 +385,7 @@ u_run_set() {
 
   printf "%s" "$command_run_set_command "
 
-  read -r _c
+  read -r _c < /dev/tty
 
   if is_empty "$_c"; then
     echo_exit "$command_run_set_command_empty"
@@ -576,7 +576,7 @@ install_needed() {
     else
       printf "${color_red}$1 ${color_reset}$package_not_installed%s\n"
 
-      read -r _a
+      read -r _a < /dev/tty
 
       if [ "$_a" = "y" ]; then
         if is_unknown; then
@@ -653,7 +653,7 @@ upgrade_combine() {
 # exec
 
 exec_async_no_std_out() {
-  exec "$@" > /dev/null 2>&1 &
+  exec sh -c "$@" > /dev/null 2>&1 &
 }
 
 exec_async_f_with_std_out() {
@@ -675,11 +675,11 @@ exec_async_f_with_std_out_i3wm() {
 }
 
 exec_default() {
-  exec "$@" 2> /dev/null
+  exec sh -c "$@" 2> /dev/null
 }
 
 exec_default_with_std_out() {
-  exec "$@"
+  exec sh -c "$@"
 }
 
 exec_default_f_with_std_out() {
