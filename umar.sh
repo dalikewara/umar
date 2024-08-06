@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.1.2"
+version="v1.1.3"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -249,7 +249,7 @@ u_open() {
       else
         a="yes"
 
-        printf "${color_red}$arg ${color_reset}$command_open_name_not_found%s\n"
+        printf "${color_red}$arg ${color_reset}$command_open_name_not_found%b\n"
       fi
     fi
   done
@@ -270,7 +270,7 @@ u_kill_process() {
     ps aux | grep "$arg" | grep -v "$pid"
   done
 
-  a=$(printf '..%s..' "$a")
+  a=$(printf '..%b..' "$a")
 
   echo "
 $command_kill_confirmation"
@@ -458,7 +458,7 @@ u_run() {
 
     for arg in "$@"; do
         if is_equal "$arg" "$_a"; then
-          printf "${color_green}$_a${color_reset} >_ ${color_cyan}$_c${color_reset}%s\n"
+          printf "${color_green}$_a${color_reset} >_ ${color_cyan}$_c${color_reset}%b\n"
           exec_combine_async_f_with_std_out "$_c"
         fi
     done
@@ -466,7 +466,7 @@ u_run() {
 }
 
 u_set_run() {
-  printf "%s" "$command_run_set_name "
+  printf "%b" "$command_run_set_name "
 
   read -r _a < /dev/tty
 
@@ -488,7 +488,7 @@ u_set_run() {
     echo_exit "$command_run_set_name_exist"
   fi
 
-  printf "%s" "$command_run_set_description "
+  printf "%b" "$command_run_set_description "
 
   read -r _b < /dev/tty
 
@@ -496,7 +496,7 @@ u_set_run() {
     echo_exit "$command_run_set_description_contain_colon"
   fi
 
-  printf "%s" "$command_run_set_command "
+  printf "%b" "$command_run_set_command "
 
   read -r _c < /dev/tty
 
@@ -523,7 +523,7 @@ u_list_run() {
       continue
     fi
 
-    printf "${color_green}%-20s ${color_reset}%-30s ${color_cyan}%s${color_reset}\n" "$_a" "$_b" "$_c"
+    printf "${color_green}%-20s ${color_reset}%-30s ${color_cyan}%b${color_reset}\n" "$_a" "$_b" "$_c"
   done
 }
 
@@ -539,7 +539,7 @@ u_prompt() {
 }
 
 u_set_ai() {
-  printf "%s" "$command_set_ai_type "
+  printf "%b" "$command_set_ai_type "
 
   read -r _a < /dev/tty
 
@@ -552,7 +552,7 @@ u_set_ai() {
   fi
 
   if is_equal "$_a" "1"; then
-    printf "%s" "$command_set_ai_model_google "
+    printf "%b" "$command_set_ai_model_google "
   fi
 
   read -r _b < /dev/tty
@@ -567,7 +567,7 @@ u_set_ai() {
     fi
   fi
 
-  printf "%s" "$command_set_ai_api_key "
+  printf "%b" "$command_set_ai_api_key "
 
   read -r _c < /dev/tty
 
@@ -595,23 +595,23 @@ echo_exit() {
 }
 
 echo_typing() {
-  a=$(printf "%s" "$1" | sed 's/$/\\n/' | tr -d '\n')
+  a=$(printf "%b" "$1" | sed 's/$/\\n/' | tr -d '\n')
   i=0
 
   while [ $i -lt ${#a} ]; do
     # shellcheck disable=SC2004
-    char=$(printf "%s" "$a" | cut -c $(($i+1)))
+    char=$(printf "%b" "$a" | cut -c $(($i+1)))
 
     if is_equal "$char" "\\"; then
       # shellcheck disable=SC2004
-      next_char=$(printf "%s" "$a" | cut -c $(($i+2)))
+      next_char=$(printf "%b" "$a" | cut -c $(($i+2)))
       if is_equal "$next_char" "n"; then
         printf "\n"
         # shellcheck disable=SC2004
         i=$(($i + 1))
       fi
     else
-      printf "%s" "$char"
+      printf "%b" "$char"
     fi
 
     sleep "$typing_speed"
@@ -625,12 +625,12 @@ echo_typing() {
 # printf
 
 printf_exit() {
-  printf "$1%s\n"
+  printf "$1%b\n"
   exit 0
 }
 
 printf_ai_info() {
-  printf "${color_yellow}$ai ($(get_ai_model))${color_reset} :%s\n\n"
+  printf "${color_yellow}$ai ($(get_ai_model))${color_reset} :%b\n\n"
 }
 
 # check
@@ -642,7 +642,7 @@ $umar
 "
 
     echo "$commands" | while IFS=: read -r _a _b; do
-      printf "${color_green}%-15s ${color_reset}%s\n" "$_a" "$_b"
+      printf "${color_green}%-15s ${color_reset}%b\n" "$_a" "$_b"
     done
 
     exit 0
@@ -709,7 +709,7 @@ check_ai_empty() {
     return 0
   fi
 
-  echo_exit "$ai_empty"
+  printf_exit "$ai_empty"
 }
 
 check_ai_url_empty() {
@@ -719,7 +719,7 @@ check_ai_url_empty() {
     fi
   fi
 
-  echo_exit "$ai_url_empty"
+  printf_exit "$ai_url_empty"
 }
 
 check_ai_api_key_empty() {
@@ -729,7 +729,7 @@ check_ai_api_key_empty() {
     fi
   fi
 
-  echo_exit "$ai_api_key_empty"
+  printf_exit "$ai_api_key_empty"
 }
 
 check_ai_model_empty() {
@@ -739,7 +739,7 @@ check_ai_model_empty() {
     fi
   fi
 
-  echo_exit "$ai_model_empty"
+  printf_exit "$ai_model_empty"
 }
 
 # is
@@ -854,7 +854,7 @@ install_needed() {
     if is_user_package_exist "$1"; then
       return 0
     else
-      printf "${color_red}$1 ${color_reset}$package_not_installed%s\n"
+      printf "${color_red}$1 ${color_reset}$package_not_installed%b\n"
 
       read -r _a < /dev/tty
 
@@ -1378,7 +1378,7 @@ make_http_request_google_ai() {
 
   echo
 
-  text=$(printf '%s\n' "$http_response" | jq -r '.candidates[0].content.parts[0].text')
+  text=$(printf '%b\n' "$http_response" | jq -r '.candidates[0].content.parts[0].text')
 
   if is_equal "$text" "null"; then
     echo_exit "$http_response"
