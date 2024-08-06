@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.1.7"
+version="v1.1.8"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -64,7 +64,8 @@ command_set_ai_type="AI type:
 Choose AI type number..."
 command_set_ai_type_empty="AI type can't be empty"
 command_set_ai_type_wrong="You choose wrong AI type number"
-command_set_ai_model_google="AI model:
+command_set_ai_model_google="
+AI model:
 
 1. Gemini 1.0 Pro
 2. Gemini 1.5 Pro
@@ -73,7 +74,12 @@ command_set_ai_model_google="AI model:
 Choose AI model number..."
 command_set_ai_model_empty="AI model can't be empty"
 command_set_ai_model_wrong="You choose wrong AI model number"
-command_set_ai_api_key="Enter API key..."
+command_set_ai_api_key_google="
+You'll need an API key to use the AI.
+You can follow this doc -> https://ai.google.dev/gemini-api/docs/api-key
+
+Enter API key..."
+command_set_ai_api_key_empty="API Key can't be empty"
 command_set_ai_registered="OK"
 
 kill_empty="You didn't provide any names to kill!"
@@ -568,9 +574,17 @@ u_set_ai() {
     fi
   fi
 
-  printf "%b" "$command_set_ai_api_key "
+  if is_equal "$_a" "1"; then
+    printf "%b" "$command_set_ai_api_key_google "
+  fi
 
   read -r _c < /dev/tty
+
+  if is_equal "$_a" "1"; then
+    if is_empty "$_c"; then
+      echo_exit "$command_set_ai_api_key_empty"
+    fi
+  fi
 
   write_config_ai "$_a
 $_b

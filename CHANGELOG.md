@@ -2,6 +2,9 @@
 
 ## 2024
 
+- **v1.1.8** (2024-08-07)
+  - After release changes
+
 - **v1.1.0 - v1.1.7** (2024-08-06)
   - Add AI
   - After release changes
