@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.1.8"
+version="v1.1.9"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -464,8 +464,8 @@ u_run() {
 
     for arg in "$@"; do
         if is_equal "$arg" "$_a"; then
-          printf "${color_green}$_a${color_reset} >_ ${color_cyan}$_c${color_reset}%b\n"
-          exec_combine_async_f_with_std_out "$_c"
+          printf "\n${color_green}$_a${color_reset} >_ ${color_cyan}$_c${color_reset}%b\n\n"
+          exec_combine_default_f_with_std_out "$_c"
         fi
     done
   done
@@ -948,7 +948,7 @@ upgrade_combine() {
 # exec
 
 exec_async_no_std_out() {
-  exec sh -c "$@" > /dev/null 2>&1 &
+  eval "$@" > /dev/null 2>&1 &
 }
 
 exec_async_no_std_out_base() {
@@ -956,7 +956,7 @@ exec_async_no_std_out_base() {
 }
 
 exec_async_f_with_std_out() {
-  exec sh -c "$@" &
+  eval "$@" &
 }
 
 exec_async_f_with_std_out_base() {
@@ -976,7 +976,6 @@ exec_async_no_std_out_i3wm_base() {
   i3wm_focus_l
 }
 
-
 exec_async_f_with_std_out_i3wm() {
   i3wm_split_lr
   exec_async_f_with_std_out "$@"
@@ -991,7 +990,7 @@ exec_async_f_with_std_out_i3wm_base() {
 }
 
 exec_default() {
-  exec sh -c "$@" 2> /dev/null
+  eval "$@" 2> /dev/null
 }
 
 exec_default_base() {
@@ -999,7 +998,7 @@ exec_default_base() {
 }
 
 exec_default_with_std_out() {
-  exec sh -c "$@"
+  eval "$@"
 }
 
 exec_default_with_std_out_base() {
@@ -1007,7 +1006,7 @@ exec_default_with_std_out_base() {
 }
 
 exec_default_f_with_std_out() {
-  exec sh -c "$@"
+  eval "$@"
 }
 
 exec_default_f_with_std_out_base() {
