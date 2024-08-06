@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.1.3"
+version="v1.1.4"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -530,6 +530,7 @@ u_list_run() {
 u_prompt() {
   determine_distro
   determine_ai
+  install_needed $json_tool
   check_ai
   printf_ai_info
 
@@ -1298,8 +1299,6 @@ $1"
 # make http request
 
 make_http_request() {
-  install_needed $json_tool
-
   a=""
   b="application/json"
   c="POST"
