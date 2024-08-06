@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.1.0"
+version="v1.1.1"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -1327,7 +1327,7 @@ markdown_parse() {
         next
       }
 
-      if ($0 ~ /^```/) {
+      if (index($0, "```") > 0) {
         if (in_code_block) {
           print code_block_end
           in_code_block = 0
