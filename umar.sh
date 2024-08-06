@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.1.9"
+version="v1.1.10"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -137,7 +137,18 @@ play video:Play video(s)
 
 umar() {
   install_needed $shell_tool
-  check_umar_empty "$@"
+
+  if is_no_argument "$@"; then
+    echo "
+$umar
+"
+
+    echo "$commands" | while IFS=: read -r _u_name _u_description; do
+      printf "${color_green}%-15s ${color_reset}%b\n" "$_u_name" "$_u_description"
+    done
+
+    exit 0
+  fi
 
   case "$1 $2" in
     "get smarter")
@@ -244,23 +255,23 @@ u_open() {
   determine_de
   check_open_empty "$@"
 
-  a=""
+  _u_o_not_exist=""
 
-  for arg in "$@"; do
-    if is_package_exist "$arg"; then
-      exec_combine_async_no_std_out_base "$arg"
+  for _u_o_arg in "$@"; do
+    if is_package_exist "$_u_o_arg"; then
+      exec_combine_async_no_std_out_base "$_u_o_arg"
     else
-      if is_user_package_exist "$arg"; then
-        exec_combine_async_no_std_out_base "$arg"
+      if is_user_package_exist "$_u_o_arg"; then
+        exec_combine_async_no_std_out_base "$_u_o_arg"
       else
-        a="yes"
+        _u_o_not_exist="yes"
 
-        printf "${color_red}$arg ${color_reset}$command_open_name_not_found%b\n"
+        printf "${color_red}$_u_o_arg ${color_reset}$command_open_name_not_found%b\n"
       fi
     fi
   done
 
-  if ! is_equal "$a" "yes"; then
+  if ! is_equal "$_u_o_not_exist" "yes"; then
     kill_combine
   fi
 }
@@ -268,25 +279,27 @@ u_open() {
 u_kill_process() {
   check_kill_empty "$@"
 
-  a=""
+  _u_k_p_process_list=""
 
-  for arg in "$@"; do
-    a="$a\n$(ps -ef | grep "$arg" | grep -v "$pid" | awk '{print $2}')"
+  for _u_k_p_arg in "$@"; do
+    # shellcheck disable=SC2009
+    _u_k_p_process_list="$_u_k_p_process_list\n$(ps -ef | grep "$_u_k_p_arg" | grep -v "$pid" | awk '{print $2}')"
 
-    ps aux | grep "$arg" | grep -v "$pid"
+    # shellcheck disable=SC2009
+    ps aux | grep "$_u_k_p_arg" | grep -v "$pid"
   done
 
-  a=$(printf '..%b..' "$a")
+  _u_k_p_process_list=$(printf '..%b..' "$_u_k_p_process_list")
 
   echo "
 $command_kill_confirmation"
 
-  read -r b < /dev/tty
+  _u_k_p_confirmation=$(read_func)
 
-  if is_equal "$b" "y"; then
-    echo "$a" | while IFS= read -r line; do
-      if ! is_empty "$line"; then
-        sudo kill -9 "$line" > /dev/null 2>&1
+  if is_equal "$_u_k_p_confirmation" "y"; then
+    echo "$_u_k_p_process_list" | while IFS= read -r _u_k_p_line; do
+      if ! is_empty "$_u_k_p_line"; then
+        sudo kill -9 "$_u_k_p_line" > /dev/null 2>&1
       fi
     done
 
@@ -377,79 +390,82 @@ u_test_http() {
   determine_de
   install_needed $http_test_tool
 
-  a="10"
-  b=""
-  c=""
-  d=""
-  e="X-HELLO:X-WORLD"
-  f=""
-  g=""
+  _u_t_h_concurrent="10"
+  _u_t_h_time=""
+  _u_t_h_retry=""
+  _u_t_h_url=""
+  _u_t_h_url_header="X-HELLO:X-WORLD"
+  _u_t_h_url_user_agent=""
+  _u_t_h_url_content_type=""
 
   while [ $# -gt 0 ]; do
     case "$1" in
       -c)
-        a="${1#-c}"
-        if [ -z "$a" ]; then
+        _u_t_h_concurrent="${1#-c}"
+        if [ -z "$_u_t_h_concurrent" ]; then
           shift
-          a="$1"
+          _u_t_h_concurrent="$1"
         fi
         ;;
       -t)
-        b="${1#-t}"
-        if [ -z "$b" ]; then
+        _u_t_h_time="${1#-t}"
+        if [ -z "$_u_t_h_time" ]; then
           shift
-          b="$1"
+          _u_t_h_time="$1"
         fi
         ;;
       -r)
-        c="${1#-r}"
-        if [ -z "$c" ]; then
+        _u_t_h_retry="${1#-r}"
+        if [ -z "$_u_t_h_retry" ]; then
           shift
-          c="$1"
+          _u_t_h_retry="$1"
         fi
         ;;
       -u)
-        d="${1#-u}"
-        if [ -z "$d" ]; then
+        _u_t_h_url="${1#-u}"
+        if [ -z "$_u_t_h_url" ]; then
           shift
-          d="$1"
+          _u_t_h_url="$1"
         fi
         ;;
       -userAgent)
-        f="${1#-userAgent}"
-        if [ -z "$f" ]; then
+        _u_t_h_url_user_agent="${1#-userAgent}"
+        if [ -z "$_u_t_h_url_user_agent" ]; then
           shift
-          f="$1"
+          _u_t_h_url_user_agent="$1"
         fi
         ;;
       -header)
-        e="${1#-header}"
-        if [ -z "$e" ]; then
+        _u_t_h_url_header="${1#-header}"
+        if [ -z "$_u_t_h_url_header" ]; then
           shift
-          e="$1"
+          _u_t_h_url_header="$1"
         fi
         ;;
       -contentType)
-        g="${1#-contentType}"
-        if [ -z "$g" ]; then
+        _u_t_h_url_content_type="${1#-contentType}"
+        if [ -z "$_u_t_h_url_content_type" ]; then
           shift
-          g="$1"
+          _u_t_h_url_content_type="$1"
         fi
         ;;
     esac
     shift
   done
 
-  if is_empty "$d"; then
+  if is_empty "$_u_t_h_url"; then
     printf_exit "$command_test_http_no_url"
   fi
 
-  if ! is_empty "$b"; then
-     exec_combine_default_with_std_out_base $http_test_tool -vbp "-c$a" "-t${b}S" --header="$e" --user-agent="$f" --content-type="$g" "$d"
-  elif ! is_empty "$c"; then
-     exec_combine_default_with_std_out_base $http_test_tool -vbp "-c$a" "-r$c" --header="$e" --user-agent="$f" --content-type="$g" "$d"
+  echo "url=$_u_t_h_url | concurrent=$_u_t_h_concurrent | time=${_u_t_h_time}S | retry=$_u_t_h_retry | header=$_u_t_h_url_header | userAgent=$_u_t_h_url_user_agent | contentType=$_u_t_h_url_content_type
+"
+
+  if ! is_empty "$_u_t_h_time"; then
+     exec_combine_default_with_std_out_base $http_test_tool -vbp "-c$_u_t_h_concurrent" "-t${_u_t_h_time}S" --header="$_u_t_h_url_header" --user-agent="$_u_t_h_url_user_agent" --content-type="$_u_t_h_url_content_type" "$_u_t_h_url"
+  elif ! is_empty "$_u_t_h_retry"; then
+     exec_combine_default_with_std_out_base $http_test_tool -vbp "-c$_u_t_h_concurrent" "-r$_u_t_h_retry" --header="$_u_t_h_url_header" --user-agent="$_u_t_h_url_user_agent" --content-type="$_u_t_h_url_content_type" "$_u_t_h_url"
   else
-    exec_combine_default_with_std_out_base $http_test_tool -vbp "-c$a" "-t10S" --header="$e" --user-agent="$f" --content-type="$g" "$d"
+    exec_combine_default_with_std_out_base $http_test_tool -vbp "-c$_u_t_h_concurrent" "-t10S" --header="$_u_t_h_url_header" --user-agent="$_u_t_h_url_user_agent" --content-type="$_u_t_h_url_content_type" "$_u_t_h_url"
   fi
 }
 
@@ -457,15 +473,15 @@ u_run() {
   determine_de
   check_run_empty "$@"
 
-  read_config_run_list | while IFS=: read -r _a _b _c; do
-    if is_empty "$_a" && is_empty "$_b" && is_empty "$_c"; then
+  read_config_run_list | while IFS=: read -r _u_r_name _u_r_description _u_r_command; do
+    if is_empty "$_u_r_name" && is_empty "$_u_r_description" && is_empty "$_u_r_command"; then
       continue
     fi
 
-    for arg in "$@"; do
-        if is_equal "$arg" "$_a"; then
-          printf "\n${color_green}$_a${color_reset} >_ ${color_cyan}$_c${color_reset}%b\n\n"
-          exec_combine_default_f_with_std_out "$_c"
+    for _u_r_arg in "$@"; do
+        if is_equal "$_u_r_arg" "$_u_r_name"; then
+          printf "\n${color_green}$_u_r_name${color_reset} >_ ${color_cyan}$_u_r_command${color_reset}%b\n\n"
+          exec_combine_default_f_with_std_out "$_u_r_command"
         fi
     done
   done
@@ -474,62 +490,62 @@ u_run() {
 u_set_run() {
   printf "%b" "$command_run_set_name "
 
-  read -r _a < /dev/tty
+  _u_s_r_name=$(read_func)
 
-  if is_empty "$_a"; then
+  if is_empty "$_u_s_r_name"; then
     echo_exit "$command_run_set_name_empty"
   fi
 
-  if is_contain "$_a" ":"; then
+  if is_contain "$_u_s_r_name" ":"; then
     echo_exit "$command_run_set_name_contain_colon"
   fi
 
-  _ae=$(read_config_run_list | while IFS=: read -r _a2 _ _; do
-    if is_equal "$_a" "$_a2"; then
+  _u_s_r_name_exist=$(read_config_run_list | while IFS=: read -r _u_s_r_name_config _ _; do
+    if is_equal "$_u_s_r_name" "$_u_s_r_name_config"; then
       echo_exit "exist"
     fi
   done)
 
-  if is_equal "$_ae" "exist"; then
+  if is_equal "$_u_s_r_name_exist" "exist"; then
     echo_exit "$command_run_set_name_exist"
   fi
 
   printf "%b" "$command_run_set_description "
 
-  read -r _b < /dev/tty
+  _u_s_r_description=$(read_func)
 
-  if is_contain "$_b" ":"; then
+  if is_contain "$_u_s_r_description" ":"; then
     echo_exit "$command_run_set_description_contain_colon"
   fi
 
   printf "%b" "$command_run_set_command "
 
-  read -r _c < /dev/tty
+  _u_s_r_command=$(read_func)
 
-  if is_empty "$_c"; then
+  if is_empty "$_u_s_r_command"; then
     echo_exit "$command_run_set_command_empty"
   fi
 
-  _d=$(append_config_run_list "$_a:$_b:$_c")
+  _u_s_r_cfg=$(append_config_run_list "$_u_s_r_name:$_u_s_r_description:$_u_s_r_command")
 
-  write_config_run_list "$_d"
+  write_config_run_list "$_u_s_r_cfg"
 
   echo "$command_run_set_registered"
 }
 
 u_list_run() {
-  a="$(read_config_run_list)"
+  _u_l_r_cfg="$(read_config_run_list)"
 
-  if is_empty "$a"; then
+  if is_empty "$_u_l_r_cfg"; then
     echo_exit "$command_run_list_empty"
   fi
 
-  echo "$a" | while IFS=: read -r _a _b _c; do
-    if is_empty "$_a" && is_empty "$_b" && is_empty "$_c"; then
+  echo "$_u_l_r_cfg" | while IFS=: read -r _u_l_r_name _u_l_r_description _u_l_r_command; do
+    if is_empty "$_u_l_r_name" && is_empty "$_u_l_r_description" && is_empty "$_u_l_r_command"; then
       continue
     fi
 
-    printf "${color_green}%-20s ${color_reset}%-30s ${color_cyan}%b${color_reset}\n" "$_a" "$_b" "$_c"
+    printf "${color_green}%-20s ${color_reset}%-30s ${color_cyan}%b${color_reset}\n" "$_u_l_r_name" "$_u_l_r_description" "$_u_l_r_command"
   done
 }
 
@@ -540,55 +556,55 @@ u_prompt() {
   check_ai
   printf_ai_info
 
-  text=$(make_http_request_ai "$@")
+  _u_p_response=$(make_http_request_ai "$@")
 
-  echo_typing "$(echo "$text" | markdown_parse)"
+  echo_typing "$(echo "$_u_p_response" | markdown_parse)"
 }
 
 u_set_ai() {
   printf "%b" "$command_set_ai_type "
 
-  read -r _a < /dev/tty
+  _u_s_a_type=$(read_func)
 
-  if is_empty "$_a"; then
+  if is_empty "$_u_s_a_type"; then
     echo_exit "$command_set_ai_type_empty"
   fi
 
-  if ! is_equal "$_a" "1"; then
+  if ! is_equal "$_u_s_a_type" "1"; then
     echo_exit "$command_set_ai_type_wrong"
   fi
 
-  if is_equal "$_a" "1"; then
+  if is_equal "$_u_s_a_type" "1"; then
     printf "%b" "$command_set_ai_model_google "
   fi
 
-  read -r _b < /dev/tty
+  _u_s_a_model=$(read_func)
 
-  if is_empty "$_b"; then
+  if is_empty "$_u_s_a_model"; then
     echo_exit "$command_set_ai_model_empty"
   fi
 
-  if is_equal "$_a" "1"; then
-    if ! is_equal "$_b" "1" && ! is_equal "$_b" "2" && ! is_equal "$_b" "3"; then
+  if is_equal "$_u_s_a_type" "1"; then
+    if ! is_equal "$_u_s_a_model" "1" && ! is_equal "$_u_s_a_model" "2" && ! is_equal "$_u_s_a_model" "3"; then
       echo_exit "$command_set_ai_model_wrong"
     fi
   fi
 
-  if is_equal "$_a" "1"; then
+  if is_equal "$_u_s_a_type" "1"; then
     printf "%b" "$command_set_ai_api_key_google "
   fi
 
-  read -r _c < /dev/tty
+  _u_s_a_api_key=$(read_func)
 
-  if is_equal "$_a" "1"; then
-    if is_empty "$_c"; then
+  if is_equal "$_u_s_a_type" "1"; then
+    if is_empty "$_u_s_a_api_key"; then
       echo_exit "$command_set_ai_api_key_empty"
     fi
   fi
 
-  write_config_ai "$_a
-$_b
-$_c"
+  write_config_ai "$_u_s_a_type
+$_u_s_a_model
+$_u_s_a_api_key"
 
   echo "$command_set_ai_registered"
 }
@@ -610,28 +626,28 @@ echo_exit() {
 }
 
 echo_typing() {
-  a=$(printf "%b" "$1" | sed 's/$/\\n/' | tr -d '\n')
-  i=0
+  __e_t_text=$(printf "%b" "$1" | sed 's/$/\\n/' | tr -d '\n')
+  __e_t_i=0
 
-  while [ $i -lt ${#a} ]; do
+  while [ $__e_t_i -lt ${#__e_t_text} ]; do
     # shellcheck disable=SC2004
-    char=$(printf "%s" "$a" | cut -c $(($i+1)))
+    __e_t_char=$(printf "%s" "$__e_t_text" | cut -c $(($__e_t_i+1)))
 
-    if is_equal "$char" "\\"; then
+    if is_equal "$__e_t_char" "\\"; then
       # shellcheck disable=SC2004
-      next_char=$(printf "%s" "$a" | cut -c $(($i+2)))
-      if is_equal "$next_char" "n"; then
+      __e_t_next_char=$(printf "%s" "$__e_t_text" | cut -c $(($__e_t_i+2)))
+      if is_equal "$__e_t_next_char" "n"; then
         printf "\n"
         # shellcheck disable=SC2004
-        i=$(($i + 1))
+        __e_t_i=$(($__e_t_i + 1))
       fi
     else
-      printf "%b" "$char"
+      printf "%b" "$__e_t_char"
     fi
 
     sleep "$typing_speed"
     # shellcheck disable=SC2004
-    i=$(($i + 1))
+    __e_t_i=$(($__e_t_i + 1))
   done
 
   echo
@@ -649,20 +665,6 @@ printf_ai_info() {
 }
 
 # check
-
-check_umar_empty() {
-  if is_no_argument "$@"; then
-    echo "
-$umar
-"
-
-    echo "$commands" | while IFS=: read -r _a _b; do
-      printf "${color_green}%-15s ${color_reset}%b\n" "$_a" "$_b"
-    done
-
-    exit 0
-  fi
-}
 
 check_kill_empty() {
   if is_no_argument "$@"; then
@@ -871,9 +873,9 @@ install_needed() {
     else
       printf "${color_red}$1 ${color_reset}$package_not_installed%b\n"
 
-      read -r _a < /dev/tty
+      __i_n_confirmation=$(read_func)
 
-      if [ "$_a" = "y" ]; then
+      if is_equal "$__i_n_confirmation" "y"; then
         if is_unknown; then
           echo "$distro_is_unknown"
           echo_exit "$package_is_needed"
@@ -1214,24 +1216,24 @@ determine_ai() {
     return 0
   fi
 
-  a=$(sed -n '1p' "$config_ai_filepath")
-  b=$(sed -n '2p' "$config_ai_filepath")
-  c=$(sed -n '3p' "$config_ai_filepath")
+  __d_a_type=$(sed -n '1p' "$config_ai_filepath")
+  __d_a_model=$(sed -n '2p' "$config_ai_filepath")
+  __d_a_api_key=$(sed -n '3p' "$config_ai_filepath")
 
-  if is_equal "$a" "1"; then
+  if is_equal "$__d_a_type" "1"; then
     ai="google"
   fi
 
   if is_ai_google; then
-    if is_equal "$b" "1"; then
+    if is_equal "$__d_a_model" "1"; then
       gemini_model="$gemini_model_1"
-    elif is_equal "$b" "2"; then
+    elif is_equal "$__d_a_model" "2"; then
       gemini_model="$gemini_model_2"
-    elif is_equal "$b" "3"; then
+    elif is_equal "$__d_a_model" "3"; then
       gemini_model="$gemini_model_3"
     fi
 
-    gemini_api_key="$c"
+    gemini_api_key="$__d_a_api_key"
   fi
 }
 
@@ -1312,46 +1314,46 @@ $1"
 # make http request
 
 make_http_request() {
-  a=""
-  b="application/json"
-  c="POST"
-  d=""
+  __m_h_r_url=""
+  __m_h_r_content_type="application/json"
+  __m_h_r_method="POST"
+  __m_h_r_request_body=""
 
   while [ $# -gt 0 ]; do
     case "$1" in
       -url)
-        a="${1#-url}"
-        if [ -z "$a" ]; then
+        __m_h_r_url="${1#-url}"
+        if [ -z "$__m_h_r_url" ]; then
           shift
-          a="$1"
+          __m_h_r_url="$1"
         fi
         ;;
       -contentType)
-        b="${1#-contentType}"
-        if [ -z "$b" ]; then
+        __m_h_r_content_type="${1#-contentType}"
+        if [ -z "$__m_h_r_content_type" ]; then
           shift
-          b="$1"
+          __m_h_r_content_type="$1"
         fi
         ;;
       -method)
-        c="${1#-method}"
-        if [ -z "$c" ]; then
+        __m_h_r_method="${1#-method}"
+        if [ -z "$__m_h_r_method" ]; then
           shift
-          c="$1"
+          __m_h_r_method="$1"
         fi
         ;;
       -requestBody)
-        d="${1#-requestBody}"
-        if [ -z "$d" ]; then
+        __m_h_r_request_body="${1#-requestBody}"
+        if [ -z "$__m_h_r_request_body" ]; then
           shift
-          d="$1"
+          __m_h_r_request_body="$1"
         fi
         ;;
     esac
     shift
   done
 
-  curl "$a" -H "Content-Type: $b" -X "$c" -d "$d"
+  curl "$__m_h_r_url" -H "Content-Type: $__m_h_r_content_type" -X "$__m_h_r_method" -d "$__m_h_r_request_body"
 }
 
 make_http_request_ai() {
@@ -1365,21 +1367,21 @@ make_http_request_google_ai() {
 
   check_prompt_empty "$@"
 
-  prompt=""
+  __m_h_r_g_a_prompt=""
 
-  for arg in "$@"; do
-    if is_empty "$prompt"; then
-      prompt="$arg"
+  for __m_h_r_g_a_arg in "$@"; do
+    if is_empty "$__m_h_r_g_a_prompt"; then
+      __m_h_r_g_a_prompt="$__m_h_r_g_a_arg"
     else
-      prompt="$prompt $arg"
+      __m_h_r_g_a_prompt="$__m_h_r_g_a_prompt $__m_h_r_g_a_arg"
     fi
   done
 
-  http_response=$(make_http_request -url "$(get_ai_url)/$(get_ai_model):generateContent?key=$(get_ai_api_key)" -requestBody "
+  __m_h_r_g_a_http_response=$(make_http_request -url "$(get_ai_url)/$(get_ai_model):generateContent?key=$(get_ai_api_key)" -requestBody "
     {
       \"contents\": [{
         \"parts\":[
-          {\"text\": \"$prompt\"}
+          {\"text\": \"$__m_h_r_g_a_prompt\"}
         ]
       }],
       \"generationConfig\": {
@@ -1390,13 +1392,13 @@ make_http_request_google_ai() {
 
   echo
 
-  text=$(printf '%s\n' "$http_response" | jq -r '.candidates[0].content.parts[0].text')
+  __m_h_r_g_a_text=$(printf '%s\n' "$__m_h_r_g_a_http_response" | jq -r '.candidates[0].content.parts[0].text')
 
-  if is_equal "$text" "null"; then
-    echo_exit "$http_response"
+  if is_equal "$__m_h_r_g_a_text" "null"; then
+    echo_exit "$__m_h_r_g_a_http_response"
   fi
 
-  echo "$text"
+  echo "$__m_h_r_g_a_text"
 }
 
 # markdown
@@ -1471,6 +1473,14 @@ markdown_parse() {
       print
     }
     '
+}
+
+# read func
+
+read_func() {
+  read -r _r_f_input < /dev/tty
+
+  echo "$_r_f_input"
 }
 
 create_config
