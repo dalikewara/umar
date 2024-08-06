@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.0.16"
+version="v1.1.0"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -8,14 +8,23 @@ de="unknown"
 user_package_dir="/usr/local/bin"
 config_dir="$HOME/.umar"
 config_run_list_filepath="$config_dir/run-list.cfg"
+config_ai_filepath="$config_dir/ai.cfg"
 color_green='\033[0;32m'
 color_cyan='\033[0;36m'
 color_blue='\033[0;34m'
 color_red='\033[0;31m'
+color_yellow='\033[1;33m'
 color_reset='\033[0m'
 repo_url="https://raw.githubusercontent.com/dalikewara/umar/master"
 script_name="umar.sh"
 install_dir="/usr/local/bin"
+ai="unknown"
+generative_ai_url="https://generativelanguage.googleapis.com/v1beta/models"
+gemini_api_key=""
+gemini_model=""
+gemini_model_1="gemini-1.0-pro"
+gemini_model_2="gemini-1.5-pro"
+gemini_model_3="gemini-1.5-flash"
 target_name="umar"
 browser="w3m"
 img_display="feh"
@@ -23,16 +32,21 @@ audio_player="mpg123"
 video_player="mpv"
 editor="vim"
 http_test_tool="siege"
+json_tool="jq"
+shell_tool="sh"
+typing_speed=0.005
 
 umar="I am Umar ($version), your little Linux assistant. I can help you with the common tasks listed below. \
 I will continue to be updated indefinitely, as my creator may need to add new features, \
-update my logic, fix issues, or make other changes. So, I may get smarter every day."
+update my logic, fix issues, or make other changes. So, I may get smarter every day. I can also use AI, \
+but you need to manually set up the configuration first."
 invalid_command="Sorry, I can't understand your command"
 command_open_name_not_found="is not found!"
 command_kill_confirmation="All processes listed above will be terminated. Are you sure? [N/y]"
 command_kill_confirmation_y="All processes have been terminated!"
 command_kill_confirmation_n="Aborted!"
-command_test_http_no_url="Please provide me with a URL to test! Use this option: ${color_cyan}-u ${color_blue}URL${color_reset}"
+command_test_http_no_url="Please provide me with a URL to test!
+Use this option: ${color_cyan}-u ${color_blue}URL${color_reset}"
 command_run_list_empty="No custom command has been set"
 command_run_set_name="Enter name..."
 command_run_set_name_contain_colon="Name can't contains a colon"
@@ -43,6 +57,24 @@ command_run_set_description_contain_colon="Description can't contains a colon"
 command_run_set_command="Enter execution command..."
 command_run_set_command_empty="Execution command can't be empty"
 command_run_set_registered="OK"
+command_set_ai_type="AI type:
+
+1. Google
+
+Choose AI type number..."
+command_set_ai_type_empty="AI type can't be empty"
+command_set_ai_type_wrong="You choose wrong AI type number"
+command_set_ai_model_google="AI model:
+
+1. Gemini 1.0 Pro
+2. Gemini 1.5 Pro
+3. Gemini 1.5 Flash
+
+Choose AI model number..."
+command_set_ai_model_empty="AI model can't be empty"
+command_set_ai_model_wrong="You choose wrong AI model number"
+command_set_ai_api_key="Enter API key..."
+command_set_ai_registered="OK"
 
 kill_empty="You didn't provide any names to kill!"
 open_empty="You didn't provide any names to open!"
@@ -51,6 +83,15 @@ remove_empty="You didn't provide any names to remove!"
 show_empty="You didn't provide any names to show!"
 play_empty="You didn't provide any names to play!"
 run_empty="You didn't provide any names to run!"
+prompt_empty="You didn't provide any prompt!"
+ai_empty="You didn't provide any AI type to process!
+You can use this command to set up the new one: ${color_cyan}umar set ai${color_reset}"
+ai_url_empty="You didn't provide any AI url to process!
+You can use this command to set up the new one: ${color_cyan}umar set ai${color_reset}"
+ai_api_key_empty="You didn't provide any AI api key to process!
+You can use this command to set up the new one: ${color_cyan}umar set ai${color_reset}"
+ai_model_empty="You didn't provide any AI model to process!
+You can use this command to set up the new one: ${color_cyan}umar set ai${color_reset}"
 
 file_not_found="file is not found!"
 
@@ -58,18 +99,23 @@ distro_is_unknown="Unknown distribution"
 package_not_installed="is not installed. Do you want to install it? [N/y]"
 package_is_needed="I need that package to process the command"
 package_needed_installed="The required package(s) have been installed. Refresh the current console/terminal session and run the command again"
+feature_is_not_implemented_yet="This feature is not implemented yet"
 
 commands="get smarter:Upgrade me to the latest version
 version:Show my current version
 reveal:Reveal my source code
 --------------:--------------------------
 run:Run custom command(s)
-run list:Show registered custom command
-run set:Set new custom command
+list run:List registered custom command(s)
+set run:Set new custom command
+--------------:--------------------------
+prompt:Prompt anything to AI
+set ai:Set new AI configuration
+start chat:Start new chat session with AI
 --------------:--------------------------
 open:Open package(s)
 kill:Kill package(s) process
-search:Search for the given keyword(s) using a search engine
+search:Search for the given keyword(s) using a terminal browser
 install:Install package(s)
 remove:Remove package(s)
 upgrade:Upgrade package(s)
@@ -81,62 +127,115 @@ play audio:Play audio(s)
 play video:Play video(s)
 "
 
+# umar
+
 umar() {
+  install_needed $shell_tool
   check_umar_empty "$@"
 
-  if [ "$1" = "open" ]; then
-    shift
-    u_open "$@"
-  elif [ "$1" = "kill" ]; then
-    shift
-    u_kill_process "$@"
-  elif [ "$1" = "search" ]; then
-    shift
-    u_search "$@"
-  elif [ "$1" = "install" ]; then
-    shift
-    u_install "$@"
-  elif [ "$1" = "remove" ]; then
-    shift
-    u_remove "$@"
-  elif [ "$1" = "upgrade" ]; then
-    shift
-    u_upgrade "$@"
-  elif [ "$1" = "version" ]; then
-    echo "$version"
-  elif [ "$1" = "reveal" ]; then
-    u_reveal
-  elif [ "$1 $2" = "run list" ]; then
-    u_run_list
-  elif [ "$1 $2" = "run set" ]; then
-    u_run_set
-  elif [ "$1" = "run" ]; then
-    shift
-    u_run "$@"
-  elif [ "$1 $2" = "get smarter" ]; then
-    u_get_smarter
-  elif [ "$1 $2" = "show image" ]; then
-    shift
-    shift
-    u_show_image "$@"
-  elif [ "$1 $2" = "play audio" ]; then
-    shift
-    shift
-    u_play_audio "$@"
-  elif [ "$1 $2" = "play video" ]; then
-    shift
-    shift
-    u_play_video "$@"
-  elif [ "$1 $2" = "test http" ]; then
-    shift
-    shift
-    u_test_http "$@"
-  else
-    echo_exit "$invalid_command"
-  fi
+  case "$1 $2" in
+    "get smarter")
+      u_get_smarter
+      return 0
+      ;;
+    "list run")
+      u_list_run
+      return 0
+      ;;
+    "set run")
+      u_set_run
+      return 0
+      ;;
+    "show image")
+      shift
+      shift
+      u_show_image "$@"
+      return 0
+      ;;
+    "play audio")
+      shift
+      shift
+      u_play_audio "$@"
+      return 0
+      ;;
+    "play video")
+      shift
+      shift
+      u_play_video "$@"
+      return 0
+      ;;
+    "test http")
+      shift
+      shift
+      u_test_http "$@"
+      return 0
+      ;;
+    "set ai")
+      u_set_ai
+      return 0
+      ;;
+    "start chat")
+      u_start_chat
+      return 0
+      ;;
+  esac
+
+  case "$1" in
+    "open")
+      shift
+      u_open "$@"
+      return 0
+      ;;
+    "kill")
+      shift
+      u_kill_process "$@"
+      return 0
+      ;;
+    "search")
+      shift
+      u_search "$@"
+      return 0
+      ;;
+    "install")
+      shift
+      u_install "$@"
+      return 0
+      ;;
+    "remove")
+      shift
+      u_remove "$@"
+      return 0
+      ;;
+    "upgrade")
+      shift
+      u_upgrade "$@"
+      return 0
+      ;;
+    "version")
+      echo "$version"
+      return 0
+      ;;
+    "reveal")
+      u_reveal
+      return 0
+      ;;
+    "run")
+      shift
+      u_run "$@"
+      return 0
+      ;;
+    "prompt")
+      shift
+      u_prompt "$@"
+      return 0
+      ;;
+  esac
+
+  echo_exit "$invalid_command"
 }
 
 u_open() {
+  determine_de
   check_open_empty "$@"
 
   a=""
@@ -155,7 +254,7 @@ u_open() {
     fi
   done
 
-  if [ "$a" != "yes" ]; then
+  if ! is_equal "$a" "yes"; then
     kill_combine
   fi
 }
@@ -167,6 +266,7 @@ u_kill_process() {
 
   for arg in "$@"; do
     a="$a\n$(ps -ef | grep "$arg" | grep -v "$pid" | awk '{print $2}')"
+
     ps aux | grep "$arg" | grep -v "$pid"
   done
 
@@ -177,9 +277,9 @@ $command_kill_confirmation"
 
   read -r b < /dev/tty
 
-  if [ "$b" = "y" ]; then
+  if is_equal "$b" "y"; then
     echo "$a" | while IFS= read -r line; do
-      if [ "$line" != "" ]; then
+      if ! is_empty "$line"; then
         sudo kill -9 "$line" > /dev/null 2>&1
       fi
     done
@@ -193,22 +293,27 @@ $command_kill_confirmation"
 }
 
 u_search() {
+  determine_distro
+  determine_de
   install_needed $browser
   exec_combine_default $browser "$search_url$(echo "$*" | sed 's/ /+/g')"
   kill_combine
 }
 
 u_install() {
+  determine_distro
   check_install_empty "$@"
   install_combine "$@"
 }
 
 u_remove() {
+  determine_distro
   check_remove_empty "$@"
   remove_combine "$@"
 }
 
 u_upgrade() {
+  determine_distro
   upgrade_combine "$@"
 }
 
@@ -231,29 +336,39 @@ u_get_smarter() {
 }
 
 u_show_image() {
+  determine_distro
+  determine_de
   check_show_empty "$@"
   install_needed $img_display
   exec_combine_async_no_std_out $img_display "$@"
 }
 
 u_play_audio() {
+  determine_distro
+  determine_de
   check_play_empty "$@"
   install_needed $audio_player
   exec_combine_default_with_std_out $audio_player -v "$@"
 }
 
 u_play_video() {
+  determine_distro
+  determine_de
   check_play_empty "$@"
   install_needed $video_player
   exec_combine_async_no_std_out $video_player "$@"
 }
 
 u_reveal() {
+  determine_distro
+  determine_de
   install_needed $editor
   exec_combine_default $editor -R "$install_dir/$target_name"
 }
 
 u_test_http() {
+  determine_distro
+  determine_de
   install_needed $http_test_tool
 
   a="10"
@@ -266,69 +381,66 @@ u_test_http() {
 
   while [ $# -gt 0 ]; do
     case "$1" in
-      -contentType*)
-        g="${1#-contentType}"
-        if [ -z "$g" ]; then
-          shift
-          g="$1"
-        fi
-        ;;
-      -c*)
+      -c)
         a="${1#-c}"
         if [ -z "$a" ]; then
           shift
           a="$1"
         fi
         ;;
-      -t*)
+      -t)
         b="${1#-t}"
         if [ -z "$b" ]; then
           shift
           b="$1"
         fi
         ;;
-      -r*)
+      -r)
         c="${1#-r}"
         if [ -z "$c" ]; then
           shift
           c="$1"
         fi
         ;;
-      -userAgent*)
-        f="${1#-userAgent}"
-        if [ -z "$f" ]; then
-          shift
-          f="$1"
-        fi
-        ;;
-      -u*)
+      -u)
         d="${1#-u}"
         if [ -z "$d" ]; then
           shift
           d="$1"
         fi
         ;;
-      -header*)
+      -userAgent)
+        f="${1#-userAgent}"
+        if [ -z "$f" ]; then
+          shift
+          f="$1"
+        fi
+        ;;
+      -header)
         e="${1#-header}"
         if [ -z "$e" ]; then
           shift
           e="$1"
         fi
         ;;
-      *)
-        usage
+      -contentType)
+        g="${1#-contentType}"
+        if [ -z "$g" ]; then
+          shift
+          g="$1"
+        fi
         ;;
     esac
     shift
   done
 
-  if [ "$d" = "" ]; then
+  if is_empty "$d"; then
     printf_exit "$command_test_http_no_url"
   fi
 
-  if ! [ "$b" = "" ]; then
+  if ! is_empty "$b"; then
      exec_combine_default_with_std_out $http_test_tool -vbp "-c$a" "-t${b}S" --header="$e" --user-agent="$f" --content-type="$g" "$d"
-  elif ! [ "$c" = "" ]; then
+  elif ! is_empty "$c"; then
      exec_combine_default_with_std_out $http_test_tool -vbp "-c$a" "-r$c" --header="$e" --user-agent="$f" --content-type="$g" "$d"
   else
     exec_combine_default_with_std_out $http_test_tool -vbp "-c$a" "-t10S" --header="$e" --user-agent="$f" --content-type="$g" "$d"
@@ -336,6 +448,7 @@ u_test_http() {
 }
 
 u_run() {
+  determine_de
   check_run_empty "$@"
 
   read_config_run_list | while IFS=: read -r _a _b _c; do
@@ -352,7 +465,7 @@ u_run() {
   done
 }
 
-u_run_set() {
+u_set_run() {
   printf "%s" "$command_run_set_name "
 
   read -r _a < /dev/tty
@@ -398,7 +511,7 @@ u_run_set() {
   echo "$command_run_set_registered"
 }
 
-u_run_list() {
+u_list_run() {
   a="$(read_config_run_list)"
 
   if is_empty "$a"; then
@@ -414,6 +527,66 @@ u_run_list() {
   done
 }
 
+u_prompt() {
+  determine_distro
+  determine_ai
+  check_ai
+  printf_ai_info
+
+  text=$(make_http_request_ai "$@")
+
+  echo_typing "$(echo "$text" | markdown_parse)"
+}
+
+u_set_ai() {
+  printf "%s" "$command_set_ai_type "
+
+  read -r _a < /dev/tty
+
+  if is_empty "$_a"; then
+    echo_exit "$command_set_ai_type_empty"
+  fi
+
+  if ! is_equal "$_a" "1"; then
+    echo_exit "$command_set_ai_type_wrong"
+  fi
+
+  if is_equal "$_a" "1"; then
+    printf "%s" "$command_set_ai_model_google "
+  fi
+
+  read -r _b < /dev/tty
+
+  if is_empty "$_b"; then
+    echo_exit "$command_set_ai_model_empty"
+  fi
+
+  if is_equal "$_a" "1"; then
+    if ! is_equal "$_b" "1" && ! is_equal "$_b" "2" && ! is_equal "$_b" "3"; then
+      echo_exit "$command_set_ai_model_wrong"
+    fi
+  fi
+
+  printf "%s" "$command_set_ai_api_key "
+
+  read -r _c < /dev/tty
+
+  write_config_ai "$_a
+$_b
+$_c"
+
+  echo "$command_set_ai_registered"
+}
+
+u_start_chat() {
+  determine_distro
+  determine_ai
+  check_ai
+  printf_ai_info
+
+  echo_exit "$feature_is_not_implemented_yet"
+}
+
 # echo
 
 echo_exit() {
@@ -421,11 +594,43 @@ echo_exit() {
   exit 0
 }
 
+echo_typing() {
+  a=$(printf "%s" "$1" | sed 's/$/\\n/' | tr -d '\n')
+  i=0
+
+  while [ $i -lt ${#a} ]; do
+    # shellcheck disable=SC2004
+    char=$(printf "%s" "$a" | cut -c $(($i+1)))
+
+    if is_equal "$char" "\\"; then
+      # shellcheck disable=SC2004
+      next_char=$(printf "%s" "$a" | cut -c $(($i+2)))
+      if is_equal "$next_char" "n"; then
+        printf "\n"
+        # shellcheck disable=SC2004
+        i=$(($i + 1))
+      fi
+    else
+      printf "%s" "$char"
+    fi
+
+    sleep "$typing_speed"
+    # shellcheck disable=SC2004
+    i=$(($i + 1))
+  done
+
+  echo
+}
+
 # printf
 
 printf_exit() {
   printf "$1%s\n"
   exit 0
+}
+
+printf_ai_info() {
+  printf "${color_yellow}$ai ($(get_ai_model))${color_reset} :%s\n\n"
 }
 
 # check
@@ -486,30 +691,93 @@ check_run_empty() {
   fi
 }
 
+check_prompt_empty() {
+  if is_no_argument "$@"; then
+    echo_exit "$prompt_empty"
+  fi
+}
+
+check_ai() {
+  check_ai_empty
+  check_ai_url_empty
+  check_ai_api_key_empty
+  check_ai_model_empty
+}
+
+check_ai_empty() {
+  if is_ai_google; then
+    return 0
+  fi
+
+  echo_exit "$ai_empty"
+}
+
+check_ai_url_empty() {
+  if is_ai_google; then
+    if ! is_empty "$generative_ai_url"; then
+      return 0
+    fi
+  fi
+
+  echo_exit "$ai_url_empty"
+}
+
+check_ai_api_key_empty() {
+  if is_ai_google; then
+    if ! is_empty "$gemini_api_key"; then
+      return 0
+    fi
+  fi
+
+  echo_exit "$ai_api_key_empty"
+}
+
+check_ai_model_empty() {
+  if is_ai_google; then
+    if ! is_empty "$gemini_model"; then
+      return 0
+    fi
+  fi
+
+  echo_exit "$ai_model_empty"
+}
+
 # is
+
+is_equal() {
+  [ "$1" = "$2" ]
+}
+
+is_empty() {
+  is_equal "$1" ""
+}
+
+is_contain() {
+  echo "$1" | grep -q "$2"
+}
 
 is_no_argument() {
   [ $# -eq 0 ]
 }
 
 is_arch() {
-  [ "$distro" = "arch" ] || [ "$distro" = "manjaro" ]
+  is_equal "$distro" "arch" || is_equal "$distro" "manjaro"
 }
 
 is_debian() {
-  [ "$distro" = "debian" ] || [ "$distro" = "ubuntu" ]
+  is_equal "$distro" "debian" || is_equal "$distro" "ubuntu"
 }
 
 is_fedora() {
-  [ "$distro" = "fedora" ] || [ "$distro" = "centos" ]
+  is_equal "$distro" "fedora" || is_equal "$distro" "centos"
 }
 
 is_unknown() {
-  [ "$distro" = "unknown" ]
+  is_equal "$distro" "unknown"
 }
 
 is_de_i3wm() {
-  [ "$de" = "i3wm" ] || [ "$de" = "i3" ] || [ "$de" = "I3WM" ] || [ "$de" = "I3" ]
+  is_equal "$de" "i3wm" || is_equal "$de" "i3" || is_equal "$de" "I3WM" || is_equal "$de" "I3"
 }
 
 is_package_exist() {
@@ -528,16 +796,28 @@ is_dir_exist() {
   [ -d "$1" ]
 }
 
-is_empty() {
-  [ "$1" = "" ]
+is_ai_google() {
+  is_equal "$ai" "google"
 }
 
-is_contain() {
-  echo "$1" | grep -q "$2"
+# get
+
+get_ai_url() {
+  if is_ai_google; then
+    echo "$generative_ai_url"
+  fi
 }
 
-is_equal() {
-  [ "$1" = "$2" ]
+get_ai_model() {
+  if is_ai_google; then
+    echo "$gemini_model"
+  fi
+}
+
+get_ai_api_key() {
+  if is_ai_google; then
+    echo "$gemini_api_key"
+  fi
 }
 
 # install
@@ -821,6 +1101,33 @@ determine_de() {
   de="unknown"
 }
 
+determine_ai() {
+  if ! is_file_exist "$config_ai_filepath"; then
+    return 0
+  fi
+
+  a=$(sed -n '1p' "$config_ai_filepath")
+  b=$(sed -n '2p' "$config_ai_filepath")
+  c=$(sed -n '3p' "$config_ai_filepath")
+
+  if is_equal "$a" "1"; then
+    ai="google"
+  fi
+
+  if is_ai_google; then
+    if is_equal "$b" "1"; then
+      gemini_model="$gemini_model_1"
+    elif is_equal "$b" "2"; then
+      gemini_model="$gemini_model_2"
+    elif is_equal "$b" "3"; then
+      gemini_model="$gemini_model_3"
+    fi
+
+    gemini_api_key="$c"
+  fi
+}
+
+
 # i3wm
 
 i3wm_split_lr() {
@@ -852,6 +1159,7 @@ create_file() {
 create_config() {
   create_dir "$config_dir"
   create_file "$config_run_list_filepath"
+  create_file "$config_ai_filepath"
 }
 
 # write
@@ -862,6 +1170,10 @@ write_to_file() {
 
 write_config_run_list() {
   write_to_file "$1" "$config_run_list_filepath"
+}
+
+write_config_ai() {
+  write_to_file "$1" "$config_ai_filepath"
 }
 
 # read
@@ -878,6 +1190,10 @@ read_config_run_list() {
   read_file_content "$config_run_list_filepath"
 }
 
+read_config_ai() {
+  read_file_content "$config_ai_filepath"
+}
+
 # append
 
 append_config_run_list() {
@@ -885,7 +1201,171 @@ append_config_run_list() {
 $1"
 }
 
-determine_distro
-determine_de
+# make http request
+
+make_http_request() {
+  install_needed $json_tool
+
+  a=""
+  b="application/json"
+  c="POST"
+  d=""
+
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -url)
+        a="${1#-url}"
+        if [ -z "$a" ]; then
+          shift
+          a="$1"
+        fi
+        ;;
+      -contentType)
+        b="${1#-contentType}"
+        if [ -z "$b" ]; then
+          shift
+          b="$1"
+        fi
+        ;;
+      -method)
+        c="${1#-method}"
+        if [ -z "$c" ]; then
+          shift
+          c="$1"
+        fi
+        ;;
+      -requestBody)
+        d="${1#-requestBody}"
+        if [ -z "$d" ]; then
+          shift
+          d="$1"
+        fi
+        ;;
+    esac
+    shift
+  done
+
+  curl "$a" -H "Content-Type: $b" -X "$c" -d "$d"
+}
+
+make_http_request_ai() {
+  make_http_request_google_ai "$@"
+}
+
+make_http_request_google_ai() {
+  if ! is_ai_google; then
+    return 0
+  fi
+
+  check_prompt_empty "$@"
+
+  prompt=""
+
+  for arg in "$@"; do
+    if is_empty "$prompt"; then
+      prompt="$arg"
+    else
+      prompt="$prompt $arg"
+    fi
+  done
+
+  http_response=$(make_http_request -url "$(get_ai_url)/$(get_ai_model):generateContent?key=$(get_ai_api_key)" -requestBody "
+    {
+      \"contents\": [{
+        \"parts\":[
+          {\"text\": \"$prompt\"}
+        ]
+      }],
+      \"generationConfig\": {
+        \"temperature\": 0.9
+      }
+    }"
+  )
+
+  echo
+
+  text=$(printf '%s\n' "$http_response" | jq -r '.candidates[0].content.parts[0].text')
+
+  if is_equal "$text" "null"; then
+    echo_exit "$http_response"
+  fi
+
+  echo "$text"
+}
+
+# markdown
+
+markdown_parse() {
+  awk '
+    BEGIN {
+      bold_start = "\033[1m"
+      bold_end = "\033[0m"
+      italic_start = "\033[3m"
+      italic_end = "\033[0m"
+      header_start = "\033[1;37m"
+      header_end = "\033[0m"
+      strikethrough_start = "\033[9m"
+      strikethrough_end = "\033[0m"
+      code_start = "\033[0;36m"
+      code_end = "\033[0m"
+      link_start = "\033[4m"
+      link_end = "\033[0m"
+      horizontal_rule = "\033[2m────────────────────────────────────────────────────────────\033[0m"
+      code_block_start = "\033[0;32m"
+      code_block_end = "\033[0m"
+    }
+
+    {
+      if ($0 ~ /^# /) {
+        sub(/^# +/, "")
+        print header_start $0 header_end
+        next
+      }
+
+      if ($0 ~ /^[-*]\{3,}$/) {
+        print horizontal_rule
+        next
+      }
+
+      if ($0 ~ /^```/) {
+        if (in_code_block) {
+          print code_block_end
+          in_code_block = 0
+        } else {
+          print code_block_start
+          in_code_block = 1
+        }
+        next
+      }
+      if (in_code_block) {
+        print $0
+        next
+      }
+
+      while (match($0, /\[([^\]]+)\]\([^\)]+\)/)) {
+        $0 = substr($0, 1, RSTART-1) link_start substr($0, RSTART+1, RLENGTH-2) link_end substr($0, RSTART+RLENGTH)
+      }
+
+      while (match($0, /~~([^~]+)~~/)) {
+        $0 = substr($0, 1, RSTART-1) strikethrough_start substr($0, RSTART+2, RLENGTH-4) strikethrough_end substr($0, RSTART+RLENGTH)
+      }
+
+      while (match($0, /\*\*([^*]+)\*\*/)) {
+        $0 = substr($0, 1, RSTART-1) bold_start substr($0, RSTART+2, RLENGTH-4) bold_end substr($0, RSTART+RLENGTH)
+      }
+
+      while (match($0, /\*([^*]+)\*/)) {
+        $0 = substr($0, 1, RSTART-1) italic_start substr($0, RSTART+1, RLENGTH-2) italic_end substr($0, RSTART+RLENGTH)
+      }
+
+      while (match($0, /`([^`]+)`/)) {
+        $0 = substr($0, 1, RSTART-1) code_start substr($0, RSTART+1, RLENGTH-2) code_end substr($0, RSTART+RLENGTH)
+      }
+
+      print
+    }
+    '
+}
+
 create_config
 umar "$@"
