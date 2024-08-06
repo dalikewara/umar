@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.1.1"
+version="v1.1.2"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -242,10 +242,10 @@ u_open() {
 
   for arg in "$@"; do
     if is_package_exist "$arg"; then
-      exec_combine_async_no_std_out "$arg"
+      exec_combine_async_no_std_out_base "$arg"
     else
       if is_user_package_exist "$arg"; then
-        exec_combine_async_no_std_out "$arg"
+        exec_combine_async_no_std_out_base "$arg"
       else
         a="yes"
 
@@ -296,7 +296,7 @@ u_search() {
   determine_distro
   determine_de
   install_needed $browser
-  exec_combine_default $browser "$search_url$(echo "$*" | sed 's/ /+/g')"
+  exec_combine_default_base $browser "$search_url$(echo "$*" | sed 's/ /+/g')"
   kill_combine
 }
 
@@ -340,7 +340,7 @@ u_show_image() {
   determine_de
   check_show_empty "$@"
   install_needed $img_display
-  exec_combine_async_no_std_out $img_display "$@"
+  exec_combine_async_no_std_out_base $img_display "$@"
 }
 
 u_play_audio() {
@@ -348,7 +348,7 @@ u_play_audio() {
   determine_de
   check_play_empty "$@"
   install_needed $audio_player
-  exec_combine_default_with_std_out $audio_player -v "$@"
+  exec_combine_default_with_std_out_base $audio_player -v "$@"
 }
 
 u_play_video() {
@@ -356,14 +356,14 @@ u_play_video() {
   determine_de
   check_play_empty "$@"
   install_needed $video_player
-  exec_combine_async_no_std_out $video_player "$@"
+  exec_combine_async_no_std_out_base $video_player "$@"
 }
 
 u_reveal() {
   determine_distro
   determine_de
   install_needed $editor
-  exec_combine_default $editor -R "$install_dir/$target_name"
+  exec_combine_default_base $editor -R "$install_dir/$target_name"
 }
 
 u_test_http() {
@@ -439,11 +439,11 @@ u_test_http() {
   fi
 
   if ! is_empty "$b"; then
-     exec_combine_default_with_std_out $http_test_tool -vbp "-c$a" "-t${b}S" --header="$e" --user-agent="$f" --content-type="$g" "$d"
+     exec_combine_default_with_std_out_base $http_test_tool -vbp "-c$a" "-t${b}S" --header="$e" --user-agent="$f" --content-type="$g" "$d"
   elif ! is_empty "$c"; then
-     exec_combine_default_with_std_out $http_test_tool -vbp "-c$a" "-r$c" --header="$e" --user-agent="$f" --content-type="$g" "$d"
+     exec_combine_default_with_std_out_base $http_test_tool -vbp "-c$a" "-r$c" --header="$e" --user-agent="$f" --content-type="$g" "$d"
   else
-    exec_combine_default_with_std_out $http_test_tool -vbp "-c$a" "-t10S" --header="$e" --user-agent="$f" --content-type="$g" "$d"
+    exec_combine_default_with_std_out_base $http_test_tool -vbp "-c$a" "-t10S" --header="$e" --user-agent="$f" --content-type="$g" "$d"
   fi
 }
 
@@ -936,8 +936,16 @@ exec_async_no_std_out() {
   exec sh -c "$@" > /dev/null 2>&1 &
 }
 
+exec_async_no_std_out_base() {
+  exec "$@" > /dev/null 2>&1 &
+}
+
 exec_async_f_with_std_out() {
   exec sh -c "$@" &
+}
+
+exec_async_f_with_std_out_base() {
+  exec "$@" &
 }
 
 exec_async_no_std_out_i3wm() {
@@ -946,10 +954,23 @@ exec_async_no_std_out_i3wm() {
   i3wm_focus_r
   i3wm_focus_l
 }
+exec_async_no_std_out_i3wm_base() {
+  i3wm_split_lr
+  exec_async_no_std_out_base "$@"
+  i3wm_focus_r
+  i3wm_focus_l
+}
+
 
 exec_async_f_with_std_out_i3wm() {
   i3wm_split_lr
   exec_async_f_with_std_out "$@"
+  i3wm_focus_r
+  i3wm_focus_l
+}
+exec_async_f_with_std_out_i3wm_base() {
+  i3wm_split_lr
+  exec_async_f_with_std_out_base "$@"
   i3wm_focus_r
   i3wm_focus_l
 }
@@ -958,17 +979,36 @@ exec_default() {
   exec sh -c "$@" 2> /dev/null
 }
 
+exec_default_base() {
+  exec "$@" 2> /dev/null
+}
+
 exec_default_with_std_out() {
   exec sh -c "$@"
+}
+
+exec_default_with_std_out_base() {
+  exec "$@"
 }
 
 exec_default_f_with_std_out() {
   exec sh -c "$@"
 }
 
+exec_default_f_with_std_out_base() {
+  exec "$@"
+}
+
 exec_default_i3wm() {
   i3wm_split_lr
   exec_default "$@"
+  i3wm_focus_r
+  i3wm_focus_l
+}
+
+exec_default_i3wm_base() {
+  i3wm_split_lr
+  exec_default_base "$@"
   i3wm_focus_r
   i3wm_focus_l
 }
@@ -980,9 +1020,23 @@ exec_default_with_std_out_i3wm() {
   i3wm_focus_l
 }
 
+exec_default_with_std_out_i3wm_base() {
+  i3wm_split_lr
+  exec_default_with_std_out_base "$@"
+  i3wm_focus_r
+  i3wm_focus_l
+}
+
 exec_default_f_with_std_out_i3wm() {
   i3wm_split_lr
   exec_default_f_with_std_out "$@"
+  i3wm_focus_r
+  i3wm_focus_l
+}
+
+exec_default_f_with_std_out_i3wm_base() {
+  i3wm_split_lr
+  exec_default_f_with_std_out_base "$@"
   i3wm_focus_r
   i3wm_focus_l
 }
@@ -995,11 +1049,27 @@ exec_combine_async_no_std_out() {
   fi
 }
 
+exec_combine_async_no_std_out_base() {
+  if is_de_i3wm; then
+    exec_async_no_std_out_i3wm_base "$@"
+  else
+    exec_async_no_std_out_base "$@"
+  fi
+}
+
 exec_combine_async_f_with_std_out() {
   if is_de_i3wm; then
     exec_async_f_with_std_out_i3wm "$@"
   else
     exec_async_f_with_std_out "$@"
+  fi
+}
+
+exec_combine_async_f_with_std_out_base() {
+  if is_de_i3wm; then
+    exec_async_f_with_std_out_i3wm_base "$@"
+  else
+    exec_async_f_with_std_out_base "$@"
   fi
 }
 
@@ -1011,6 +1081,14 @@ exec_combine_default() {
   fi
 }
 
+exec_combine_default_base() {
+  if is_de_i3wm; then
+    exec_default_i3wm_base "$@"
+  else
+    exec_default_base "$@"
+  fi
+}
+
 exec_combine_default_with_std_out() {
   if is_de_i3wm; then
     exec_default_with_std_out_i3wm "$@"
@@ -1019,11 +1097,27 @@ exec_combine_default_with_std_out() {
   fi
 }
 
+exec_combine_default_with_std_out_base() {
+  if is_de_i3wm; then
+    exec_default_with_std_out_i3wm_base "$@"
+  else
+    exec_default_with_std_out_base "$@"
+  fi
+}
+
 exec_combine_default_f_with_std_out() {
   if is_de_i3wm; then
     exec_default_f_with_std_out_i3wm "$@"
   else
     exec_default_f_with_std_out "$@"
+  fi
+}
+
+exec_combine_default_f_with_std_out_base() {
+  if is_de_i3wm; then
+    exec_default_f_with_std_out_i3wm_base "$@"
+  else
+    exec_default_f_with_std_out_base "$@"
   fi
 }
 
