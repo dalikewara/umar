@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.1.4"
+version="v1.1.6"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -601,11 +601,11 @@ echo_typing() {
 
   while [ $i -lt ${#a} ]; do
     # shellcheck disable=SC2004
-    char=$(printf "%b" "$a" | cut -c $(($i+1)))
+    char=$(printf "%s" "$a" | cut -c $(($i+1)))
 
     if is_equal "$char" "\\"; then
       # shellcheck disable=SC2004
-      next_char=$(printf "%b" "$a" | cut -c $(($i+2)))
+      next_char=$(printf "%s" "$a" | cut -c $(($i+2)))
       if is_equal "$next_char" "n"; then
         printf "\n"
         # shellcheck disable=SC2004
@@ -1377,7 +1377,7 @@ make_http_request_google_ai() {
 
   echo
 
-  text=$(printf '%b\n' "$http_response" | jq -r '.candidates[0].content.parts[0].text')
+  text=$(printf '%s\n' "$http_response" | jq -r '.candidates[0].content.parts[0].text')
 
   if is_equal "$text" "null"; then
     echo_exit "$http_response"
