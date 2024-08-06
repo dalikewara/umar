@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.1.6"
+version="v1.1.7"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -701,7 +701,7 @@ check_prompt_empty() {
 check_ai() {
   check_ai_empty
   check_ai_url_empty
-  check_ai_api_key_empty
+#  check_ai_api_key_empty
   check_ai_model_empty
 }
 
