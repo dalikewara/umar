@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v1.1.10"
+version="v1.1.11"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -25,6 +25,9 @@ gemini_model=""
 gemini_model_1="gemini-1.0-pro"
 gemini_model_2="gemini-1.5-pro"
 gemini_model_3="gemini-1.5-flash"
+tmp_ai_type=""
+tmp_ai_model=""
+tmp_ai_api_key=""
 target_name="umar"
 browser="w3m"
 img_display="feh"
@@ -90,6 +93,7 @@ show_empty="You didn't provide any names to show!"
 play_empty="You didn't provide any names to play!"
 run_empty="You didn't provide any names to run!"
 prompt_empty="You didn't provide any prompt!"
+change_empty="You didn't provide new content to change!"
 ai_empty="You didn't provide any AI type to process!
 You can use this command to set up the new one: ${color_cyan}umar set ai${color_reset}"
 ai_url_empty="You didn't provide any AI url to process!
@@ -98,6 +102,8 @@ ai_api_key_empty="You didn't provide any AI api key to process!
 You can use this command to set up the new one: ${color_cyan}umar set ai${color_reset}"
 ai_model_empty="You didn't provide any AI model to process!
 You can use this command to set up the new one: ${color_cyan}umar set ai${color_reset}"
+
+ok="OK"
 
 file_not_found="file is not found!"
 
@@ -116,8 +122,12 @@ list run:List registered custom command(s)
 set run:Set new custom command
 --------------:--------------------------
 prompt:Prompt anything to AI
-set ai:Set new AI configuration
 start chat:Start new chat session with AI
+set ai:Set new AI configuration
+show ai:Show AI information
+change ai type:Change AI type
+change ai model:Change AI model
+change ai api key:Change AI API key
 --------------:--------------------------
 open:Open package(s)
 kill:Kill package(s) process
@@ -144,11 +154,39 @@ $umar
 "
 
     echo "$commands" | while IFS=: read -r _u_name _u_description; do
-      printf "${color_green}%-15s ${color_reset}%b\n" "$_u_name" "$_u_description"
+      printf "${color_green}%-20s ${color_reset}%b\n" "$_u_name" "$_u_description"
     done
 
     exit 0
   fi
+
+  case "$1 $2 $3 $4" in
+    "change ai api key")
+      shift
+      shift
+      shift
+      shift
+      u_change_ai_api_key
+      return 0
+      ;;
+    esac
+
+  case "$1 $2 $3" in
+    "change ai type")
+      shift
+      shift
+      shift
+      u_change_ai_type
+      return 0
+      ;;
+    "change ai model")
+      shift
+      shift
+      shift
+      u_change_ai_model
+      return 0
+      ;;
+    esac
 
   case "$1 $2" in
     "get smarter")
@@ -193,6 +231,10 @@ $umar
       ;;
     "start chat")
       u_start_chat
+      return 0
+      ;;
+    "show ai")
+      u_show_ai
       return 0
       ;;
   esac
@@ -562,49 +604,13 @@ u_prompt() {
 }
 
 u_set_ai() {
-  printf "%b" "$command_set_ai_type "
+  set_tmp_ai_type
+  set_tmp_ai_model "$tmp_ai_type"
+  set_tmp_ai_api_key "$tmp_ai_type"
 
-  _u_s_a_type=$(read_func)
-
-  if is_empty "$_u_s_a_type"; then
-    echo_exit "$command_set_ai_type_empty"
-  fi
-
-  if ! is_equal "$_u_s_a_type" "1"; then
-    echo_exit "$command_set_ai_type_wrong"
-  fi
-
-  if is_equal "$_u_s_a_type" "1"; then
-    printf "%b" "$command_set_ai_model_google "
-  fi
-
-  _u_s_a_model=$(read_func)
-
-  if is_empty "$_u_s_a_model"; then
-    echo_exit "$command_set_ai_model_empty"
-  fi
-
-  if is_equal "$_u_s_a_type" "1"; then
-    if ! is_equal "$_u_s_a_model" "1" && ! is_equal "$_u_s_a_model" "2" && ! is_equal "$_u_s_a_model" "3"; then
-      echo_exit "$command_set_ai_model_wrong"
-    fi
-  fi
-
-  if is_equal "$_u_s_a_type" "1"; then
-    printf "%b" "$command_set_ai_api_key_google "
-  fi
-
-  _u_s_a_api_key=$(read_func)
-
-  if is_equal "$_u_s_a_type" "1"; then
-    if is_empty "$_u_s_a_api_key"; then
-      echo_exit "$command_set_ai_api_key_empty"
-    fi
-  fi
-
-  write_config_ai "$_u_s_a_type
-$_u_s_a_model
-$_u_s_a_api_key"
+  write_config_ai "$tmp_ai_type
+$tmp_ai_model
+$tmp_ai_api_key"
 
   echo "$command_set_ai_registered"
 }
@@ -616,6 +622,48 @@ u_start_chat() {
   printf_ai_info
 
   echo_exit "$feature_is_not_implemented_yet"
+}
+
+u_show_ai() {
+  determine_ai
+  check_ai
+  printf_ai_info_complete
+}
+
+u_change_ai_type() {
+  determine_ai
+  check_ai
+  set_tmp_ai_type
+
+  change_file_content_line "1" "$tmp_ai_type" "$config_ai_filepath"
+
+  echo "$ok"
+}
+
+u_change_ai_model() {
+  determine_ai
+  check_ai
+
+  _u_c_a_m_type=$(sed -n '1p' "$config_ai_filepath")
+
+  set_tmp_ai_model "$_u_c_a_m_type"
+
+  change_file_content_line "2" "$tmp_ai_model" "$config_ai_filepath"
+
+  echo "$ok"
+}
+
+u_change_ai_api_key() {
+  determine_ai
+  check_ai
+
+  _u_c_a_a_k_type=$(sed -n '1p' "$config_ai_filepath")
+
+  set_tmp_ai_api_key "$_u_c_a_a_k_type"
+
+  change_file_content_line "3" "$tmp_ai_api_key" "$config_ai_filepath"
+
+  echo "$ok"
 }
 
 # echo
@@ -662,6 +710,16 @@ printf_exit() {
 
 printf_ai_info() {
   printf "${color_yellow}$ai ($(get_ai_model))${color_reset} :%b\n\n"
+}
+
+printf_ai_info_complete() {
+  __p_a_i_c_api_key="* * * * *"
+
+  if is_empty "$(get_ai_api_key)"; then
+    __p_a_i_c_api_key=""
+  fi
+
+  printf "Type: ${color_yellow}$ai\n${color_reset}Model: ${color_yellow}$(get_ai_model)\n${color_reset}API key: ${color_blue}$__p_a_i_c_api_key${color_reset}%b\n"
 }
 
 # check
@@ -711,6 +769,12 @@ check_run_empty() {
 check_prompt_empty() {
   if is_no_argument "$@"; then
     echo_exit "$prompt_empty"
+  fi
+}
+
+check_change_empty() {
+  if is_no_argument "$@"; then
+    echo_exit "$change_empty"
   fi
 }
 
@@ -1304,11 +1368,81 @@ read_config_ai() {
   read_file_content "$config_ai_filepath"
 }
 
+read_func() {
+  read -r _r_f_input < /dev/tty
+
+  echo "$_r_f_input"
+}
+
+# set
+
+set_tmp_ai_type() {
+  printf "%b" "$command_set_ai_type "
+
+  __s_t_a_t_type=$(read_func)
+
+  if is_empty "$__s_t_a_t_type"; then
+    echo_exit "$command_set_ai_type_empty"
+  fi
+
+  if ! is_equal "$__s_t_a_t_type" "1"; then
+    echo_exit "$command_set_ai_type_wrong"
+  fi
+
+  tmp_ai_type="$__s_t_a_t_type"
+}
+
+set_tmp_ai_model() {
+  if is_equal "$1" "1"; then
+    printf "%b" "$command_set_ai_model_google "
+  else
+    echo_exit "$command_set_ai_type_wrong"
+  fi
+
+  _s_t_a_m_model=$(read_func)
+
+  if is_empty "$_s_t_a_m_model"; then
+    echo_exit "$command_set_ai_model_empty"
+  fi
+
+  if is_equal "$1" "1"; then
+    if ! is_equal "$_s_t_a_m_model" "1" && ! is_equal "$_s_t_a_m_model" "2" && ! is_equal "$_s_t_a_m_model" "3"; then
+      echo_exit "$command_set_ai_model_wrong"
+    fi
+  fi
+
+  tmp_ai_model="$_s_t_a_m_model"
+}
+
+set_tmp_ai_api_key() {
+  if is_equal "$1" "1"; then
+    printf "%b" "$command_set_ai_api_key_google "
+  else
+    echo_exit "$command_set_ai_type_wrong"
+  fi
+
+  _s_t_a_a_k_api_key=$(read_func)
+
+  if is_equal "$1" "1"; then
+    if is_empty "$_s_t_a_a_k_api_key"; then
+      echo_exit "$command_set_ai_api_key_empty"
+    fi
+  fi
+
+  tmp_ai_api_key="$_s_t_a_a_k_api_key"
+}
+
 # append
 
 append_config_run_list() {
   echo "$(read_config_run_list)
 $1"
+}
+
+# change
+
+change_file_content_line() {
+  sed -i "$1s/.*/$2/" "$3"
 }
 
 # make http request
@@ -1473,14 +1607,6 @@ markdown_parse() {
       print
     }
     '
-}
-
-# read func
-
-read_func() {
-  read -r _r_f_input < /dev/tty
-
-  echo "$_r_f_input"
 }
 
 create_config
