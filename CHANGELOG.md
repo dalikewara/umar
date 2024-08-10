@@ -2,11 +2,15 @@
 
 ## 2024
 
+- **v1.2.0** (2024-08-11)
+  - Refactor
+  - Add `window` command
+
 - **v1.1.8 - v1.1.11** (2024-08-07)
   - After release changes
 
 - **v1.1.0 - v1.1.7** (2024-08-06)
-  - Add AI
+  - Add AI command(s)
   - After release changes
 
 - **v1.0.15 - v1.0.16** (2024-08-04)

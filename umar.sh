@@ -1,6 +1,8 @@
 #!/bin/sh
 
-version="v1.1.11"
+# config
+
+version="v1.2.0"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -9,6 +11,8 @@ user_package_dir="/usr/local/bin"
 config_dir="$HOME/.umar"
 config_run_list_filepath="$config_dir/run-list.cfg"
 config_ai_filepath="$config_dir/ai.cfg"
+config_tmp_value_filepath="$config_dir/tmp_value.cfg"
+config_tmp_error_filepath="$config_dir/tmp_error.cfg"
 color_green='\033[0;32m'
 color_cyan='\033[0;36m'
 color_blue='\033[0;34m'
@@ -29,100 +33,95 @@ tmp_ai_type=""
 tmp_ai_model=""
 tmp_ai_api_key=""
 target_name="umar"
-browser="w3m"
-img_display="feh"
-audio_player="mpg123"
-video_player="mpv"
-editor="vim"
-http_test_tool="siege"
-json_tool="jq"
-shell_tool="sh"
 typing_speed=0.005
+http_header="X-HELLO:X-WORLD"
 
-umar="I am Umar ($version), your little Linux assistant. I can help you with the common tasks listed below. \
-I will continue to be updated indefinitely, as my creator may need to add new features, \
-update my logic, fix issues, or make other changes. So, I may get smarter every day. I can also use AI, \
-but you need to manually set up the configuration first."
-invalid_command="Sorry, I can't understand your command"
-command_open_name_not_found="is not found!"
-command_kill_confirmation="All processes listed above will be terminated. Are you sure? [N/y]"
-command_kill_confirmation_y="All processes have been terminated!"
-command_kill_confirmation_n="Aborted!"
-command_test_http_no_url="Please provide me with a URL to test!
+# message
+
+message_umar="I am Umar ($version), your Linux assistant. I can help you with the common tasks listed below. \
+I will continue to be updated indefinitely, as my creator may need to add new features, update my logic, fix issues, \
+or make other changes. I may get smarter every day. I can also use AI, but you need to manually set up the configuration first."
+message_package_not_found="package not found!"
+message_invalid_command="Sorry, I can't understand your command"
+message_kill_confirmation="All processes listed above will be terminated. Are you sure? [N/y]"
+message_all_process_terminated="All processes have been terminated!"
+message_aborted="Operation aborted!"
+message_test_http_no_url="Please provide a URL to test!
 Use this option: ${color_cyan}-u ${color_blue}URL${color_reset}"
-command_run_list_empty="No custom command has been set"
-command_run_set_name="Enter name..."
-command_run_set_name_contain_colon="Name can't contains a colon"
-command_run_set_name_exist="Name already exist"
-command_run_set_name_empty="Name can't be empty"
-command_run_set_description="Enter description..."
-command_run_set_description_contain_colon="Description can't contains a colon"
-command_run_set_command="Enter execution command..."
-command_run_set_command_empty="Execution command can't be empty"
-command_run_set_registered="OK"
-command_set_ai_type="AI type:
+message_run_list_empty="No custom commands have been set"
+message_run_set_name="Enter a name..."
+message_run_set_name_contain_colon="The name can't contain a colon!"
+message_run_set_name_exist="The name already exists!"
+message_run_set_name_empty="The name can't be empty!"
+message_run_set_description="Enter a description..."
+message_run_set_description_contain_colon="The description can't contain a colon!"
+message_run_set_command="Enter the execution command..."
+message_run_set_command_empty="The execution command can't be empty!"
+message_ok="OK"
+message_set_ai_type="AI type:
 
 1. Google
 
-Choose AI type number..."
-command_set_ai_type_empty="AI type can't be empty"
-command_set_ai_type_wrong="You choose wrong AI type number"
-command_set_ai_model_google="
+Choose the AI type number..."
+message_set_ai_type_empty="AI type can't be empty!"
+message_set_ai_type_wrong="You chose the wrong AI type number!"
+message_set_ai_model_google="
 AI model:
 
 1. Gemini 1.0 Pro
 2. Gemini 1.5 Pro
 3. Gemini 1.5 Flash
 
-Choose AI model number..."
-command_set_ai_model_empty="AI model can't be empty"
-command_set_ai_model_wrong="You choose wrong AI model number"
-command_set_ai_api_key_google="
-You'll need an API key to use the AI.
-You can follow this doc -> https://ai.google.dev/gemini-api/docs/api-key
+Choose the AI model number..."
+message_set_ai_model_empty="AI model can't be empty!"
+message_set_ai_model_wrong="You chose the wrong AI model number!"
+message_set_ai_api_key_google="
+You'll need an API key to use the AI. You can follow this documentation -> https://ai.google.dev/gemini-api/docs/api-key
 
-Enter API key..."
-command_set_ai_api_key_empty="API Key can't be empty"
-command_set_ai_registered="OK"
+Enter the API key..."
+message_set_ai_api_key_empty="API Key can't be empty!"
+message_set_ai_registered="AI configuration registered"
+message_kill_empty="You didn't provide any names to kill!"
+message_open_empty="You didn't provide any names to open!"
+message_install_empty="You didn't provide any names to install!"
+message_remove_empty="You didn't provide any names to remove!"
+message_show_empty="You didn't provide any names to show!"
+message_play_empty="You didn't provide any names to play!"
+message_run_empty="You didn't provide any commands to run!"
+message_prompt_empty="You didn't provide any prompt text!"
+message_change_empty="You didn't provide new content to change!"
+message_search_empty="You didn't provide any keywords to search!"
+message_ai_empty="You didn't provide any AI type to process!
+You can use this command to set up a new one: ${color_cyan}umar set ai${color_reset}"
+message_ai_url_empty="You didn't provide any AI URL to process!
+You can use this command to set up a new one: ${color_cyan}umar set ai${color_reset}"
+message_ai_model_empty="You didn't provide any AI model to process!
+You can use this command to set up a new one: ${color_cyan}umar set ai${color_reset}"
+message_file_not_found="file not found!"
+message_unknown_distro="Unknown distribution!"
+message_package_not_installed="The package is not installed. Do you want to install it? [N/y]"
+message_package_needed="I need that package(s) to process the command!"
+message_package_needed_installed="The required package(s) have been installed. Refresh the current console/terminal session and run the command again"
+message_feature_is_not_implemented_yet="This feature is not implemented yet!"
+message_press_enter_to_exit="Press Enter to exit"
+message_failed="Operation failed!"
+message_command_not_found="command not found!"
+message_caution_plain="BE CAREFUL ABOUT WHAT YOU TYPE, MAKE SURE THERE IS NOTHING THAT CAN BREAK YOUR SYSTEM"
+message_caution="${color_red}**$message_caution_plain**${color_reset}"
 
-kill_empty="You didn't provide any names to kill!"
-open_empty="You didn't provide any names to open!"
-install_empty="You didn't provide any names to install!"
-remove_empty="You didn't provide any names to remove!"
-show_empty="You didn't provide any names to show!"
-play_empty="You didn't provide any names to play!"
-run_empty="You didn't provide any names to run!"
-prompt_empty="You didn't provide any prompt!"
-change_empty="You didn't provide new content to change!"
-ai_empty="You didn't provide any AI type to process!
-You can use this command to set up the new one: ${color_cyan}umar set ai${color_reset}"
-ai_url_empty="You didn't provide any AI url to process!
-You can use this command to set up the new one: ${color_cyan}umar set ai${color_reset}"
-ai_api_key_empty="You didn't provide any AI api key to process!
-You can use this command to set up the new one: ${color_cyan}umar set ai${color_reset}"
-ai_model_empty="You didn't provide any AI model to process!
-You can use this command to set up the new one: ${color_cyan}umar set ai${color_reset}"
-
-ok="OK"
-
-file_not_found="file is not found!"
-
-distro_is_unknown="Unknown distribution"
-package_not_installed="is not installed. Do you want to install it? [N/y]"
-package_is_needed="I need that package to process the command"
-package_needed_installed="The required package(s) have been installed. Refresh the current console/terminal session and run the command again"
-feature_is_not_implemented_yet="This feature is not implemented yet"
+# command
 
 commands="get smarter:Upgrade me to the latest version
 version:Show my current version
 reveal:Reveal my source code
+window:Open my command window. You may create a keyboard shortcut for this command to open my command window directly
 --------------:--------------------------
 run:Run custom command(s)
 list run:List registered custom command(s)
 set run:Set new custom command
 --------------:--------------------------
 prompt:Prompt anything to AI
-start chat:Start new chat session with AI
+start chat:Start a new chat session with AI
 set ai:Set new AI configuration
 show ai:Show AI information
 change ai type:Change AI type
@@ -135,7 +134,7 @@ search:Search for the given keyword(s) using a terminal browser
 install:Install package(s)
 remove:Remove package(s)
 upgrade:Upgrade package(s)
-test http:Test and benchmark http url -> \`${color_cyan}-c ${color_blue}NUM ${color_cyan}-r ${color_blue}NUM ${color_cyan}-t \
+test http:Test and benchmark HTTP URL -> \`${color_cyan}-c ${color_blue}NUM ${color_cyan}-r ${color_blue}NUM ${color_cyan}-t \
 ${color_blue}SECONDS ${color_cyan}-header ${color_blue}TEXT ${color_cyan}-userAgent ${color_blue}TEXT ${color_cyan}-contentType \
 ${color_blue}TEXT ${color_cyan}-u ${color_blue}URL${color_reset}\`
 show image:Show image(s)
@@ -146,95 +145,288 @@ play video:Play video(s)
 # umar
 
 umar() {
-  install_needed $shell_tool
+  determine_distro
+  determine_de
+  determine_ai
+  create_config
+  check_requirements "sh"
 
   if is_no_argument "$@"; then
-    echo "
-$umar
-"
+    printf_func "\n$message_umar\n"
 
     echo "$commands" | while IFS=: read -r _u_name _u_description; do
       printf "${color_green}%-20s ${color_reset}%b\n" "$_u_name" "$_u_description"
     done
 
-    exit 0
+    printf_func "$(echo "$message_caution" | markdown_parse)\n"
+
+    return 0
   fi
 
   case "$1 $2 $3 $4" in
     "change ai api key")
-      shift
-      shift
-      shift
-      shift
-      u_change_ai_api_key
+      check_ai
+      set_ai_api_key
+
+      change_file_content_line "3" "$tmp_ai_api_key" "$config_ai_filepath"
+      echo "$message_ok"
+
       return 0
       ;;
-    esac
+  esac
 
   case "$1 $2 $3" in
     "change ai type")
-      shift
-      shift
-      shift
-      u_change_ai_type
+      check_ai
+      set_ai_type
+
+      change_file_content_line "1" "$tmp_ai_type" "$config_ai_filepath"
+      echo "$message_ok"
+
       return 0
       ;;
+
     "change ai model")
-      shift
-      shift
-      shift
-      u_change_ai_model
+      check_ai
+      set_ai_model
+
+      change_file_content_line "2" "$tmp_ai_model" "$config_ai_filepath"
+      echo "$message_ok"
+
       return 0
       ;;
-    esac
+  esac
 
   case "$1 $2" in
     "get smarter")
-      u_get_smarter
+      check_requirements "curl" "sudo"
+
+      curl -L "$repo_url/$script_name" -o "/tmp/$script_name"
+      sudo mv "/tmp/$script_name" "$install_dir/$target_name"
+      sudo chmod +x "$install_dir/$target_name"
+
+      if [ -x "$install_dir/$target_name" ]; then
+        echo_exit "$message_ok"
+      else
+        echo_exit "$message_failed"
+      fi
+
       return 0
       ;;
+
     "list run")
-      u_list_run
+      _u_cfg="$(read_config_run_list)"
+
+      if is_empty "$_u_cfg"; then
+        echo_exit "$message_run_list_empty"
+      fi
+
+      echo "$_u_cfg" | while IFS=: read -r _u_name _u_description _u_command; do
+        if is_empty "$_u_name" && is_empty "$_u_description" && is_empty "$_u_command"; then
+          continue
+        fi
+
+        printf "${color_green}%-20s ${color_reset}%-30s ${color_cyan}%b${color_reset}\n" "$_u_name" "$_u_description" "$_u_command"
+      done
+
       return 0
       ;;
+
     "set run")
-      u_set_run
+      printf_func_no_enter "$message_run_set_name "
+
+      _u_name=$(read_func)
+
+      if is_empty "$_u_name"; then
+        echo_exit "$message_run_set_name_empty"
+      fi
+
+      if is_contain "$_u_name" ":"; then
+        echo_exit "$message_run_set_name_contain_colon"
+      fi
+
+      _u_name_exist=$(read_config_run_list | while IFS=: read -r _u_name_config _ _; do
+        if is_equal "$_u_name" "$_u_name_config"; then
+          echo_exit "exist"
+        fi
+      done)
+
+      if is_equal "$_u_name_exist" "exist"; then
+        echo_exit "$message_run_set_name_exist"
+      fi
+
+      printf_func_no_enter "$message_run_set_description "
+
+      _u_description=$(read_func)
+
+      if is_contain "$_u_description" ":"; then
+        echo_exit "$message_run_set_description_contain_colon"
+      fi
+
+      printf_func_no_enter "$message_run_set_command "
+
+      _u_command=$(read_func)
+
+      if is_empty "$_u_command"; then
+        echo_exit "$message_run_set_command_empty"
+      fi
+
+      _u_cfg=$(append_config_run_list "$_u_name:$_u_description:$_u_command")
+
+      write_config_run_list "$_u_cfg"
+
+      echo "$message_ok"
+
       return 0
       ;;
+
     "show image")
       shift
       shift
-      u_show_image "$@"
+
+      check_show_empty "$@"
+      check_requirements "feh"
+      feh "$@" &
+
       return 0
       ;;
+
     "play audio")
       shift
       shift
-      u_play_audio "$@"
+
+      check_play_empty "$@"
+      check_requirements "mpg123"
+      mpg123 -v "$@"
+
       return 0
       ;;
+
     "play video")
       shift
       shift
-      u_play_video "$@"
+
+      check_play_empty "$@"
+      check_requirements "mpv"
+      mpv "$@" > /dev/null 2>&1 &
+
       return 0
       ;;
+
     "test http")
       shift
       shift
-      u_test_http "$@"
+
+      check_requirements "siege"
+
+      _u_concurrent="10"
+      _u_time=""
+      _u_retry=""
+      _u_url=""
+      _u_url_header="$http_header"
+      _u_url_user_agent=""
+      _u_url_content_type=""
+
+      while [ $# -gt 0 ]; do
+        case "$1" in
+          -c)
+            _u_concurrent="${1#-c}"
+            if [ -z "$_u_concurrent" ]; then
+              shift
+              _u_concurrent="$1"
+            fi
+            ;;
+          -t)
+            _u_time="${1#-t}"
+            if [ -z "$_u_time" ]; then
+              shift
+              _u_time="$1"
+            fi
+            ;;
+          -r)
+            _u_retry="${1#-r}"
+            if [ -z "$_u_retry" ]; then
+              shift
+              _u_retry="$1"
+            fi
+            ;;
+          -u)
+            _u_url="${1#-u}"
+            if [ -z "$_u_url" ]; then
+              shift
+              _u_url="$1"
+            fi
+            ;;
+          -userAgent)
+            _u_url_user_agent="${1#-userAgent}"
+            if [ -z "$_u_url_user_agent" ]; then
+              shift
+              _u_url_user_agent="$1"
+            fi
+            ;;
+          -header)
+            _u_url_header="${1#-header}"
+            if [ -z "$_u_url_header" ]; then
+              shift
+              _u_url_header="$1"
+            fi
+            ;;
+          -contentType)
+            _u_url_content_type="${1#-contentType}"
+            if [ -z "$_u_url_content_type" ]; then
+              shift
+              _u_url_content_type="$1"
+            fi
+            ;;
+        esac
+        shift
+      done
+
+      if is_empty "$_u_url"; then
+        printf_exit "$message_test_http_no_url"
+      fi
+
+      printf_func "url=$_u_url | concurrent=$_u_concurrent | time=${_u_time}S | retry=$_u_retry | header=$_u_url_header | userAgent=$_u_url_user_agent | contentType=$_u_url_content_type\n"
+
+      if ! is_empty "$_u_time"; then
+         exec_func siege -vbp "-c$_u_concurrent" "-t${_u_time}S" --header="$_u_url_header" --user-agent="$_u_url_user_agent" --content-type="$_u_url_content_type" "$_u_url"
+      elif ! is_empty "$_u_retry"; then
+         exec_func siege -vbp "-c$_u_concurrent" "-r$_u_retry" --header="$_u_url_header" --user-agent="$_u_url_user_agent" --content-type="$_u_url_content_type" "$_u_url"
+      else
+        exec_func siege -vbp "-c$_u_concurrent" "-t10S" --header="$_u_url_header" --user-agent="$_u_url_user_agent" --content-type="$_u_url_content_type" "$_u_url"
+      fi
+
       return 0
       ;;
+
     "set ai")
-      u_set_ai
+      set_ai_type
+      set_ai_model
+      set_ai_api_key
+
+      write_config_ai "$(printf_func "$tmp_ai_type\n$tmp_ai_model\n$tmp_ai_api_key")"
+      echo "$message_set_ai_registered"
+
       return 0
       ;;
+
     "start chat")
-      u_start_chat
+      echo_exit "$message_feature_is_not_implemented_yet"
+
       return 0
       ;;
+
     "show ai")
-      u_show_ai
+      check_ai
+
+      _u_api_key="* * * * *"
+
+      if is_empty "$(get_ai_api_key)"; then
+        _u_api_key=""
+      fi
+
+      printf_func "Type: ${color_yellow}$ai\n${color_reset}Model: ${color_yellow}$(get_ai_model)\n${color_reset}API key: ${color_blue}$_u_api_key${color_reset}"
+
       return 0
       ;;
   esac
@@ -242,434 +434,206 @@ $umar
   case "$1" in
     "open")
       shift
-      u_open "$@"
+
+      check_open_empty "$@"
+
+      _u_not_exist=""
+
+      for _u_arg in "$@"; do
+        if is_package_exist "$_u_arg" || is_user_package_exist "$_u_arg"; then
+          exec_func_async_no_std_out "$_u_arg"
+
+          continue
+        fi
+
+        _u_not_exist="yes"
+
+        printf_func "${color_red}$_u_arg ${color_reset}$message_package_not_found"
+      done
+
+      if ! is_equal "$_u_not_exist" "yes"; then
+        clear_shell
+      fi
+
       return 0
       ;;
+
     "kill")
       shift
-      u_kill_process "$@"
+
+      check_kill_empty "$@"
+      check_requirements "sudo"
+
+      _u_process_list=""
+
+      echo
+
+      for _u_arg in "$@"; do
+        # shellcheck disable=SC2009
+        _u_process_list="$_u_process_list\n$(ps -ef | grep "$_u_arg" | grep -v "$pid" | awk '{print $2}')"
+
+        # shellcheck disable=SC2009
+        ps aux | grep "$_u_arg" | grep -v "$pid"
+      done
+
+      _u_process_list=$(printf_func "$_u_process_list")
+
+      printf_func_no_enter "\n$message_kill_confirmation "
+
+      _u_confirmation=$(read_func)
+
+      if ! is_equal "$_u_confirmation" "y"; then
+        printf_func "\n$message_aborted"
+
+        return 0
+      fi
+
+      echo "$_u_process_list" | while IFS= read -r _u_line; do
+        if ! is_empty "$_u_line"; then
+          sudo kill -9 "$_u_line" > /dev/null 2>&1
+        fi
+      done
+
+      printf_func "\n$message_all_process_terminated"
+
       return 0
       ;;
+
     "search")
       shift
-      u_search "$@"
+
+      check_search_empty "$@"
+      check_requirements "w3m"
+      exec_func w3m "$search_url$(echo "$*" | sed 's/ /+/g')"
+
+      clear_shell
+
       return 0
       ;;
+
     "install")
       shift
-      u_install "$@"
+
+      check_install_empty "$@"
+      install_func "$@"
+
       return 0
       ;;
+
     "remove")
       shift
-      u_remove "$@"
+
+      check_remove_empty "$@"
+      remove_func "$@"
+
       return 0
       ;;
+
     "upgrade")
       shift
-      u_upgrade "$@"
+
+      upgrade_func "$@"
+
       return 0
       ;;
+
     "version")
       echo "$version"
+
       return 0
       ;;
+
     "reveal")
-      u_reveal
+      check_requirements "vim"
+      exec_func vim -R "$install_dir/$target_name"
+
       return 0
       ;;
+
     "run")
       shift
-      u_run "$@"
+
+      check_run_empty "$@"
+      set_tmp_value "not exist"
+
+      for _u_arg in "$@"; do
+        read_config_run_list | while IFS=: read -r _u_name _u_description _u_command; do
+          if is_empty "$_u_name" && is_empty "$_u_description" && is_empty "$_u_command"; then
+            continue
+          fi
+
+          if is_equal "$_u_arg" "$_u_name"; then
+            set_tmp_value "exist"
+            printf_func "\n${color_green}$_u_name${color_reset} >_ ${color_cyan}$_u_command${color_reset}\n"
+            eval_func "$_u_command"
+
+            echo
+            break
+          fi
+        done
+
+        if ! is_equal "$(get_tmp_value)" "exist"; then
+          printf_func "${color_green}$_u_arg${color_reset} $message_command_not_found"
+        fi
+      done
+
       return 0
       ;;
+
     "prompt")
       shift
-      u_prompt "$@"
+      check_prompt_empty "$@"
+
+      check_ai
+      printf_ai_info
+
+      _u_response=""
+
+      if is_ai_google; then
+        _u_response=$(make_http_request_google_ai "$@")
+      fi
+
+      echo_typing "$(echo "$_u_response" | markdown_parse)"
+
+      return 0
+      ;;
+
+    "window")
+      _u_command=$(open_and_read_float_window)
+
+      if is_empty "$_u_command"; then
+        return 0
+      fi
+
+      if ! is_start_with "$_u_command" "umar"; then
+        _u_command="umar $_u_command"
+      fi
+
+      if is_start_with "$_u_command" "umar help"; then
+        open_terminal_and_exec_wait "umar"
+      elif is_start_with "$_u_command" "umar show image" || is_start_with "$_u_command" "umar play video"; then
+        eval_func "$_u_command"
+      elif is_start_with "$_u_command" "umar open"; then
+        $_u_command
+      elif is_start_with "$_u_command" "umar search" || is_start_with "$_u_command" "umar play audio"; then
+        open_terminal_and_exec "$_u_command"
+      else
+        open_terminal_and_exec_wait "$_u_command"
+      fi
+
       return 0
       ;;
   esac
 
-  echo_exit "$invalid_command"
-}
-
-u_open() {
-  determine_de
-  check_open_empty "$@"
-
-  _u_o_not_exist=""
-
-  for _u_o_arg in "$@"; do
-    if is_package_exist "$_u_o_arg"; then
-      exec_combine_async_no_std_out_base "$_u_o_arg"
-    else
-      if is_user_package_exist "$_u_o_arg"; then
-        exec_combine_async_no_std_out_base "$_u_o_arg"
-      else
-        _u_o_not_exist="yes"
-
-        printf "${color_red}$_u_o_arg ${color_reset}$command_open_name_not_found%b\n"
-      fi
-    fi
-  done
-
-  if ! is_equal "$_u_o_not_exist" "yes"; then
-    kill_combine
-  fi
-}
-
-u_kill_process() {
-  check_kill_empty "$@"
-
-  _u_k_p_process_list=""
-
-  for _u_k_p_arg in "$@"; do
-    # shellcheck disable=SC2009
-    _u_k_p_process_list="$_u_k_p_process_list\n$(ps -ef | grep "$_u_k_p_arg" | grep -v "$pid" | awk '{print $2}')"
-
-    # shellcheck disable=SC2009
-    ps aux | grep "$_u_k_p_arg" | grep -v "$pid"
-  done
-
-  _u_k_p_process_list=$(printf '..%b..' "$_u_k_p_process_list")
-
-  echo "
-$command_kill_confirmation"
-
-  _u_k_p_confirmation=$(read_func)
-
-  if is_equal "$_u_k_p_confirmation" "y"; then
-    echo "$_u_k_p_process_list" | while IFS= read -r _u_k_p_line; do
-      if ! is_empty "$_u_k_p_line"; then
-        sudo kill -9 "$_u_k_p_line" > /dev/null 2>&1
-      fi
-    done
-
-    echo "$command_kill_confirmation_y"
-
-    exit 0
-  fi
-
-  echo "$command_kill_confirmation_n"
-}
-
-u_search() {
-  determine_distro
-  determine_de
-  install_needed $browser
-  exec_combine_default_base $browser "$search_url$(echo "$*" | sed 's/ /+/g')"
-  kill_combine
-}
-
-u_install() {
-  determine_distro
-  check_install_empty "$@"
-  install_combine "$@"
-}
-
-u_remove() {
-  determine_distro
-  check_remove_empty "$@"
-  remove_combine "$@"
-}
-
-u_upgrade() {
-  determine_distro
-  upgrade_combine "$@"
-}
-
-u_get_smarter() {
-  echo "Downloading the latest version of $script_name from $repo_url..."
-  curl -L "$repo_url/$script_name" -o "/tmp/$script_name"
-
-  echo "Installing $target_name to $install_dir..."
-  sudo mv "/tmp/$script_name" "$install_dir/$target_name"
-
-  echo "Making $target_name executable..."
-  sudo chmod +x "$install_dir/$target_name"
-
-  if [ -x "$install_dir/$target_name" ]; then
-    echo "$target_name installed/upgraded successfully!"
-  else
-    echo "Failed to install/upgrade $target_name"
-    exit 0
-  fi
-}
-
-u_show_image() {
-  determine_distro
-  determine_de
-  check_show_empty "$@"
-  install_needed $img_display
-  exec_combine_async_no_std_out_base $img_display "$@"
-}
-
-u_play_audio() {
-  determine_distro
-  determine_de
-  check_play_empty "$@"
-  install_needed $audio_player
-  exec_combine_default_with_std_out_base $audio_player -v "$@"
-}
-
-u_play_video() {
-  determine_distro
-  determine_de
-  check_play_empty "$@"
-  install_needed $video_player
-  exec_combine_async_no_std_out_base $video_player "$@"
-}
-
-u_reveal() {
-  determine_distro
-  determine_de
-  install_needed $editor
-  exec_combine_default_base $editor -R "$install_dir/$target_name"
-}
-
-u_test_http() {
-  determine_distro
-  determine_de
-  install_needed $http_test_tool
-
-  _u_t_h_concurrent="10"
-  _u_t_h_time=""
-  _u_t_h_retry=""
-  _u_t_h_url=""
-  _u_t_h_url_header="X-HELLO:X-WORLD"
-  _u_t_h_url_user_agent=""
-  _u_t_h_url_content_type=""
-
-  while [ $# -gt 0 ]; do
-    case "$1" in
-      -c)
-        _u_t_h_concurrent="${1#-c}"
-        if [ -z "$_u_t_h_concurrent" ]; then
-          shift
-          _u_t_h_concurrent="$1"
-        fi
-        ;;
-      -t)
-        _u_t_h_time="${1#-t}"
-        if [ -z "$_u_t_h_time" ]; then
-          shift
-          _u_t_h_time="$1"
-        fi
-        ;;
-      -r)
-        _u_t_h_retry="${1#-r}"
-        if [ -z "$_u_t_h_retry" ]; then
-          shift
-          _u_t_h_retry="$1"
-        fi
-        ;;
-      -u)
-        _u_t_h_url="${1#-u}"
-        if [ -z "$_u_t_h_url" ]; then
-          shift
-          _u_t_h_url="$1"
-        fi
-        ;;
-      -userAgent)
-        _u_t_h_url_user_agent="${1#-userAgent}"
-        if [ -z "$_u_t_h_url_user_agent" ]; then
-          shift
-          _u_t_h_url_user_agent="$1"
-        fi
-        ;;
-      -header)
-        _u_t_h_url_header="${1#-header}"
-        if [ -z "$_u_t_h_url_header" ]; then
-          shift
-          _u_t_h_url_header="$1"
-        fi
-        ;;
-      -contentType)
-        _u_t_h_url_content_type="${1#-contentType}"
-        if [ -z "$_u_t_h_url_content_type" ]; then
-          shift
-          _u_t_h_url_content_type="$1"
-        fi
-        ;;
-    esac
-    shift
-  done
-
-  if is_empty "$_u_t_h_url"; then
-    printf_exit "$command_test_http_no_url"
-  fi
-
-  echo "url=$_u_t_h_url | concurrent=$_u_t_h_concurrent | time=${_u_t_h_time}S | retry=$_u_t_h_retry | header=$_u_t_h_url_header | userAgent=$_u_t_h_url_user_agent | contentType=$_u_t_h_url_content_type
-"
-
-  if ! is_empty "$_u_t_h_time"; then
-     exec_combine_default_with_std_out_base $http_test_tool -vbp "-c$_u_t_h_concurrent" "-t${_u_t_h_time}S" --header="$_u_t_h_url_header" --user-agent="$_u_t_h_url_user_agent" --content-type="$_u_t_h_url_content_type" "$_u_t_h_url"
-  elif ! is_empty "$_u_t_h_retry"; then
-     exec_combine_default_with_std_out_base $http_test_tool -vbp "-c$_u_t_h_concurrent" "-r$_u_t_h_retry" --header="$_u_t_h_url_header" --user-agent="$_u_t_h_url_user_agent" --content-type="$_u_t_h_url_content_type" "$_u_t_h_url"
-  else
-    exec_combine_default_with_std_out_base $http_test_tool -vbp "-c$_u_t_h_concurrent" "-t10S" --header="$_u_t_h_url_header" --user-agent="$_u_t_h_url_user_agent" --content-type="$_u_t_h_url_content_type" "$_u_t_h_url"
-  fi
-}
-
-u_run() {
-  determine_de
-  check_run_empty "$@"
-
-  read_config_run_list | while IFS=: read -r _u_r_name _u_r_description _u_r_command; do
-    if is_empty "$_u_r_name" && is_empty "$_u_r_description" && is_empty "$_u_r_command"; then
-      continue
-    fi
-
-    for _u_r_arg in "$@"; do
-        if is_equal "$_u_r_arg" "$_u_r_name"; then
-          printf "\n${color_green}$_u_r_name${color_reset} >_ ${color_cyan}$_u_r_command${color_reset}%b\n\n"
-          exec_combine_default_f_with_std_out "$_u_r_command"
-        fi
-    done
-  done
-}
-
-u_set_run() {
-  printf "%b" "$command_run_set_name "
-
-  _u_s_r_name=$(read_func)
-
-  if is_empty "$_u_s_r_name"; then
-    echo_exit "$command_run_set_name_empty"
-  fi
-
-  if is_contain "$_u_s_r_name" ":"; then
-    echo_exit "$command_run_set_name_contain_colon"
-  fi
-
-  _u_s_r_name_exist=$(read_config_run_list | while IFS=: read -r _u_s_r_name_config _ _; do
-    if is_equal "$_u_s_r_name" "$_u_s_r_name_config"; then
-      echo_exit "exist"
-    fi
-  done)
-
-  if is_equal "$_u_s_r_name_exist" "exist"; then
-    echo_exit "$command_run_set_name_exist"
-  fi
-
-  printf "%b" "$command_run_set_description "
-
-  _u_s_r_description=$(read_func)
-
-  if is_contain "$_u_s_r_description" ":"; then
-    echo_exit "$command_run_set_description_contain_colon"
-  fi
-
-  printf "%b" "$command_run_set_command "
-
-  _u_s_r_command=$(read_func)
-
-  if is_empty "$_u_s_r_command"; then
-    echo_exit "$command_run_set_command_empty"
-  fi
-
-  _u_s_r_cfg=$(append_config_run_list "$_u_s_r_name:$_u_s_r_description:$_u_s_r_command")
-
-  write_config_run_list "$_u_s_r_cfg"
-
-  echo "$command_run_set_registered"
-}
-
-u_list_run() {
-  _u_l_r_cfg="$(read_config_run_list)"
-
-  if is_empty "$_u_l_r_cfg"; then
-    echo_exit "$command_run_list_empty"
-  fi
-
-  echo "$_u_l_r_cfg" | while IFS=: read -r _u_l_r_name _u_l_r_description _u_l_r_command; do
-    if is_empty "$_u_l_r_name" && is_empty "$_u_l_r_description" && is_empty "$_u_l_r_command"; then
-      continue
-    fi
-
-    printf "${color_green}%-20s ${color_reset}%-30s ${color_cyan}%b${color_reset}\n" "$_u_l_r_name" "$_u_l_r_description" "$_u_l_r_command"
-  done
-}
-
-u_prompt() {
-  determine_distro
-  determine_ai
-  install_needed $json_tool
-  check_ai
-  printf_ai_info
-
-  _u_p_response=$(make_http_request_ai "$@")
-
-  echo_typing "$(echo "$_u_p_response" | markdown_parse)"
-}
-
-u_set_ai() {
-  set_tmp_ai_type
-  set_tmp_ai_model "$tmp_ai_type"
-  set_tmp_ai_api_key "$tmp_ai_type"
-
-  write_config_ai "$tmp_ai_type
-$tmp_ai_model
-$tmp_ai_api_key"
-
-  echo "$command_set_ai_registered"
-}
-
-u_start_chat() {
-  determine_distro
-  determine_ai
-  check_ai
-  printf_ai_info
-
-  echo_exit "$feature_is_not_implemented_yet"
-}
-
-u_show_ai() {
-  determine_ai
-  check_ai
-  printf_ai_info_complete
-}
-
-u_change_ai_type() {
-  determine_ai
-  check_ai
-  set_tmp_ai_type
-
-  change_file_content_line "1" "$tmp_ai_type" "$config_ai_filepath"
-
-  echo "$ok"
-}
-
-u_change_ai_model() {
-  determine_ai
-  check_ai
-
-  _u_c_a_m_type=$(sed -n '1p' "$config_ai_filepath")
-
-  set_tmp_ai_model "$_u_c_a_m_type"
-
-  change_file_content_line "2" "$tmp_ai_model" "$config_ai_filepath"
-
-  echo "$ok"
-}
-
-u_change_ai_api_key() {
-  determine_ai
-  check_ai
-
-  _u_c_a_a_k_type=$(sed -n '1p' "$config_ai_filepath")
-
-  set_tmp_ai_api_key "$_u_c_a_a_k_type"
-
-  change_file_content_line "3" "$tmp_ai_api_key" "$config_ai_filepath"
-
-  echo "$ok"
+  echo "$message_invalid_command"
 }
 
 # echo
 
 echo_exit() {
   echo "$1"
+  set_tmp_error "$1"
+
   exit 0
 }
 
@@ -684,8 +648,10 @@ echo_typing() {
     if is_equal "$__e_t_char" "\\"; then
       # shellcheck disable=SC2004
       __e_t_next_char=$(printf "%s" "$__e_t_text" | cut -c $(($__e_t_i+2)))
+
       if is_equal "$__e_t_next_char" "n"; then
         printf "\n"
+
         # shellcheck disable=SC2004
         __e_t_i=$(($__e_t_i + 1))
       fi
@@ -694,6 +660,7 @@ echo_typing() {
     fi
 
     sleep "$typing_speed"
+
     # shellcheck disable=SC2004
     __e_t_i=$(($__e_t_i + 1))
   done
@@ -703,124 +670,136 @@ echo_typing() {
 
 # printf
 
-printf_exit() {
+printf_func() {
   printf "$1%b\n"
+}
+
+printf_func_no_enter() {
+  printf "$1%b"
+}
+
+printf_exit() {
+  printf_func "$1"
+  set_tmp_error "$1"
+
   exit 0
 }
 
 printf_ai_info() {
-  printf "${color_yellow}$ai ($(get_ai_model))${color_reset} :%b\n\n"
-}
-
-printf_ai_info_complete() {
-  __p_a_i_c_api_key="* * * * *"
-
-  if is_empty "$(get_ai_api_key)"; then
-    __p_a_i_c_api_key=""
-  fi
-
-  printf "Type: ${color_yellow}$ai\n${color_reset}Model: ${color_yellow}$(get_ai_model)\n${color_reset}API key: ${color_blue}$__p_a_i_c_api_key${color_reset}%b\n"
+  printf_func "${color_yellow}$ai ($(get_ai_model))${color_reset}\n"
 }
 
 # check
 
 check_kill_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$kill_empty"
+    echo_exit "$message_kill_empty"
   fi
 }
 
 check_open_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$open_empty"
+    echo_exit "$message_open_empty"
   fi
 }
 
 check_install_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$install_empty"
+    echo_exit "$message_install_empty"
   fi
 }
 
 check_remove_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$remove_empty"
+    echo_exit "$message_remove_empty"
   fi
 }
 
 check_show_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$show_empty"
+    echo_exit "$message_show_empty"
   fi
 }
 
 check_play_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$play_empty"
+    echo_exit "$message_play_empty"
   fi
 }
 
 check_run_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$run_empty"
+    echo_exit "$message_run_empty"
   fi
 }
 
 check_prompt_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$prompt_empty"
+    echo_exit "$message_prompt_empty"
   fi
 }
 
 check_change_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$change_empty"
+    echo_exit "$message_change_empty"
+  fi
+}
+
+check_search_empty() {
+  if is_no_argument "$@"; then
+    echo_exit "$message_search_empty"
   fi
 }
 
 check_ai() {
-  check_ai_empty
-  check_ai_url_empty
-#  check_ai_api_key_empty
-  check_ai_model_empty
+  if ! is_ai_google; then
+    printf_exit "$message_ai_empty"
+  fi
+
+  if is_ai_google && is_empty "$generative_ai_url"; then
+    printf_exit "$message_ai_url_empty"
+  fi
+
+  if is_ai_google && is_empty "$gemini_model"; then
+    printf_exit "$message_ai_model_empty"
+  fi
 }
 
-check_ai_empty() {
-  if is_ai_google; then
+check_requirements() {
+  __i_n_not_exist=""
+
+  for __i_n_arg in "$@"; do
+    if is_package_exist "$__i_n_arg" || is_user_package_exist "$__i_n_arg"; then
+        continue
+    fi
+
+    if is_empty "$__i_n_not_exist"; then
+      __i_n_not_exist="$__i_n_arg"
+    else
+      __i_n_not_exist="$__i_n_not_exist $__i_n_arg"
+    fi
+  done
+
+  if is_empty "$__i_n_not_exist"; then
     return 0
   fi
 
-  printf_exit "$ai_empty"
-}
+  printf_func_no_enter "${color_red}$__i_n_not_exist ${color_reset}$message_package_not_installed "
 
-check_ai_url_empty() {
-  if is_ai_google; then
-    if ! is_empty "$generative_ai_url"; then
-      return 0
-    fi
+  __i_n_confirmation=$(read_func)
+
+  if ! is_equal "$__i_n_confirmation" "y"; then
+    printf_exit "\n$message_package_needed"
   fi
 
-  printf_exit "$ai_url_empty"
-}
-
-check_ai_api_key_empty() {
-  if is_ai_google; then
-    if ! is_empty "$gemini_api_key"; then
-      return 0
-    fi
+  if is_unknown; then
+    printf_func "\n$message_unknown_distro"
+    printf_exit "$message_package_needed"
   fi
 
-  printf_exit "$ai_api_key_empty"
-}
+  install_func_arg_split "$__i_n_not_exist"
 
-check_ai_model_empty() {
-  if is_ai_google; then
-    if ! is_empty "$gemini_model"; then
-      return 0
-    fi
-  fi
-
-  printf_exit "$ai_model_empty"
+  echo "$message_package_needed_installed"
 }
 
 # is
@@ -835,6 +814,10 @@ is_empty() {
 
 is_contain() {
   echo "$1" | grep -q "$2"
+}
+
+is_start_with() {
+  [ "${1#$2}" != "$1" ]
 }
 
 is_no_argument() {
@@ -901,322 +884,174 @@ get_ai_api_key() {
   fi
 }
 
+get_tmp_value() {
+  if ! is_file_exist "$config_tmp_value_filepath"; then
+    return 0
+  fi
+
+  read_file_content "$config_tmp_value_filepath"
+
+  clear_tmp_value
+}
+
+get_tmp_error() {
+  if ! is_file_exist "$config_tmp_error_filepath"; then
+    return 0
+  fi
+
+  read_file_content "$config_tmp_error_filepath"
+
+  clear_tmp_error
+}
+
 # install
 
-install_arch() {
+install_func() {
   if is_arch; then
     sudo pacman -S "$@"
   fi
-}
 
-install_debian() {
   if is_debian; then
     sudo apt update
     sudo apt install "$@"
   fi
-}
 
-install_fedora() {
   if is_fedora; then
     sudo dnf install "$@"
   fi
 }
 
-install_combine() {
-  install_arch "$@"
-  install_debian "$@"
-  install_fedora "$@"
-}
-
-install_needed() {
-  if is_package_exist "$1"; then
-    return 0
-  else
-    if is_user_package_exist "$1"; then
-      return 0
-    else
-      printf "${color_red}$1 ${color_reset}$package_not_installed%b\n"
-
-      __i_n_confirmation=$(read_func)
-
-      if is_equal "$__i_n_confirmation" "y"; then
-        if is_unknown; then
-          echo "$distro_is_unknown"
-          echo_exit "$package_is_needed"
-        fi
-
-        install_combine "$1"
-
-        echo "$package_needed_installed"
-
-        return 0
-      fi
-
-      echo_exit "$package_is_needed"
-    fi
-  fi
+install_func_arg_split() {
+  # shellcheck disable=SC2068
+  install_func $@
 }
 
 # remove
 
-remove_arch() {
+remove_func() {
   if is_arch; then
     sudo pacman -Rsd --cascade "$@"
   fi
-}
 
-remove_debian() {
   if is_debian; then
     sudo apt autoremove --purge "$@"
   fi
-}
 
-remove_fedora() {
   if is_fedora; then
     sudo dnf remove "$@"
   fi
 }
 
-remove_combine() {
-  remove_arch "$@"
-  remove_debian "$@"
-  remove_fedora "$@"
-}
-
 # upgrade
 
-upgrade_arch() {
+upgrade_func() {
   if is_arch; then
     sudo pacman -Syu "$@"
   fi
-}
 
-upgrade_debian() {
   if is_debian; then
     sudo apt update
     sudo apt autoremove --purge
     sudo apt upgrade "$@"
   fi
-}
 
-upgrade_fedora() {
   if is_fedora; then
     sudo dnf upgrade "$@"
   fi
 }
 
-upgrade_combine() {
-  upgrade_arch "$@"
-  upgrade_debian "$@"
-  upgrade_fedora "$@"
-}
-
 # exec
 
-exec_async_no_std_out() {
-  eval "$@" > /dev/null 2>&1 &
-}
-
-exec_async_no_std_out_base() {
-  exec "$@" > /dev/null 2>&1 &
-}
-
-exec_async_f_with_std_out() {
-  eval "$@" &
-}
-
-exec_async_f_with_std_out_base() {
-  exec "$@" &
-}
-
-exec_async_no_std_out_i3wm() {
-  i3wm_split_lr
-  exec_async_no_std_out "$@"
-  i3wm_focus_r
-  i3wm_focus_l
-}
-exec_async_no_std_out_i3wm_base() {
-  i3wm_split_lr
-  exec_async_no_std_out_base "$@"
-  i3wm_focus_r
-  i3wm_focus_l
-}
-
-exec_async_f_with_std_out_i3wm() {
-  i3wm_split_lr
-  exec_async_f_with_std_out "$@"
-  i3wm_focus_r
-  i3wm_focus_l
-}
-exec_async_f_with_std_out_i3wm_base() {
-  i3wm_split_lr
-  exec_async_f_with_std_out_base "$@"
-  i3wm_focus_r
-  i3wm_focus_l
-}
-
-exec_default() {
-  eval "$@" 2> /dev/null
-}
-
-exec_default_base() {
-  exec "$@" 2> /dev/null
-}
-
-exec_default_with_std_out() {
-  eval "$@"
-}
-
-exec_default_with_std_out_base() {
-  exec "$@"
-}
-
-exec_default_f_with_std_out() {
-  eval "$@"
-}
-
-exec_default_f_with_std_out_base() {
-  exec "$@"
-}
-
-exec_default_i3wm() {
-  i3wm_split_lr
-  exec_default "$@"
-  i3wm_focus_r
-  i3wm_focus_l
-}
-
-exec_default_i3wm_base() {
-  i3wm_split_lr
-  exec_default_base "$@"
-  i3wm_focus_r
-  i3wm_focus_l
-}
-
-exec_default_with_std_out_i3wm() {
-  i3wm_split_lr
-  exec_default_with_std_out "$@"
-  i3wm_focus_r
-  i3wm_focus_l
-}
-
-exec_default_with_std_out_i3wm_base() {
-  i3wm_split_lr
-  exec_default_with_std_out_base "$@"
-  i3wm_focus_r
-  i3wm_focus_l
-}
-
-exec_default_f_with_std_out_i3wm() {
-  i3wm_split_lr
-  exec_default_f_with_std_out "$@"
-  i3wm_focus_r
-  i3wm_focus_l
-}
-
-exec_default_f_with_std_out_i3wm_base() {
-  i3wm_split_lr
-  exec_default_f_with_std_out_base "$@"
-  i3wm_focus_r
-  i3wm_focus_l
-}
-
-exec_combine_async_no_std_out() {
+exec_func() {
   if is_de_i3wm; then
-    exec_async_no_std_out_i3wm "$@"
+    i3-msg split h > /dev/null 2>&1
+  fi
+
+  if is_equal "$1" "__exec_func_async=true"; then
+    shift
+    exec "$@" &
+  elif is_equal "$1" "__exec_func_async_no_std_out=true"; then
+    shift
+    exec "$@" > /dev/null 2>&1 &
+  elif is_equal "$1" "__exec_func_no_std_out=true"; then
+    shift
+    exec "$@" > /dev/null 2>&1
+  elif is_equal "$1" "__eval_func=true"; then
+    shift
+    eval "$@"
+  elif is_equal "$1" "__eval_func_async=true"; then
+    shift
+    eval "$@" &
+  elif is_equal "$1" "__eval_func_async_no_std_out=true"; then
+    shift
+    eval "$@" > /dev/null 2>&1 &
+  elif is_equal "$1" "__eval_func_no_std_out=true"; then
+    shift
+    eval "$@" > /dev/null 2>&1
   else
-    exec_async_no_std_out "$@"
+    exec "$@"
+  fi
+
+  if is_de_i3wm; then
+    i3-msg focus right > /dev/null 2>&1
+    i3-msg focus left > /dev/null 2>&1
   fi
 }
 
-exec_combine_async_no_std_out_base() {
+exec_func_no_std_out() {
+  exec_func "__exec_func_no_std_out=true" "$@"
+}
+
+exec_func_async() {
+  exec_func "__exec_func_async=true" "$@"
+}
+
+exec_func_async_no_std_out() {
+  exec_func "__exec_func_async_no_std_out=true" "$@"
+}
+
+# eval
+
+eval_func() {
+  exec_func "__eval_func=true" "$@"
+}
+
+eval_func_no_std_out() {
+  exec_func "__eval_func_no_std_out=true" "$@"
+}
+
+eval_func_async() {
+  exec_func "__eval_func_async=true" "$@"
+}
+
+eval_func_async_no_std_out() {
+  exec_func "__eval_func_async_no_std_out=true" "$@"
+}
+
+# clear
+
+clear_shell() {
   if is_de_i3wm; then
-    exec_async_no_std_out_i3wm_base "$@"
-  else
-    exec_async_no_std_out_base "$@"
+    i3-msg kill > /dev/null 2>&1
   fi
 }
 
-exec_combine_async_f_with_std_out() {
-  if is_de_i3wm; then
-    exec_async_f_with_std_out_i3wm "$@"
-  else
-    exec_async_f_with_std_out "$@"
+clear_tmp_value() {
+  if is_file_exist "$config_tmp_value_filepath"; then
+    rm -rf "$config_tmp_value_filepath"
   fi
 }
 
-exec_combine_async_f_with_std_out_base() {
-  if is_de_i3wm; then
-    exec_async_f_with_std_out_i3wm_base "$@"
-  else
-    exec_async_f_with_std_out_base "$@"
-  fi
-}
-
-exec_combine_default() {
-  if is_de_i3wm; then
-    exec_default_i3wm "$@"
-  else
-    exec_default "$@"
-  fi
-}
-
-exec_combine_default_base() {
-  if is_de_i3wm; then
-    exec_default_i3wm_base "$@"
-  else
-    exec_default_base "$@"
-  fi
-}
-
-exec_combine_default_with_std_out() {
-  if is_de_i3wm; then
-    exec_default_with_std_out_i3wm "$@"
-  else
-    exec_default_with_std_out "$@"
-  fi
-}
-
-exec_combine_default_with_std_out_base() {
-  if is_de_i3wm; then
-    exec_default_with_std_out_i3wm_base "$@"
-  else
-    exec_default_with_std_out_base "$@"
-  fi
-}
-
-exec_combine_default_f_with_std_out() {
-  if is_de_i3wm; then
-    exec_default_f_with_std_out_i3wm "$@"
-  else
-    exec_default_f_with_std_out "$@"
-  fi
-}
-
-exec_combine_default_f_with_std_out_base() {
-  if is_de_i3wm; then
-    exec_default_f_with_std_out_i3wm_base "$@"
-  else
-    exec_default_f_with_std_out_base "$@"
-  fi
-}
-
-# kill
-
-kill_i3wm() {
-  i3-msg kill > /dev/null 2>&1
-}
-
-kill_combine() {
-  if is_de_i3wm; then
-    kill_i3wm
+clear_tmp_error() {
+  if is_file_exist "$config_tmp_error_filepath"; then
+    rm -rf "$config_tmp_error_filepath"
   fi
 }
 
 # determine
 
 determine_distro() {
-  if [ -f /etc/os-release ]; then
+  if is_file_exist "/etc/os-release"; then
     distro=$(awk -F= '/^ID=/ { print $2 }' /etc/os-release | tr -d '"')
   fi
 
@@ -1226,7 +1061,6 @@ determine_distro() {
     ubuntu*) distro="ubuntu" ;;
     fedora*) distro="fedora" ;;
     centos*) distro="centos" ;;
-    #opensuse*) distro="opensuse" ;;
     manjaro*) distro="manjaro" ;;
     *) distro="unknown" ;;
   esac
@@ -1235,44 +1069,53 @@ determine_distro() {
 determine_de() {
   if [ -n "$XDG_CURRENT_DESKTOP" ]; then
     de="$XDG_CURRENT_DESKTOP"
+
     return 0
   fi
 
-  if [ -f /etc/X11/xinit/xinitrc.d/50-gnome-session.sh ]; then
+  if is_file_exist "/etc/X11/xinit/xinitrc.d/50-gnome-session.sh"; then
     de="gnome"
+
     return 0
-  elif [ -f /etc/X11/xinit/xinitrc.d/50-kde.sh ]; then
+  elif is_file_exist "/etc/X11/xinit/xinitrc.d/50-kde.sh"; then
     de="kde"
+
     return 0
-  elif [ -f /etc/X11/xinit/xinitrc.d/50-xfce.sh ]; then
+  elif is_file_exist "/etc/X11/xinit/xinitrc.d/50-xfce.sh"; then
     de="xfce"
+
     return 0
-  elif [ -f /etc/X11/xinit/xinitrc.d/50-lxde.sh ]; then
+  elif is_file_exist "/etc/X11/xinit/xinitrc.d/50-lxde.sh"; then
     de="lxde"
+
     return 0
-  elif [ -f /etc/X11/xinit/xinitrc.d/50-i3.sh ]; then
+  elif is_file_exist "/etc/X11/xinit/xinitrc.d/50-i3.sh"; then
     de="i3wm"
+
     return 0
   fi
 
-  if [ -f /usr/share/xsessions/gnome.desktop ]; then
+  if is_file_exist "/usr/share/xsessions/gnome.desktop"; then
     de="gnome"
+
     return 0
-  elif [ -f /usr/share/xsessions/kde.plasma.desktop ]; then
+  elif is_file_exist "/usr/share/xsessions/kde.plasma.desktop"; then
     de="kdeplasma"
+
     return 0
-  elif [ -f /usr/share/xsessions/xfce.desktop ]; then
+  elif is_file_exist "/usr/share/xsessions/xfce.desktop"; then
     de="xfce"
+
     return 0
-  elif [ -f /usr/share/xsessions/lxde.desktop ]; then
+  elif is_file_exist "/usr/share/xsessions/lxde.desktop"; then
     de="lxde"
+
     return 0
-  elif [ -f /usr/share/xsessions/i3.desktop ]; then
+  elif is_file_exist "/usr/share/xsessions/i3.desktop"; then
     de="i3wm"
+
     return 0
   fi
-
-  de="unknown"
 }
 
 determine_ai() {
@@ -1299,21 +1142,6 @@ determine_ai() {
 
     gemini_api_key="$__d_a_api_key"
   fi
-}
-
-
-# i3wm
-
-i3wm_split_lr() {
-  i3-msg split h > /dev/null 2>&1
-}
-
-i3wm_focus_r() {
-  i3-msg focus right > /dev/null 2>&1
-}
-
-i3wm_focus_l() {
-  i3-msg focus left > /dev/null 2>&1
 }
 
 # create
@@ -1354,7 +1182,7 @@ write_config_ai() {
 
 read_file_content() {
   if ! is_file_exist "$1"; then
-    printf_exit "${color_red}$1 ${color_reset}$file_not_found"
+    printf_exit "${color_red}$1 ${color_reset}$message_file_not_found"
   fi
 
   cat "$1"
@@ -1369,74 +1197,125 @@ read_config_ai() {
 }
 
 read_func() {
-  read -r _r_f_input < /dev/tty
+  read -r __r_f_input < /dev/tty
 
-  echo "$_r_f_input"
+  echo "$__r_f_input"
 }
 
 # set
 
-set_tmp_ai_type() {
-  printf "%b" "$command_set_ai_type "
+set_ai_type() {
+  printf_func_no_enter "$message_set_ai_type "
 
-  __s_t_a_t_type=$(read_func)
+  __s_a_t_type=$(read_func)
 
-  if is_empty "$__s_t_a_t_type"; then
-    echo_exit "$command_set_ai_type_empty"
+  if is_empty "$__s_a_t_type"; then
+    echo_exit "$message_set_ai_type_empty"
   fi
 
-  if ! is_equal "$__s_t_a_t_type" "1"; then
-    echo_exit "$command_set_ai_type_wrong"
+  if ! is_equal "$__s_a_t_type" "1"; then
+    echo_exit "$message_set_ai_type_wrong"
   fi
 
-  tmp_ai_type="$__s_t_a_t_type"
+  tmp_ai_type="$__s_a_t_type"
 }
 
-set_tmp_ai_model() {
-  if is_equal "$1" "1"; then
-    printf "%b" "$command_set_ai_model_google "
+set_ai_model() {
+  __s_a_m_type="$tmp_ai_type"
+
+  if is_empty "$__s_a_m_type"; then
+    __s_a_m_type=$(sed -n '1p' "$config_ai_filepath")
+  fi
+
+  if is_equal "$__s_a_m_type" "1"; then
+    printf_func_no_enter "$message_set_ai_model_google "
   else
-    echo_exit "$command_set_ai_type_wrong"
+    echo_exit "$message_set_ai_type_wrong"
   fi
 
-  _s_t_a_m_model=$(read_func)
+  __s_a_m_model=$(read_func)
 
-  if is_empty "$_s_t_a_m_model"; then
-    echo_exit "$command_set_ai_model_empty"
+  if is_empty "$__s_a_m_model"; then
+    echo_exit "$message_set_ai_model_empty"
   fi
 
-  if is_equal "$1" "1"; then
-    if ! is_equal "$_s_t_a_m_model" "1" && ! is_equal "$_s_t_a_m_model" "2" && ! is_equal "$_s_t_a_m_model" "3"; then
-      echo_exit "$command_set_ai_model_wrong"
+  if is_equal "$__s_a_m_type" "1"; then
+    if ! is_equal "$__s_a_m_model" "1" && ! is_equal "$__s_a_m_model" "2" && ! is_equal "$__s_a_m_model" "3"; then
+      echo_exit "$message_set_ai_model_wrong"
     fi
   fi
 
-  tmp_ai_model="$_s_t_a_m_model"
+  tmp_ai_model="$__s_a_m_model"
 }
 
-set_tmp_ai_api_key() {
-  if is_equal "$1" "1"; then
-    printf "%b" "$command_set_ai_api_key_google "
+set_ai_api_key() {
+  __s_a_a_k_type="$tmp_ai_type"
+
+  if is_empty "$__s_a_a_k_type"; then
+    __s_a_a_k_type=$(sed -n '1p' "$config_ai_filepath")
+  fi
+
+  if is_equal "$__s_a_a_k_type" "1"; then
+    printf_func_no_enter "$message_set_ai_api_key_google "
   else
-    echo_exit "$command_set_ai_type_wrong"
+    echo_exit "$message_set_ai_type_wrong"
   fi
 
-  _s_t_a_a_k_api_key=$(read_func)
+  __s_a_a_k_api_key=$(read_func)
 
-  if is_equal "$1" "1"; then
-    if is_empty "$_s_t_a_a_k_api_key"; then
-      echo_exit "$command_set_ai_api_key_empty"
-    fi
+  if is_equal "$__s_a_a_k_type" "1" && is_empty "$__s_a_a_k_api_key"; then
+    echo_exit "$message_set_ai_api_key_empty"
   fi
 
-  tmp_ai_api_key="$_s_t_a_a_k_api_key"
+  tmp_ai_api_key="$__s_a_a_k_api_key"
+}
+
+set_tmp_value() {
+  write_to_file "$1" "$config_tmp_value_filepath"
+}
+
+set_tmp_error() {
+  write_to_file "$1" "$config_tmp_error_filepath"
 }
 
 # append
 
 append_config_run_list() {
-  echo "$(read_config_run_list)
-$1"
+  printf_func "$(read_config_run_list)\n$1"
+}
+
+# open
+
+open_and_read_float_window() {
+  check_requirements "yad"
+
+  yad --entry --sticky --no-buttons --width=400 --title "" --text "$message_caution_plain" --text-align "fill" --undecorated
+}
+
+open_and_print_text_float_window() {
+  check_requirements "yad"
+
+  yad --sticky --no-buttons --width=400 --title "" --text "$1" --text-align "fill" --undecorated
+}
+
+open_terminal_and_exec() {
+  check_requirements "xfce4-terminal"
+
+  _e_t_command=""
+
+  if is_equal "$1" "__o_t_a_e_wait=true"; then
+    shift
+
+    _e_t_command="sh -c '$*; printf \"\n\n$message_press_enter_to_exit\n\n\"; read -r _ < /dev/tty'"
+  else
+    _e_t_command="sh -c '$*'"
+  fi
+
+  xfce4-terminal -e "$_e_t_command"
+}
+
+open_terminal_and_exec_wait() {
+  open_terminal_and_exec "__o_t_a_e_wait=true" "$@"
 }
 
 # change
@@ -1448,6 +1327,8 @@ change_file_content_line() {
 # make http request
 
 make_http_request() {
+  check_requirements "curl"
+
   __m_h_r_url=""
   __m_h_r_content_type="application/json"
   __m_h_r_method="POST"
@@ -1487,11 +1368,7 @@ make_http_request() {
     shift
   done
 
-  curl "$__m_h_r_url" -H "Content-Type: $__m_h_r_content_type" -X "$__m_h_r_method" -d "$__m_h_r_request_body"
-}
-
-make_http_request_ai() {
-  make_http_request_google_ai "$@"
+  curl "$__m_h_r_url" -H "$http_header" -H "Content-Type: $__m_h_r_content_type" -X "$__m_h_r_method" -d "$__m_h_r_request_body"
 }
 
 make_http_request_google_ai() {
@@ -1499,7 +1376,7 @@ make_http_request_google_ai() {
     return 0
   fi
 
-  check_prompt_empty "$@"
+  check_requirements "jq"
 
   __m_h_r_g_a_prompt=""
 
@@ -1609,5 +1486,4 @@ markdown_parse() {
     '
 }
 
-create_config
 umar "$@"
