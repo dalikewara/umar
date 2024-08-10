@@ -2,7 +2,7 @@
 
 # config
 
-version="v1.2.0"
+version="v1.2.1"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -114,7 +114,7 @@ message_caution="${color_red}**$message_caution_plain**${color_reset}"
 commands="get smarter:Upgrade me to the latest version
 version:Show my current version
 reveal:Reveal my source code
-window:Open my command window. You may create a keyboard shortcut for this command to open my command window directly
+window:Open my command window. ${color_yellow}**You may create a keyboard shortcut for this command to open my command window directly**${color_reset}
 --------------:--------------------------
 run:Run custom command(s)
 list run:List registered custom command(s)
@@ -155,7 +155,7 @@ umar() {
     printf_func "\n$message_umar\n"
 
     echo "$commands" | while IFS=: read -r _u_name _u_description; do
-      printf "${color_green}%-20s ${color_reset}%b\n" "$_u_name" "$_u_description"
+      printf "${color_green}%-20s ${color_reset}%b\n" "$_u_name" "$(echo "$_u_description" | markdown_parse)"
     done
 
     printf_func "$(echo "$message_caution" | markdown_parse)\n"
