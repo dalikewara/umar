@@ -2,7 +2,7 @@
 
 # config
 
-version="v1.3.0"
+version="v1.3.1"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -434,7 +434,7 @@ umar() {
         echo
 
         if is_ai_google; then
-          _u_response=$(make_http_request_google_ai "$(remove_trailing_comma "$_u_prompt")")
+          _u_response=$(make_http_request_google_ai "$(echo "$_u_prompt" | remove_trailing_comma)")
         fi
 
         _u_prompt="$_u_prompt $(generate_google_ai_prompt "model" "$_u_response")"
@@ -621,7 +621,7 @@ umar() {
       _u_response=""
 
       if is_ai_google; then
-        _u_response=$(make_http_request_google_ai "$(remove_trailing_comma "$(generate_google_ai_prompt "user" "$@")")")
+        _u_response=$(make_http_request_google_ai "$(generate_google_ai_prompt "user" "$@" | remove_trailing_comma)")
       fi
 
       echo_typing "$(echo "$_u_response" | markdown_parse)"
@@ -974,7 +974,7 @@ remove_func() {
 }
 
 remove_trailing_comma() {
-  echo "$1" | sed 's/,$//'
+  sed 's/,$//'
 }
 
 # upgrade
@@ -1456,7 +1456,13 @@ generate_google_ai_prompt() {
     fi
   done
 
-  echo "{\"role\": \"$__g_g_a_p_role\", \"parts\":[{\"text\": \"$__g_g_a_p_prompt\"}]},"
+  echo "{\"role\": \"$__g_g_a_p_role\", \"parts\":[{\"text\": \"$(echo "$__g_g_a_p_prompt" | escape_json_string)\"}]},"
+}
+
+# escape
+
+escape_json_string() {
+  sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\n/\\n/g' -e 's/\r/\\r/g' -e 's/\t/\\t/g' -e 's/\b/\\b/g' -e 's/\f/\\f/g'
 }
 
 # markdown

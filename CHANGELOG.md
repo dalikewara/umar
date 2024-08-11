@@ -2,7 +2,7 @@
 
 ## 2024
 
-- **v1.2.0 - v1.3.0** (2024-08-11)
+- **v1.2.0 - v1.3.1** (2024-08-11)
   - Refactor
   - Add `window` command
   - Add `start chat` command
