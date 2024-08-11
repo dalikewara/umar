@@ -2,7 +2,7 @@
 
 # config
 
-version="v1.3.1"
+version="v1.4.0"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -120,6 +120,9 @@ window:Open my command window. ${color_yellow}**You may create a keyboard shortc
 run:Run custom command(s)
 list run:List registered custom command(s)
 set run:Set new custom command
+remove run:Remove custom command(s)
+change run desc:Change custom command description
+change run command:Change custom command execution command
 --------------:--------------------------
 prompt:Prompt anything to AI
 start chat:Start a new chat session with AI
@@ -193,6 +196,90 @@ umar() {
 
       change_file_content_line "2" "$tmp_ai_model" "$config_ai_filepath"
       echo "$message_ok"
+
+      return 0
+      ;;
+
+    "change run desc")
+      printf_func_no_enter "$message_run_set_name "
+
+      _u_name=$(read_func)
+
+      if is_empty "$_u_name"; then
+        echo_exit "$message_run_set_name_empty"
+      fi
+
+      if is_contain "$_u_name" ":"; then
+        echo_exit "$message_run_set_name_contain_colon"
+      fi
+
+      _u_name_exist=$(read_config_run_list | while IFS=: read -r _u_name_config _ _; do
+        if is_equal "$_u_name" "$_u_name_config" && ! is_empty "$_u_name_config"; then
+          echo_exit "exist"
+        fi
+      done)
+
+      if ! is_equal "$_u_name_exist" "exist"; then
+        printf_exit "${color_green}$_u_name${color_reset} $message_command_not_found"
+      fi
+
+      printf_func_no_enter "$message_run_set_description "
+
+      _u_description=$(read_func)
+
+      if is_contain "$_u_description" ":"; then
+        echo_exit "$message_run_set_description_contain_colon"
+      fi
+
+      read_config_run_list | while IFS=: read -r _u_name_config _ _u_command_config; do
+        if is_equal "$_u_name" "$_u_name_config" && ! is_empty "$_u_name_config"; then
+          change_file_content_line_by_command_name "$_u_name_config" "$_u_name_config:$_u_description:$_u_command_config" "$config_run_list_filepath"
+
+          break
+        fi
+      done
+
+      return 0
+      ;;
+
+    "change run command")
+      printf_func_no_enter "$message_run_set_name "
+
+      _u_name=$(read_func)
+
+      if is_empty "$_u_name"; then
+        echo_exit "$message_run_set_name_empty"
+      fi
+
+      if is_contain "$_u_name" ":"; then
+        echo_exit "$message_run_set_name_contain_colon"
+      fi
+
+      _u_name_exist=$(read_config_run_list | while IFS=: read -r _u_name_config _ _; do
+        if is_equal "$_u_name" "$_u_name_config" && ! is_empty "$_u_name_config"; then
+          echo_exit "exist"
+        fi
+      done)
+
+      if ! is_equal "$_u_name_exist" "exist"; then
+        printf_exit "${color_green}$_u_name${color_reset} $message_command_not_found"
+      fi
+
+      printf_func_no_enter "$message_run_set_command "
+
+      _u_command=$(read_func)
+
+      if is_empty "$_u_command"; then
+        echo_exit "$message_run_set_command_empty"
+      fi
+
+      read_config_run_list | while IFS=: read -r _u_name_config _u_description_config _; do
+        if is_equal "$_u_name" "$_u_name_config" && ! is_empty "$_u_name_config"; then
+          change_file_content_line_by_command_name "$_u_name_config" "$_u_name_config:$_u_description_config:$_u_command" "$config_run_list_filepath"
+
+          break
+        fi
+      done
 
       return 0
       ;;
@@ -457,6 +544,27 @@ umar() {
       fi
 
       printf_func "Type: ${color_yellow}$ai\n${color_reset}Model: ${color_yellow}$(get_ai_model)\n${color_reset}API key: ${color_blue}$_u_api_key${color_reset}"
+
+      return 0
+      ;;
+
+    "remove run")
+      shift
+      shift
+
+      check_remove_empty "$@"
+
+      for _u_arg in "$@"; do
+        read_config_run_list | while IFS=: read -r _u_name_config _ _; do
+          if is_equal "$_u_arg" "$_u_name_config" && ! is_empty "$_u_name_config"; then
+            delete_file_content_line_by_command_name "$_u_name_config" "$config_run_list_filepath"
+
+            break
+          fi
+        done
+      done
+
+      echo "$message_ok"
 
       return 0
       ;;
@@ -1083,6 +1191,12 @@ clear_tmp_error() {
   fi
 }
 
+# delete
+
+delete_file_content_line_by_command_name() {
+  sed -i "/^$1:/d" "$2"
+}
+
 # determine
 
 determine_distro() {
@@ -1356,7 +1470,11 @@ open_terminal_and_exec_wait() {
 # change
 
 change_file_content_line() {
-  sed -i "$1s/.*/$2/" "$3"
+  sed -i "$1s|.*|$2|" "$3"
+}
+
+change_file_content_line_by_command_name() {
+  sed -i "s|^$1:.*|$2|" "$3"
 }
 
 # make http request
