@@ -2,7 +2,7 @@
 
 # config
 
-version="v1.2.0"
+version="v1.3.0"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -108,6 +108,7 @@ message_failed="Operation failed!"
 message_command_not_found="command not found!"
 message_caution_plain="BE CAREFUL ABOUT WHAT YOU TYPE, MAKE SURE THERE IS NOTHING THAT CAN BREAK YOUR SYSTEM"
 message_caution="${color_red}**$message_caution_plain**${color_reset}"
+message_chat_typing="${color_yellow}>_${color_reset}"
 
 # command
 
@@ -411,7 +412,37 @@ umar() {
       ;;
 
     "start chat")
-      echo_exit "$message_feature_is_not_implemented_yet"
+      check_ai
+      printf_ai_info
+
+      _u_prompt=""
+
+      while true; do
+        printf_func_no_enter "$message_chat_typing "
+
+        _u_chat_prompt="$(read_func)"
+        _u_chat_prompt=$(generate_google_ai_prompt "user" "$_u_chat_prompt")
+
+        if is_empty "$_u_prompt"; then
+          _u_prompt="$_u_chat_prompt"
+        else
+          _u_prompt="$_u_prompt $_u_chat_prompt"
+        fi
+
+        _u_response=""
+
+        echo
+
+        if is_ai_google; then
+          _u_response=$(make_http_request_google_ai "$(remove_trailing_comma "$_u_prompt")")
+        fi
+
+        _u_prompt="$_u_prompt $(generate_google_ai_prompt "model" "$_u_response")"
+
+        echo_typing "$(echo "$_u_response" | markdown_parse)"
+
+        echo
+      done
 
       return 0
       ;;
@@ -590,7 +621,7 @@ umar() {
       _u_response=""
 
       if is_ai_google; then
-        _u_response=$(make_http_request_google_ai "$@")
+        _u_response=$(make_http_request_google_ai "$(remove_trailing_comma "$(generate_google_ai_prompt "user" "$@")")")
       fi
 
       echo_typing "$(echo "$_u_response" | markdown_parse)"
@@ -940,6 +971,10 @@ remove_func() {
   if is_fedora; then
     sudo dnf remove "$@"
   fi
+}
+
+remove_trailing_comma() {
+  echo "$1" | sed 's/,$//'
 }
 
 # upgrade
@@ -1378,23 +1413,11 @@ make_http_request_google_ai() {
 
   check_requirements "jq"
 
-  __m_h_r_g_a_prompt=""
-
-  for __m_h_r_g_a_arg in "$@"; do
-    if is_empty "$__m_h_r_g_a_prompt"; then
-      __m_h_r_g_a_prompt="$__m_h_r_g_a_arg"
-    else
-      __m_h_r_g_a_prompt="$__m_h_r_g_a_prompt $__m_h_r_g_a_arg"
-    fi
-  done
-
   __m_h_r_g_a_http_response=$(make_http_request -url "$(get_ai_url)/$(get_ai_model):generateContent?key=$(get_ai_api_key)" -requestBody "
     {
-      \"contents\": [{
-        \"parts\":[
-          {\"text\": \"$__m_h_r_g_a_prompt\"}
-        ]
-      }],
+      \"contents\": [
+        $1
+      ],
       \"generationConfig\": {
         \"temperature\": 0.9
       }
@@ -1410,6 +1433,30 @@ make_http_request_google_ai() {
   fi
 
   echo "$__m_h_r_g_a_text"
+}
+
+# generate
+
+generate_google_ai_prompt() {
+  __g_g_a_p_role="user"
+
+  if is_equal "$1" "model"; then
+    __g_g_a_p_role="model"
+  fi
+
+  shift
+
+  __g_g_a_p_prompt=""
+
+  for __g_g_a_p_arg in "$@"; do
+    if is_empty "$__g_g_a_p_prompt"; then
+      __g_g_a_p_prompt="$__g_g_a_p_arg"
+    else
+      __g_g_a_p_prompt="$__g_g_a_p_prompt $__g_g_a_p_arg"
+    fi
+  done
+
+  echo "{\"role\": \"$__g_g_a_p_role\", \"parts\":[{\"text\": \"$__g_g_a_p_prompt\"}]},"
 }
 
 # markdown
