@@ -2,7 +2,7 @@
 
 # config
 
-version="v1.4.0"
+version="v1.4.1"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -138,9 +138,11 @@ search:Search for the given keyword(s) using a terminal browser
 install:Install package(s)
 remove:Remove package(s)
 upgrade:Upgrade package(s)
-test http:Test and benchmark HTTP URL -> \`${color_cyan}-c ${color_blue}NUM ${color_cyan}-r ${color_blue}NUM ${color_cyan}-t \
-${color_blue}SECONDS ${color_cyan}-header ${color_blue}TEXT ${color_cyan}-userAgent ${color_blue}TEXT ${color_cyan}-contentType \
-${color_blue}TEXT ${color_cyan}-u ${color_blue}URL${color_reset}\`
+network:Scan or connect to a network using iwd -> ${color_blue}**argument1 argument2**${color_reset}. ${color_blue}**argument1**${color_reset} is \
+the device name and ${color_blue}**argument2**${color_reset} is the network SSID
+test http:Test and benchmark HTTP URL -> \`${color_cyan}**-c** ${color_blue}**NUM** ${color_cyan}**-r** ${color_blue}**NUM** ${color_cyan}**-t** \
+${color_blue}**SECONDS** ${color_cyan}**-header** ${color_blue}**TEXT** ${color_cyan}**-userAgent** ${color_blue}**TEXT** ${color_cyan}**-contentType** \
+${color_blue}**TEXT** ${color_cyan}**-u** ${color_blue}**URL**${color_reset}\`
 show image:Show image(s)
 play audio:Play audio(s)
 play video:Play video(s)
@@ -762,6 +764,44 @@ umar() {
 
       return 0
       ;;
+
+    "network")
+      shift
+
+      check_requirements "iwctl"
+
+      _u_device="wlan0"
+
+      if ! [ "$1" = "" ]; then
+        _u_device="$1"
+      fi
+
+      if [ "$2" = "" ]; then
+        echo "Scanning..."
+        iwctl station "$_u_device" scan || return 0
+        sleep 1
+        iwctl station "$_u_device" get-networks || return 0
+        return 0
+      fi
+
+      shift
+
+      echo "Refreshing device..."
+      iwctl device "$_u_device" set-property Powered off || return 0
+      sleep 1
+      iwctl device "$_u_device" set-property Powered on || return 0
+      sleep 1
+      echo "OK"
+      echo "Scanning..."
+      iwctl station "$_u_device" scan || return 0
+      echo "OK"
+      echo "Connecting..."
+      sleep 1
+      iwctl station "$_u_device" connect "$*" || return 0
+      echo "OK"
+
+      return 0
+      ;;
   esac
 
   echo "$message_invalid_command"
@@ -910,6 +950,10 @@ check_requirements() {
   for __i_n_arg in "$@"; do
     if is_package_exist "$__i_n_arg" || is_user_package_exist "$__i_n_arg"; then
         continue
+    fi
+
+    if is_equal "$__i_n_arg" "iwctl"; then
+      __i_n_arg="iwd"
     fi
 
     if is_empty "$__i_n_not_exist"; then

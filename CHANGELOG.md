@@ -2,6 +2,9 @@
 
 ## 2024
 
+- **v1.4.1** (2024-08-22)
+  - Add `network` command
+
 - **v1.2.0 - v1.4.0** (2024-08-11)
   - Refactor
   - Add `window` command
