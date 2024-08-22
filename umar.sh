@@ -2,7 +2,7 @@
 
 # config
 
-version="v1.4.1"
+version="v1.4.2"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -138,8 +138,7 @@ search:Search for the given keyword(s) using a terminal browser
 install:Install package(s)
 remove:Remove package(s)
 upgrade:Upgrade package(s)
-network:Scan or connect to a network using iwd -> ${color_blue}**argument1 argument2**${color_reset}. ${color_blue}**argument1**${color_reset} is \
-the device name and ${color_blue}**argument2**${color_reset} is the network SSID
+wifi:Scan or connect to a Wi-Fi using iwd. ${color_blue}**Argument 1**${color_reset} is the device name and ${color_blue}**Argument 2**${color_reset} is the Wi-Fi SSID
 test http:Test and benchmark HTTP URL -> \`${color_cyan}**-c** ${color_blue}**NUM** ${color_cyan}**-r** ${color_blue}**NUM** ${color_cyan}**-t** \
 ${color_blue}**SECONDS** ${color_cyan}**-header** ${color_blue}**TEXT** ${color_cyan}**-userAgent** ${color_blue}**TEXT** ${color_cyan}**-contentType** \
 ${color_blue}**TEXT** ${color_cyan}**-u** ${color_blue}**URL**${color_reset}\`
@@ -765,7 +764,7 @@ umar() {
       return 0
       ;;
 
-    "network")
+    "wifi")
       shift
 
       check_requirements "iwctl"
