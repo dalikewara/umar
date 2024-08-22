@@ -2,7 +2,7 @@
 
 # config
 
-version="v1.4.2"
+version="v1.4.3"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -99,7 +99,7 @@ message_ai_model_empty="You didn't provide any AI model to process!
 You can use this command to set up a new one: ${color_cyan}umar set ai${color_reset}"
 message_file_not_found="file not found!"
 message_unknown_distro="Unknown distribution!"
-message_package_not_installed="The package is not installed. Do you want to install it? [N/y]"
+message_package_not_installed="package(s) is not installed. Do you want to install them? [N/y]"
 message_package_needed="I need that package(s) to process the command!"
 message_package_needed_installed="The required package(s) have been installed. Refresh the current console/terminal session and run the command again"
 message_feature_is_not_implemented_yet="This feature is not implemented yet!"
@@ -109,6 +109,7 @@ message_command_not_found="command not found!"
 message_caution_plain="BE CAREFUL ABOUT WHAT YOU TYPE, MAKE SURE THERE IS NOTHING THAT CAN BREAK YOUR SYSTEM"
 message_caution="${color_red}**$message_caution_plain**${color_reset}"
 message_chat_typing="${color_yellow}>_${color_reset}"
+message_warning_iwd="${color_yellow}It seems you want to install ${color_red}iwd${color_yellow}. If you have any other network or wireless daemon installed, it might cause a conflict between them${color_reset}"
 
 # command
 
@@ -944,33 +945,39 @@ check_ai() {
 }
 
 check_requirements() {
-  __i_n_not_exist=""
+  __c_r_not_exist=""
+  __c_r_iwd=""
 
-  for __i_n_arg in "$@"; do
-    if is_package_exist "$__i_n_arg" || is_user_package_exist "$__i_n_arg"; then
+  for __c_r_arg in "$@"; do
+    if is_package_exist "$__c_r_arg" || is_user_package_exist "$__c_r_arg"; then
         continue
     fi
 
-    if is_equal "$__i_n_arg" "iwctl"; then
-      __i_n_arg="iwd"
+    if is_equal "$__c_r_arg" "iwctl"; then
+      __c_r_arg="iwd"
+      __c_r_iwd="yes"
     fi
 
-    if is_empty "$__i_n_not_exist"; then
-      __i_n_not_exist="$__i_n_arg"
+    if is_empty "$__c_r_not_exist"; then
+      __c_r_not_exist="$__c_r_arg"
     else
-      __i_n_not_exist="$__i_n_not_exist $__i_n_arg"
+      __c_r_not_exist="$__c_r_not_exist $__c_r_arg"
     fi
   done
 
-  if is_empty "$__i_n_not_exist"; then
+  if is_empty "$__c_r_not_exist"; then
     return 0
   fi
 
-  printf_func_no_enter "${color_red}$__i_n_not_exist ${color_reset}$message_package_not_installed "
+  if is_equal "$__c_r_iwd" "yes"; then
+    printf_func "$message_warning_iwd\n"
+  fi
 
-  __i_n_confirmation=$(read_func)
+  printf_func_no_enter "${color_red}$__c_r_not_exist ${color_reset}$message_package_not_installed "
 
-  if ! is_equal "$__i_n_confirmation" "y"; then
+  __c_r_confirmation=$(read_func)
+
+  if ! is_equal "$__c_r_confirmation" "y"; then
     printf_exit "\n$message_package_needed"
   fi
 
@@ -979,7 +986,13 @@ check_requirements() {
     printf_exit "$message_package_needed"
   fi
 
-  install_func_arg_split "$__i_n_not_exist"
+  install_func_arg_split "$__c_r_not_exist"
+
+  if is_equal "$__c_r_iwd" "yes"; then
+    sudo systemctl stop iwd.service > /dev/null 2>&1
+    sudo systemctl start iwd.service > /dev/null 2>&1
+    sleep 2
+  fi
 
   echo "$message_package_needed_installed"
 }

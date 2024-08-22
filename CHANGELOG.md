@@ -2,9 +2,10 @@
 
 ## 2024
 
-- **v1.4.1 - v1.4.2** (2024-08-22)
+- **v1.4.1 - v1.4.3** (2024-08-22)
   - Add `network` command
   - Change `network` command to `wifi`
+  - Change some scripts
 
 - **v1.2.0 - v1.4.0** (2024-08-11)
   - Refactor
