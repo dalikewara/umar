@@ -2,7 +2,7 @@
 
 # config
 
-version="v1.4.4"
+version="v1.4.5"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -973,7 +973,7 @@ check_requirements() {
     printf_func "$message_warning_iwd\n"
   fi
 
-  printf_func_no_enter "${color_red}$__c_r_not_exist ${color_reset}$message_package_not_installed "
+  printf_func_no_enter "${color_red}$(echo "**$__c_r_not_exist**" | markdown_parse) ${color_reset}$message_package_not_installed "
 
   __c_r_confirmation=$(read_func)
 
