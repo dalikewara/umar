@@ -2,7 +2,7 @@
 
 # config
 
-version="v1.4.3"
+version="v1.4.4"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -99,7 +99,7 @@ message_ai_model_empty="You didn't provide any AI model to process!
 You can use this command to set up a new one: ${color_cyan}umar set ai${color_reset}"
 message_file_not_found="file not found!"
 message_unknown_distro="Unknown distribution!"
-message_package_not_installed="package(s) is not installed. Do you want to install them? [N/y]"
+message_package_not_installed="package(s) are not installed. Do you want to install them? [N/y]"
 message_package_needed="I need that package(s) to process the command!"
 message_package_needed_installed="The required package(s) have been installed. Refresh the current console/terminal session and run the command again"
 message_feature_is_not_implemented_yet="This feature is not implemented yet!"
