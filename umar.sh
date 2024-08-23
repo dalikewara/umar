@@ -2,7 +2,7 @@
 
 # config
 
-version="v1.4.6"
+version="v1.4.7"
 pid=$$
 search_url="https://www.google.com/search?q="
 distro="unknown"
@@ -36,84 +36,21 @@ target_name="umar"
 typing_speed=0.005
 http_header="X-HELLO:X-WORLD"
 
-# message
+# umar
 
-message_umar="I am Umar ($version), your Linux assistant. I can help you with the common tasks listed below. \
+umar() {
+  determine_distro
+  determine_de
+  determine_ai
+  create_config
+  check_requirements "sh"
+
+  if is_no_argument "$@"; then
+    printf_func "\nI am Umar ($version), your Linux assistant. I can help you with the common tasks listed below. \
 I will continue to be updated indefinitely, as my creator may need to add new features, update my logic, fix issues, \
-or make other changes. I may get smarter every day. I can also use AI, but you need to manually set up the configuration first."
-message_package_not_found="package not found!"
-message_invalid_command="Sorry, I can't understand your command"
-message_kill_confirmation="All processes listed above will be terminated. Are you sure? [N/y]"
-message_all_process_terminated="All processes have been terminated!"
-message_aborted="Operation aborted!"
-message_test_http_no_url="Please provide a URL to test!
-Use this option: ${color_cyan}-u ${color_blue}URL${color_reset}"
-message_run_list_empty="No custom commands have been set"
-message_run_set_name="Enter a name..."
-message_run_set_name_contain_colon="The name can't contain a colon!"
-message_run_set_name_exist="The name already exists!"
-message_run_set_name_empty="The name can't be empty!"
-message_run_set_description="Enter a description..."
-message_run_set_description_contain_colon="The description can't contain a colon!"
-message_run_set_command="Enter the execution command..."
-message_run_set_command_empty="The execution command can't be empty!"
-message_ok="OK"
-message_set_ai_type="AI type:
+or make other changes. I may get smarter every day. I can also use AI, but you need to manually set up the configuration first.\n"
 
-1. Google
-
-Choose the AI type number..."
-message_set_ai_type_empty="AI type can't be empty!"
-message_set_ai_type_wrong="You chose the wrong AI type number!"
-message_set_ai_model_google="
-AI model:
-
-1. Gemini 1.0 Pro
-2. Gemini 1.5 Pro
-3. Gemini 1.5 Flash
-
-Choose the AI model number..."
-message_set_ai_model_empty="AI model can't be empty!"
-message_set_ai_model_wrong="You chose the wrong AI model number!"
-message_set_ai_api_key_google="
-You'll need an API key to use the AI. You can follow this documentation -> https://ai.google.dev/gemini-api/docs/api-key
-
-Enter the API key..."
-message_set_ai_api_key_empty="API Key can't be empty!"
-message_set_ai_registered="AI configuration registered"
-message_kill_empty="You didn't provide any names to kill!"
-message_open_empty="You didn't provide any names to open!"
-message_install_empty="You didn't provide any names to install!"
-message_remove_empty="You didn't provide any names to remove!"
-message_show_empty="You didn't provide any names to show!"
-message_play_empty="You didn't provide any names to play!"
-message_run_empty="You didn't provide any commands to run!"
-message_prompt_empty="You didn't provide any prompt text!"
-message_change_empty="You didn't provide new content to change!"
-message_search_empty="You didn't provide any keywords to search!"
-message_ai_empty="You didn't provide any AI type to process!
-You can use this command to set up a new one: ${color_cyan}umar set ai${color_reset}"
-message_ai_url_empty="You didn't provide any AI URL to process!
-You can use this command to set up a new one: ${color_cyan}umar set ai${color_reset}"
-message_ai_model_empty="You didn't provide any AI model to process!
-You can use this command to set up a new one: ${color_cyan}umar set ai${color_reset}"
-message_file_not_found="file not found!"
-message_unknown_distro="Unknown distribution!"
-message_package_not_installed="package(s) are not installed. Do you want to install them? [N/y]"
-message_package_needed="I need that package(s) to process the command!"
-message_package_needed_installed="The required package(s) have been installed. Refresh the current console/terminal session and run the command again"
-message_feature_is_not_implemented_yet="This feature is not implemented yet!"
-message_press_enter_to_exit="Press Enter to exit"
-message_failed="Operation failed!"
-message_command_not_found="command not found!"
-message_caution_plain="BE CAREFUL ABOUT WHAT YOU TYPE, MAKE SURE THERE IS NOTHING THAT CAN BREAK YOUR SYSTEM"
-message_caution="${color_red}**$message_caution_plain**${color_reset}"
-message_chat_typing="${color_yellow}>_${color_reset}"
-message_warning_iwd="${color_yellow}It seems you want to install ${color_red}iwd${color_yellow}. If you have any other network or wireless daemon installed, it might cause a conflict between them${color_reset}"
-
-# command
-
-commands="get smarter:Upgrade me to the latest version
+    echo "get smarter:Upgrade me to the latest version
 version:Show my current version
 reveal:Reveal my source code
 window:Open my command window. ${color_yellow}**You may create a keyboard shortcut for this command to open my command window directly**${color_reset}
@@ -146,26 +83,11 @@ ${color_blue}**TEXT** ${color_cyan}**-u** ${color_blue}**URL**${color_reset}\`
 show image:Show image(s)
 play audio:Play audio(s)
 play video:Play video(s)
-"
-
-# umar
-
-umar() {
-  determine_distro
-  determine_de
-  determine_ai
-  create_config
-  check_requirements "sh"
-
-  if is_no_argument "$@"; then
-    printf_func "\n$message_umar\n"
-
-    echo "$commands" | while IFS=: read -r _u_name _u_description; do
+" | while IFS=: read -r _u_name _u_description; do
       printf "${color_green}%-20s ${color_reset}%b\n" "$_u_name" "$(echo "$_u_description" | markdown_parse)"
     done
 
-    printf_func "$(echo "$message_caution" | markdown_parse)\n"
-
+    printf_func "$(echo "${color_red}**BE CAREFUL ABOUT WHAT YOU TYPE, MAKE SURE THERE IS NOTHING THAT CAN BREAK YOUR SYSTEM**${color_reset}" | markdown_parse)\n"
     return 0
   fi
 
@@ -173,10 +95,8 @@ umar() {
     "change ai api key")
       check_ai
       set_ai_api_key
-
       change_file_content_line "3" "$tmp_ai_api_key" "$config_ai_filepath"
-      echo "$message_ok"
-
+      echo "OK"
       return 0
       ;;
   esac
@@ -185,34 +105,30 @@ umar() {
     "change ai type")
       check_ai
       set_ai_type
-
       change_file_content_line "1" "$tmp_ai_type" "$config_ai_filepath"
-      echo "$message_ok"
-
+      echo "OK"
       return 0
       ;;
 
     "change ai model")
       check_ai
       set_ai_model
-
       change_file_content_line "2" "$tmp_ai_model" "$config_ai_filepath"
-      echo "$message_ok"
-
+      echo "OK"
       return 0
       ;;
 
     "change run desc")
-      printf_func_no_enter "$message_run_set_name "
+      printf_func_no_enter "Enter a name... "
 
       _u_name=$(read_func)
 
       if is_empty "$_u_name"; then
-        echo_exit "$message_run_set_name_empty"
+        echo_exit "The name can't be empty!"
       fi
 
       if is_contain "$_u_name" ":"; then
-        echo_exit "$message_run_set_name_contain_colon"
+        echo_exit "The name can't contain a colon!"
       fi
 
       _u_name_exist=$(read_config_run_list | while IFS=: read -r _u_name_config _ _; do
@@ -222,21 +138,20 @@ umar() {
       done)
 
       if ! is_equal "$_u_name_exist" "exist"; then
-        printf_exit "${color_green}$_u_name${color_reset} $message_command_not_found"
+        printf_exit "${color_green}$_u_name${color_reset} command not found!"
       fi
 
-      printf_func_no_enter "$message_run_set_description "
+      printf_func_no_enter "Enter a description... "
 
       _u_description=$(read_func)
 
       if is_contain "$_u_description" ":"; then
-        echo_exit "$message_run_set_description_contain_colon"
+        echo_exit "The description can't contain a colon!"
       fi
 
       read_config_run_list | while IFS=: read -r _u_name_config _ _u_command_config; do
         if is_equal "$_u_name" "$_u_name_config" && ! is_empty "$_u_name_config"; then
           change_file_content_line_by_command_name "$_u_name_config" "$_u_name_config:$_u_description:$_u_command_config" "$config_run_list_filepath"
-
           break
         fi
       done
@@ -245,16 +160,16 @@ umar() {
       ;;
 
     "change run command")
-      printf_func_no_enter "$message_run_set_name "
+      printf_func_no_enter "Enter a name... "
 
       _u_name=$(read_func)
 
       if is_empty "$_u_name"; then
-        echo_exit "$message_run_set_name_empty"
+        echo_exit "The name can't be empty!"
       fi
 
       if is_contain "$_u_name" ":"; then
-        echo_exit "$message_run_set_name_contain_colon"
+        echo_exit "The name can't contain a colon!"
       fi
 
       _u_name_exist=$(read_config_run_list | while IFS=: read -r _u_name_config _ _; do
@@ -264,21 +179,20 @@ umar() {
       done)
 
       if ! is_equal "$_u_name_exist" "exist"; then
-        printf_exit "${color_green}$_u_name${color_reset} $message_command_not_found"
+        printf_exit "${color_green}$_u_name${color_reset} command not found!"
       fi
 
-      printf_func_no_enter "$message_run_set_command "
+      printf_func_no_enter "Enter the execution command... "
 
       _u_command=$(read_func)
 
       if is_empty "$_u_command"; then
-        echo_exit "$message_run_set_command_empty"
+        echo_exit "The execution command can't be empty!"
       fi
 
       read_config_run_list | while IFS=: read -r _u_name_config _u_description_config _; do
         if is_equal "$_u_name" "$_u_name_config" && ! is_empty "$_u_name_config"; then
           change_file_content_line_by_command_name "$_u_name_config" "$_u_name_config:$_u_description_config:$_u_command" "$config_run_list_filepath"
-
           break
         fi
       done
@@ -290,15 +204,14 @@ umar() {
   case "$1 $2" in
     "get smarter")
       check_requirements "curl" "sudo"
-
       curl -L "$repo_url/$script_name" -o "/tmp/$script_name"
       sudo mv "/tmp/$script_name" "$install_dir/$target_name"
       sudo chmod +x "$install_dir/$target_name"
 
       if [ -x "$install_dir/$target_name" ]; then
-        echo_exit "$message_ok"
+        echo_exit "OK"
       else
-        echo_exit "$message_failed"
+        echo_exit "Operation failed!"
       fi
 
       return 0
@@ -308,7 +221,7 @@ umar() {
       _u_cfg="$(read_config_run_list)"
 
       if is_empty "$_u_cfg"; then
-        echo_exit "$message_run_list_empty"
+        echo_exit "No custom commands have been set"
       fi
 
       echo "$_u_cfg" | while IFS=: read -r _u_name _u_description _u_command; do
@@ -323,16 +236,16 @@ umar() {
       ;;
 
     "set run")
-      printf_func_no_enter "$message_run_set_name "
+      printf_func_no_enter "Enter a name... "
 
       _u_name=$(read_func)
 
       if is_empty "$_u_name"; then
-        echo_exit "$message_run_set_name_empty"
+        echo_exit "The name can't be empty!"
       fi
 
       if is_contain "$_u_name" ":"; then
-        echo_exit "$message_run_set_name_contain_colon"
+        echo_exit "The name can't contain a colon!"
       fi
 
       _u_name_exist=$(read_config_run_list | while IFS=: read -r _u_name_config _ _; do
@@ -342,71 +255,62 @@ umar() {
       done)
 
       if is_equal "$_u_name_exist" "exist"; then
-        echo_exit "$message_run_set_name_exist"
+        echo_exit "The name already exists!"
       fi
 
-      printf_func_no_enter "$message_run_set_description "
+      printf_func_no_enter "Enter a description... "
 
       _u_description=$(read_func)
 
       if is_contain "$_u_description" ":"; then
-        echo_exit "$message_run_set_description_contain_colon"
+        echo_exit "The description can't contain a colon!"
       fi
 
-      printf_func_no_enter "$message_run_set_command "
+      printf_func_no_enter "Enter the execution command... "
 
       _u_command=$(read_func)
 
       if is_empty "$_u_command"; then
-        echo_exit "$message_run_set_command_empty"
+        echo_exit "The execution command can't be empty!"
       fi
 
       _u_cfg=$(append_config_run_list "$_u_name:$_u_description:$_u_command")
 
       write_config_run_list "$_u_cfg"
-
-      echo "$message_ok"
-
+      echo "OK"
       return 0
       ;;
 
     "show image")
       shift
       shift
-
       check_show_empty "$@"
       check_requirements "feh"
       feh "$@" &
-
       return 0
       ;;
 
     "play audio")
       shift
       shift
-
       check_play_empty "$@"
       check_requirements "mpg123"
       mpg123 -v "$@"
-
       return 0
       ;;
 
     "play video")
       shift
       shift
-
       check_play_empty "$@"
       check_requirements "mpv"
       mpv "$@" > /dev/null 2>&1 &
-
       return 0
       ;;
 
     "test http")
       shift
       shift
-
       check_requirements "siege"
 
       _u_concurrent="10"
@@ -473,7 +377,7 @@ umar() {
       done
 
       if is_empty "$_u_url"; then
-        printf_exit "$message_test_http_no_url"
+        printf_exit "Please provide a URL to test!\nUse this option: ${color_cyan}-u ${color_blue}URL${color_reset}"
       fi
 
       printf_func "url=$_u_url | concurrent=$_u_concurrent | time=${_u_time}S | retry=$_u_retry | header=$_u_url_header | userAgent=$_u_url_user_agent | contentType=$_u_url_content_type\n"
@@ -493,10 +397,8 @@ umar() {
       set_ai_type
       set_ai_model
       set_ai_api_key
-
       write_config_ai "$(printf_func "$tmp_ai_type\n$tmp_ai_model\n$tmp_ai_api_key")"
-      echo "$message_set_ai_registered"
-
+      echo "AI configuration registered"
       return 0
       ;;
 
@@ -507,7 +409,7 @@ umar() {
       _u_prompt=""
 
       while true; do
-        printf_func_no_enter "$message_chat_typing "
+        printf_func_no_enter "${color_yellow}>_${color_reset} "
 
         _u_chat_prompt="$(read_func)"
         _u_chat_prompt=$(generate_google_ai_prompt "user" "$_u_chat_prompt")
@@ -529,7 +431,6 @@ umar() {
         _u_prompt="$_u_prompt $(generate_google_ai_prompt "model" "$_u_response")"
 
         echo_typing "$(echo "$_u_response" | markdown_parse)"
-
         echo
       done
 
@@ -546,28 +447,24 @@ umar() {
       fi
 
       printf_func "Type: ${color_yellow}$ai\n${color_reset}Model: ${color_yellow}$(get_ai_model)\n${color_reset}API key: ${color_blue}$_u_api_key${color_reset}"
-
       return 0
       ;;
 
     "remove run")
       shift
       shift
-
       check_remove_empty "$@"
 
       for _u_arg in "$@"; do
         read_config_run_list | while IFS=: read -r _u_name_config _ _; do
           if is_equal "$_u_arg" "$_u_name_config" && ! is_empty "$_u_name_config"; then
             delete_file_content_line_by_command_name "$_u_name_config" "$config_run_list_filepath"
-
             break
           fi
         done
       done
 
-      echo "$message_ok"
-
+      echo "OK"
       return 0
       ;;
   esac
@@ -575,7 +472,6 @@ umar() {
   case "$1" in
     "open")
       shift
-
       check_open_empty "$@"
 
       _u_not_exist=""
@@ -583,13 +479,12 @@ umar() {
       for _u_arg in "$@"; do
         if is_package_exist "$_u_arg" || is_user_package_exist "$_u_arg"; then
           exec_func_async_no_std_out "$_u_arg"
-
           continue
         fi
 
         _u_not_exist="yes"
 
-        printf_func "${color_red}$_u_arg ${color_reset}$message_package_not_found"
+        printf_func "${color_red}$_u_arg ${color_reset}package not found!"
       done
 
       if ! is_equal "$_u_not_exist" "yes"; then
@@ -601,7 +496,6 @@ umar() {
 
     "kill")
       shift
-
       check_kill_empty "$@"
       check_requirements "sudo"
 
@@ -619,13 +513,12 @@ umar() {
 
       _u_process_list=$(printf_func "$_u_process_list")
 
-      printf_func_no_enter "\n$message_kill_confirmation "
+      printf_func_no_enter "\nAll processes listed above will be terminated. Are you sure? [N/y] "
 
       _u_confirmation=$(read_func)
 
       if ! is_equal "$_u_confirmation" "y"; then
-        printf_func "\n$message_aborted"
-
+        printf_func "\nOperation aborted!"
         return 0
       fi
 
@@ -635,65 +528,52 @@ umar() {
         fi
       done
 
-      printf_func "\n$message_all_process_terminated"
-
+      printf_func "\nAll processes have been terminated!"
       return 0
       ;;
 
     "search")
       shift
-
       check_search_empty "$@"
       check_requirements "w3m"
       exec_func w3m "$search_url$(echo "$*" | sed 's/ /+/g')"
-
       clear_shell
-
       return 0
       ;;
 
     "install")
       shift
-
       check_install_empty "$@"
       install_func "$@"
-
       return 0
       ;;
 
     "remove")
       shift
-
       check_remove_empty "$@"
       remove_func "$@"
-
       return 0
       ;;
 
     "upgrade")
       shift
-
       upgrade_func "$@"
-
       return 0
       ;;
 
     "version")
       echo "$version"
-
       return 0
       ;;
 
     "reveal")
       check_requirements "vim"
       exec_func vim -R "$install_dir/$target_name"
-
       return 0
       ;;
 
     "run")
       shift
-
       check_run_empty "$@"
       set_tmp_value "not exist"
 
@@ -707,14 +587,13 @@ umar() {
             set_tmp_value "exist"
             printf_func "\n${color_green}$_u_name${color_reset} >_ ${color_cyan}$_u_command${color_reset}\n"
             eval_func "$_u_command"
-
             echo
             break
           fi
         done
 
         if ! is_equal "$(get_tmp_value)" "exist"; then
-          printf_func "${color_green}$_u_arg${color_reset} $message_command_not_found"
+          printf_func "${color_green}$_u_arg${color_reset} command not found!"
         fi
       done
 
@@ -724,7 +603,6 @@ umar() {
     "prompt")
       shift
       check_prompt_empty "$@"
-
       check_ai
       printf_ai_info
 
@@ -735,7 +613,6 @@ umar() {
       fi
 
       echo_typing "$(echo "$_u_response" | markdown_parse)"
-
       return 0
       ;;
 
@@ -767,7 +644,6 @@ umar() {
 
     "wifi")
       shift
-
       check_requirements "iwctl"
 
       _u_device="wlan0"
@@ -785,7 +661,6 @@ umar() {
       fi
 
       shift
-
       echo "Refreshing device..."
       iwctl device "$_u_device" set-property Powered off || return 0
       sleep 1
@@ -799,12 +674,11 @@ umar() {
       sleep 1
       iwctl station "$_u_device" connect "$*" || return 0
       echo "OK"
-
       return 0
       ;;
   esac
 
-  echo "$message_invalid_command"
+  echo "Sorry, I can't understand your command"
 }
 
 # echo
@@ -812,7 +686,6 @@ umar() {
 echo_exit() {
   echo "$1"
   set_tmp_error "$1"
-
   exit 0
 }
 
@@ -860,7 +733,6 @@ printf_func_no_enter() {
 printf_exit() {
   printf_func "$1"
   set_tmp_error "$1"
-
   exit 0
 }
 
@@ -872,75 +744,75 @@ printf_ai_info() {
 
 check_kill_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$message_kill_empty"
+    echo_exit "You didn't provide any names to kill!"
   fi
 }
 
 check_open_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$message_open_empty"
+    echo_exit "You didn't provide any names to open!"
   fi
 }
 
 check_install_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$message_install_empty"
+    echo_exit "You didn't provide any names to install!"
   fi
 }
 
 check_remove_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$message_remove_empty"
+    echo_exit "You didn't provide any names to remove!"
   fi
 }
 
 check_show_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$message_show_empty"
+    echo_exit "You didn't provide any names to show!"
   fi
 }
 
 check_play_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$message_play_empty"
+    echo_exit "You didn't provide any names to play!"
   fi
 }
 
 check_run_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$message_run_empty"
+    echo_exit "You didn't provide any commands to run!"
   fi
 }
 
 check_prompt_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$message_prompt_empty"
+    echo_exit "You didn't provide any prompt text!"
   fi
 }
 
 check_change_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$message_change_empty"
+    echo_exit "You didn't provide new content to change!"
   fi
 }
 
 check_search_empty() {
   if is_no_argument "$@"; then
-    echo_exit "$message_search_empty"
+    echo_exit "You didn't provide any keywords to search!"
   fi
 }
 
 check_ai() {
   if ! is_ai_google; then
-    printf_exit "$message_ai_empty"
+    printf_exit "You didn't provide any AI type to process!\nYou can use this command to set up a new one: ${color_cyan}umar set ai${color_reset}"
   fi
 
   if is_ai_google && is_empty "$generative_ai_url"; then
-    printf_exit "$message_ai_url_empty"
+    printf_exit "You didn't provide any AI URL to process!\nYou can use this command to set up a new one: ${color_cyan}umar set ai${color_reset}"
   fi
 
   if is_ai_google && is_empty "$gemini_model"; then
-    printf_exit "$message_ai_model_empty"
+    printf_exit "You didn't provide any AI model to process!\nYou can use this command to set up a new one: ${color_cyan}umar set ai${color_reset}"
   fi
 }
 
@@ -970,20 +842,20 @@ check_requirements() {
   fi
 
   if is_equal "$__c_r_iwd" "yes"; then
-    printf_func "$(echo "**$message_warning_iwd**" | markdown_parse)\n"
+    printf_func "$(echo "**${color_yellow}It seems you want to install ${color_red}iwd${color_yellow}. If you have any other network or wireless daemon installed, it might cause a conflict between them${color_reset}**" | markdown_parse)\n"
   fi
 
-  printf_func_no_enter "${color_red}$(echo "**$__c_r_not_exist**" | markdown_parse) ${color_reset}$message_package_not_installed "
+  printf_func_no_enter "${color_red}$(echo "**$__c_r_not_exist**" | markdown_parse) ${color_reset}package(s) are not installed. Do you want to install them? [N/y] "
 
   __c_r_confirmation=$(read_func)
 
   if ! is_equal "$__c_r_confirmation" "y"; then
-    printf_exit "\n$message_package_needed"
+    printf_exit "I need that package(s) to process the command!"
   fi
 
   if is_unknown; then
-    printf_func "\n$message_unknown_distro"
-    printf_exit "$message_package_needed"
+    printf_func "Unknown distribution!"
+    printf_exit "I need that package(s) to process the command!"
   fi
 
   install_func_arg_split "$__c_r_not_exist"
@@ -994,7 +866,7 @@ check_requirements() {
     sleep 2
   fi
 
-  echo "$message_package_needed_installed"
+  echo "The required package(s) have been installed. Refresh the current console/terminal session and run the command again"
 }
 
 # is
@@ -1085,7 +957,6 @@ get_tmp_value() {
   fi
 
   read_file_content "$config_tmp_value_filepath"
-
   clear_tmp_value
 }
 
@@ -1095,7 +966,6 @@ get_tmp_error() {
   fi
 
   read_file_content "$config_tmp_error_filepath"
-
   clear_tmp_error
 }
 
@@ -1387,7 +1257,7 @@ write_config_ai() {
 
 read_file_content() {
   if ! is_file_exist "$1"; then
-    printf_exit "${color_red}$1 ${color_reset}$message_file_not_found"
+    printf_exit "${color_red}$1 ${color_reset}file not found!"
   fi
 
   cat "$1"
@@ -1403,23 +1273,26 @@ read_config_ai() {
 
 read_func() {
   read -r __r_f_input < /dev/tty
-
   echo "$__r_f_input"
 }
 
 # set
 
 set_ai_type() {
-  printf_func_no_enter "$message_set_ai_type "
+  printf_func_no_enter "AI type:
+
+1. Google
+
+Choose the AI type number... "
 
   __s_a_t_type=$(read_func)
 
   if is_empty "$__s_a_t_type"; then
-    echo_exit "$message_set_ai_type_empty"
+    echo_exit "AI type can't be empty!"
   fi
 
   if ! is_equal "$__s_a_t_type" "1"; then
-    echo_exit "$message_set_ai_type_wrong"
+    echo_exit "You chose the wrong AI type number!"
   fi
 
   tmp_ai_type="$__s_a_t_type"
@@ -1433,20 +1306,27 @@ set_ai_model() {
   fi
 
   if is_equal "$__s_a_m_type" "1"; then
-    printf_func_no_enter "$message_set_ai_model_google "
+    printf_func_no_enter "
+AI model:
+
+1. Gemini 1.0 Pro
+2. Gemini 1.5 Pro
+3. Gemini 1.5 Flash
+
+Choose the AI model number... "
   else
-    echo_exit "$message_set_ai_type_wrong"
+    echo_exit "You chose the wrong AI type number!"
   fi
 
   __s_a_m_model=$(read_func)
 
   if is_empty "$__s_a_m_model"; then
-    echo_exit "$message_set_ai_model_empty"
+    echo_exit "AI model can't be empty!"
   fi
 
   if is_equal "$__s_a_m_type" "1"; then
     if ! is_equal "$__s_a_m_model" "1" && ! is_equal "$__s_a_m_model" "2" && ! is_equal "$__s_a_m_model" "3"; then
-      echo_exit "$message_set_ai_model_wrong"
+      echo_exit "You chose the wrong AI model number!"
     fi
   fi
 
@@ -1461,15 +1341,18 @@ set_ai_api_key() {
   fi
 
   if is_equal "$__s_a_a_k_type" "1"; then
-    printf_func_no_enter "$message_set_ai_api_key_google "
+    printf_func_no_enter "
+You'll need an API key to use the AI. You can follow this documentation -> https://ai.google.dev/gemini-api/docs/api-key
+
+Enter the API key... "
   else
-    echo_exit "$message_set_ai_type_wrong"
+    echo_exit "You chose the wrong AI type number!"
   fi
 
   __s_a_a_k_api_key=$(read_func)
 
   if is_equal "$__s_a_a_k_type" "1" && is_empty "$__s_a_a_k_api_key"; then
-    echo_exit "$message_set_ai_api_key_empty"
+    echo_exit "API Key can't be empty!"
   fi
 
   tmp_ai_api_key="$__s_a_a_k_api_key"
@@ -1493,13 +1376,11 @@ append_config_run_list() {
 
 open_and_read_float_window() {
   check_requirements "yad"
-
-  yad --entry --sticky --no-buttons --width=400 --title "" --text "$message_caution_plain" --text-align "fill" --undecorated
+  yad --entry --sticky --no-buttons --width=400 --title "" --text "BE CAREFUL ABOUT WHAT YOU TYPE, MAKE SURE THERE IS NOTHING THAT CAN BREAK YOUR SYSTEM" --text-align "fill" --undecorated
 }
 
 open_and_print_text_float_window() {
   check_requirements "yad"
-
   yad --sticky --no-buttons --width=400 --title "" --text "$1" --text-align "fill" --undecorated
 }
 
@@ -1511,7 +1392,7 @@ open_terminal_and_exec() {
   if is_equal "$1" "__o_t_a_e_wait=true"; then
     shift
 
-    _e_t_command="sh -c '$*; printf \"\n\n$message_press_enter_to_exit\n\n\"; read -r _ < /dev/tty'"
+    _e_t_command="sh -c '$*; printf \"\n\nPress Enter to exit\n\n\"; read -r _ < /dev/tty'"
   else
     _e_t_command="sh -c '$*'"
   fi
@@ -1574,6 +1455,7 @@ make_http_request() {
         fi
         ;;
     esac
+
     shift
   done
 
