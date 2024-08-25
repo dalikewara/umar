@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 24
 
-version="v2.0.0"
+version="v2.1.0"
 pid=$$
 distro=""
 de=""
@@ -116,7 +116,7 @@ changerundesc:Change custom command description
 changeruncommand:Change custom command execution command
 --------------:--------------------------
 prompt:Prompt anything to AI
-startchat:Start a new chat session with AI
+chat:Start a new chat session with AI
 setai:Set new AI configuration
 showai:Show AI information
 changeaitype:Change AI type
@@ -474,7 +474,7 @@ command_setai() {
   printout "AI configuration registered"
 }
 
-command_startchat() {
+command_chat() {
   check_ai_config
   printout "${color_yellow}$ai_type ($ai_model)${color_reset}\n"
 

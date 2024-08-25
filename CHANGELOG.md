@@ -2,7 +2,7 @@
 
 ## 2024
 
-- **v2.0.0** (2024-08-25)
+- **v2.0.0 - v2.1.0** (2024-08-25)
   - Refactor
   - Add `audio` & `audiocard` command
   - Refactor command name
