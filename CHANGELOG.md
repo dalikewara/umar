@@ -2,9 +2,10 @@
 
 ## 2024
 
-- **v2.2.0** (2024-09-15)
+- **v2.2.0 - v2.3.0** (2024-09-15)
   - Fix some issues
   - Add `touchpad`, `output`, `resolution`, `brightness` command
+  - Add `macbookaudio`, `macbookcamera` command
 
 - **v2.0.0 - v2.1.0** (2024-08-25)
   - Refactor

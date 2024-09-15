@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# LAST COUNTER FOR FUNCTION VARIABLE = 26
+# LAST COUNTER FOR FUNCTION VARIABLE = 29
 
-version="v2.2.0"
+version="v2.3.0"
 pid=$$
 distro=""
 de=""
@@ -14,6 +14,10 @@ config_dir="$HOME/.umar"
 config_run_list_filepath="$config_dir/run-list.cfg"
 config_ai_filepath="$config_dir/ai.cfg"
 config_tmp_value_filepath="$config_dir/tmp_value.cfg"
+config_macbook_audio_driver1_dir="$config_dir/macbook/audio"
+config_macbook_audio_driver1_installation_script_name="install.cirrus.driver.sh"
+config_macbook_camera_driver1_dir="$config_dir/macbook/camera1"
+config_macbook_camera_driver2_dir="$config_dir/macbook/camera2"
 user_package_dir="/usr/local/bin"
 install_dir="/usr/local/bin"
 script_name="umar.sh"
@@ -28,6 +32,9 @@ color_reset='\033[0m'
 repo_url="https://raw.githubusercontent.com/dalikewara/umar/master"
 search_url="https://www.google.com/search?q="
 generative_ai_url="https://generativelanguage.googleapis.com/v1beta/models"
+macbook_audio_driver1_url="https://github.com/davidjo/snd_hda_macbookpro.git"
+macbook_camera_driver1_url="https://github.com/patjak/facetimehd-firmware.git"
+macbook_camera_driver2_url="https://github.com/patjak/facetimehd.git"
 
 # shellcheck disable=SC2034
 gemini_model_1="gemini-1.0-pro"
@@ -127,6 +134,14 @@ audio:Open audio setting
 audiocard:List audio cards
 playaudio:Play audio(s)
 --------------:--------------------------
+macbookaudio:Configure audio for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
+macbookcamera:Configure camera for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
+macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Not yet implemented, on progress**${color_reset}
+--------------:--------------------------
+output:Show available output device(s)
+resolution:Set screen resolution. ${color_blue}**Argument 1**${color_reset} is the output device name and ${color_blue}**Argument 2**${color_reset} is the screen resolution
+brightness:Set screen brightness. ${color_blue}**Argument 1**${color_reset} is the output device name and ${color_blue}**Argument 2**${color_reset} is the brightness value
+--------------:--------------------------
 open:Open package(s)
 kill:Kill package(s) process
 search:Search for the given keyword(s) using a terminal browser
@@ -139,10 +154,7 @@ ${color_blue}**SECONDS** ${color_cyan}**-header** ${color_blue}**TEXT** ${color_
 ${color_blue}**TEXT** ${color_cyan}**-u** ${color_blue}**URL**${color_reset}\`
 showimage:Show image(s)
 playvideo:Play video(s)
-touchpad:Reconfigure touchpad setting
-output:Show available output device(s)
-resolution:Set screen resolution. ${color_blue}**Argument 1**${color_reset} is the output device name and ${color_blue}**Argument 2**${color_reset} is the screen resolution
-brightness:Set screen brightness. ${color_blue}**Argument 1**${color_reset} is the output device name and ${color_blue}**Argument 2**${color_reset} is the brightness value
+touchpad:Configure touchpad device
 " | while IFS=: read -r _1_name _1_description; do
       printf "${color_green}%-17s ${color_reset}%b\n" "$_1_name" "$(printout "$_1_description" | markdown_parse)"
     done
@@ -163,6 +175,91 @@ brightness:Set screen brightness. ${color_blue}**Argument 1**${color_reset} is t
 # Provides available Umar's command(s)
 #
 # ---------------------------------------------------------------------------------------------------------------------
+
+command_macbookfan() {
+  printout_markdown "${color_yellow}**This will configure Macbook Fan Speed. If you're not using Macbook device, you SHOULD NOT execute this command**${color_reset}"
+
+  printout_blank_line
+
+  printout_no_enter "Are you sure to continue this process [N/y] "
+
+  _29_confirmation=$(read_input)
+
+  if ! is_equal "$_29_confirmation" "y"; then
+    printout_exit "Aborted!"
+  fi
+
+  printout_exit "Not yet implemented!"
+}
+
+command_macbookcamera() {
+  check_requirements "git" "sudo" "make"
+  printout_markdown "${color_yellow}**This will configure Macbook Camera. If you're not using Macbook device, you SHOULD NOT execute this command**${color_reset}"
+
+  printout_blank_line
+
+  printout_no_enter "Are you sure to continue this process [N/y] "
+
+  _28_confirmation=$(read_input)
+
+  if ! is_equal "$_28_confirmation" "y"; then
+    printout_exit "Aborted!"
+  fi
+
+  if ! is_dir_exist "$config_macbook_camera_driver1_dir"; then
+    git clone "$macbook_camera_driver1_url" "$config_macbook_camera_driver1_dir"
+  fi
+
+  if ! is_dir_exist "$config_macbook_camera_driver2_dir"; then
+    git clone "$macbook_camera_driver2_url" "$config_macbook_camera_driver2_dir"
+  fi
+
+  cd "$config_macbook_camera_driver1_dir" || printout_exit "Camera driver1 not found!"
+  make clean
+
+  make
+
+  sudo make install
+  cd "$config_macbook_camera_driver2_dir" || printout_exit "Camera driver2 not found!"
+  make clean
+
+  make
+
+  sudo make install
+  sudo depmod
+  sudo modprobe -r bdc_pci
+  sudo modprobe facetimehd
+
+  printout_blank_line
+
+  printout_markdown "${color_yellow}**Camera successfully configured. If it not working, try to reboot your system**${color_reset}"
+}
+
+command_macbookaudio() {
+  check_requirements "git" "sudo"
+  printout_markdown "${color_yellow}**This will configure Macbook Audio. If you're not using Macbook device, you SHOULD NOT execute this command**${color_reset}"
+
+  printout_blank_line
+
+  printout_no_enter "Are you sure to continue this process [N/y] "
+
+  _27_confirmation=$(read_input)
+
+  if ! is_equal "$_27_confirmation" "y"; then
+    printout_exit "Aborted!"
+  fi
+
+  if ! is_dir_exist "$config_macbook_audio_driver1_dir"; then
+    git clone "$macbook_audio_driver1_url" "$config_macbook_audio_driver1_dir"
+  fi
+
+  cd "$config_macbook_audio_driver1_dir" || printout_exit "Audio driver1 not found!"
+  sudo "./$config_macbook_audio_driver1_installation_script_name"
+
+  printout_blank_line
+
+  printout_markdown "${color_yellow}**Audio successfully configured. You may need to reboot your system or restart your audio service(s)**${color_reset}"
+}
 
 command_resolution() {
   check_requirements "xrandr"
@@ -213,7 +310,7 @@ command_brightness() {
 
 command_touchpad() {
   check_requirements "xinput"
-  printout_markdown "${color_yellow}**This will reconfigure touchpad setting**${color_reset}"
+  printout_markdown "${color_yellow}**This will configure touchpad device**${color_reset}"
 
   printout_blank_line
 
@@ -230,7 +327,7 @@ command_touchpad() {
   fi
 
   printout_no_enter "
-You're about to reconfigure this Touchpad Device:
+You're about to configure this Touchpad Device:
 
 $(xinput list | grep "id=${_25_device_id}")
 
