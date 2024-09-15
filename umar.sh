@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# LAST COUNTER FOR FUNCTION VARIABLE = 24
+# LAST COUNTER FOR FUNCTION VARIABLE = 26
 
-version="v2.1.0"
+version="v2.2.0"
 pid=$$
 distro=""
 de=""
@@ -123,6 +123,10 @@ changeaitype:Change AI type
 changeaimodel:Change AI model
 changeaiapikey:Change AI API key
 --------------:--------------------------
+audio:Open audio setting
+audiocard:List audio cards
+playaudio:Play audio(s)
+--------------:--------------------------
 open:Open package(s)
 kill:Kill package(s) process
 search:Search for the given keyword(s) using a terminal browser
@@ -135,10 +139,10 @@ ${color_blue}**SECONDS** ${color_cyan}**-header** ${color_blue}**TEXT** ${color_
 ${color_blue}**TEXT** ${color_cyan}**-u** ${color_blue}**URL**${color_reset}\`
 showimage:Show image(s)
 playvideo:Play video(s)
---------------:--------------------------
-audio:Open audio setting
-audiocard:List audio cards
-playaudio:Play audio(s)
+touchpad:Reconfigure touchpad setting
+output:Show available output device(s)
+resolution:Set screen resolution. ${color_blue}**Argument 1**${color_reset} is the output device name and ${color_blue}**Argument 2**${color_reset} is the screen resolution
+brightness:Set screen brightness. ${color_blue}**Argument 1**${color_reset} is the output device name and ${color_blue}**Argument 2**${color_reset} is the brightness value
 " | while IFS=: read -r _1_name _1_description; do
       printf "${color_green}%-17s ${color_reset}%b\n" "$_1_name" "$(printout "$_1_description" | markdown_parse)"
     done
@@ -159,6 +163,88 @@ playaudio:Play audio(s)
 # Provides available Umar's command(s)
 #
 # ---------------------------------------------------------------------------------------------------------------------
+
+command_resolution() {
+  check_requirements "xrandr"
+
+  if is_no_argument "$@"; then
+    printout_exit "Current screen resolution is $(xrandr | grep '\*' | awk '{print $1}')"
+  fi
+
+  if is_empty "$1" || is_empty "$2"; then
+    printout_exit "Current screen resolution is $(xrandr | grep '\*' | awk '{print $1}')"
+  fi
+
+  xrandr --output "$1" --mode "$2"
+}
+
+command_output() {
+  check_requirements "xrandr"
+  xrandr --current
+}
+
+command_brightness() {
+  check_requirements "xrandr" "bc"
+
+  if is_no_argument "$@"; then
+    printout_exit "Current brightness value is $(xrandr --verbose | awk '/Brightness/ { print $2 * 100; exit}')"
+  fi
+
+  if is_empty "$1" || is_empty "$2"; then
+    printout_exit "Current brightness value is $(xrandr --verbose | awk '/Brightness/ { print $2 * 100; exit}')"
+  fi
+
+  _26_brightness=$(printout "scale=2; ${2} / 100" | bc)
+
+  printout "${_26_brightness} < 0.10" | bc | grep -q 1
+
+  if is_equal "$?" "0"; then
+    printout_exit "Value under minimum!"
+  fi
+
+  printout "${_26_brightness} > 1.00" | bc | grep -q 1
+
+  if is_equal "$?" "0"; then
+    printout_exit "Value above maximum!"
+  fi
+
+  xrandr --output "$1" --brightness "$_26_brightness"
+}
+
+command_touchpad() {
+  check_requirements "xinput"
+  printout_markdown "${color_yellow}**This will reconfigure touchpad setting**${color_reset}"
+
+  printout_blank_line
+
+  xinput list
+
+  printout_blank_line
+
+  printout_no_enter "Enter your Touchpad Device ID..."
+
+  _25_device_id=$(read_input)
+
+  if is_empty "$_25_device_id"; then
+    printout_exit "Device ID can't be empty!"
+  fi
+
+  printout_no_enter "
+You're about to reconfigure this Touchpad Device:
+
+$(xinput list | grep "id=${_25_device_id}")
+
+Are you sure? [N/y] "
+
+  _25_confirmation=$(read_input)
+
+  if ! is_equal "$_25_confirmation" "y"; then
+    printout_exit "Aborted!"
+  fi
+
+  xinput set-prop $_25_device_id "libinput Tapping Enabled" 1
+  xinput set-prop $_25_device_id "libinput Natural Scrolling Enabled" 0
+}
 
 command_audiocard() {
   check_requirements "pactl"
@@ -675,7 +761,7 @@ command_prompt() {
   _13_response=""
 
   if is_ai_google; then
-    _13_response=$(http_request_google_ai "$(printout "{\"role\": \"user\", \"parts\":[{\"text\": \"$(printout "$@" | escape_json_string)\"}]}," | remove_trailing_comma)")
+    _13_response=$(http_request_google_ai "$(printout "{\"role\": \"user\", \"parts\":[{\"text\": \"$(printout "$*" | escape_json_string)\"}]}," | remove_trailing_comma)")
   fi
 
   printout_typing "$(printout "$_13_response" | markdown_parse)"
@@ -844,6 +930,14 @@ check_requirements() {
 
     if is_equal "$_17_arg" "pactl"; then
       _17_arg="pulseaudio-utils"
+    fi
+
+    if is_equal "$_17_arg" "xinput"; then
+      _17_arg="xorg-xinput"
+    fi
+
+    if is_equal "$_17_arg" "xrandr"; then
+      _17_arg="xorg-xrandr"
     fi
 
     if is_empty "$_17_not_exist"; then
