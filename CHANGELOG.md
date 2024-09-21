@@ -2,6 +2,9 @@
 
 ## 2024
 
+- **v2.3.1** (2024-09-21)
+  - Fix some issues
+
 - **v2.2.0 - v2.3.0** (2024-09-15)
   - Fix some issues
   - Add `touchpad`, `output`, `resolution`, `brightness` command

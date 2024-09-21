@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 29
 
-version="v2.3.0"
+version="v2.3.1"
 pid=$$
 distro=""
 de=""
@@ -130,31 +130,35 @@ changeaitype:Change AI type
 changeaimodel:Change AI model
 changeaiapikey:Change AI API key
 --------------:--------------------------
-audio:Open audio setting
-audiocard:List audio cards
-playaudio:Play audio(s)
---------------:--------------------------
-macbookaudio:Configure audio for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
-macbookcamera:Configure camera for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
-macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Not yet implemented, on progress**${color_reset}
---------------:--------------------------
-output:Show available output device(s)
-resolution:Set screen resolution. ${color_blue}**Argument 1**${color_reset} is the output device name and ${color_blue}**Argument 2**${color_reset} is the screen resolution
-brightness:Set screen brightness. ${color_blue}**Argument 1**${color_reset} is the output device name and ${color_blue}**Argument 2**${color_reset} is the brightness value
---------------:--------------------------
 open:Open package(s)
 kill:Kill package(s) process
 search:Search for the given keyword(s) using a terminal browser
 install:Install package(s)
 remove:Remove package(s)
 upgrade:Upgrade package(s)
-wifi:Scan or connect to a Wi-Fi using iwd. ${color_blue}**Argument 1**${color_reset} is the device name and ${color_blue}**Argument 2**${color_reset} is the Wi-Fi SSID
+--------------:--------------------------
+audio:Open audio setting
+audiocard:List audio cards
+playaudio:Play audio(s)
+--------------:--------------------------
+showimage:Show image(s)
+--------------:--------------------------
+playvideo:Play video(s)
+--------------:--------------------------
+output:Show available output device(s)
+resolution:Set screen resolution. ${color_blue}**Argument 1**${color_reset} is the output device name and ${color_blue}**Argument 2**${color_reset} is the screen resolution
+brightness:Set screen brightness. ${color_blue}**Argument 1**${color_reset} is the output device name and ${color_blue}**Argument 2**${color_reset} is the brightness value
+--------------:--------------------------
+touchpad:Configure touchpad device
+--------------:--------------------------
+wifi:Scan or connect to a Wi-Fi using iwd. ${color_blue}**Argument 1**${color_reset} is the device name. The next arguments are the Wi-Fi SSID and any required parameters
 testhttp:Test and benchmark HTTP URL -> \`${color_cyan}**-c** ${color_blue}**NUM** ${color_cyan}**-r** ${color_blue}**NUM** ${color_cyan}**-t** \
 ${color_blue}**SECONDS** ${color_cyan}**-header** ${color_blue}**TEXT** ${color_cyan}**-userAgent** ${color_blue}**TEXT** ${color_cyan}**-contentType** \
 ${color_blue}**TEXT** ${color_cyan}**-u** ${color_blue}**URL**${color_reset}\`
-showimage:Show image(s)
-playvideo:Play video(s)
-touchpad:Configure touchpad device
+--------------:--------------------------
+macbookaudio:Configure audio for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
+macbookcamera:Configure camera for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
+macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Not yet implemented, on progress**${color_reset}
 " | while IFS=: read -r _1_name _1_description; do
       printf "${color_green}%-17s ${color_reset}%b\n" "$_1_name" "$(printout "$_1_description" | markdown_parse)"
     done
@@ -919,7 +923,8 @@ command_wifi() {
   printout "OK"
   printout "Connecting..."
   sleep 1
-  iwctl station "$_15_device" connect "$*" || return 0
+  # shellcheck disable=SC2048
+  iwctl station "$_15_device" connect $* || return 0
   printout "OK"
 }
 
