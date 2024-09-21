@@ -2,7 +2,7 @@
 
 ## 2024
 
-- **v2.3.1 - v2.4.0** (2024-09-21)
+- **v2.3.1 - v2.4.1** (2024-09-21)
   - Fix some issues
   - Add `macbookfan` command
 

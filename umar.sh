@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# LAST COUNTER FOR FUNCTION VARIABLE = 30
+# LAST COUNTER FOR FUNCTION VARIABLE = 29
 
-version="v2.4.0"
+version="v2.4.1"
 pid=$$
 distro=""
 de=""
