@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# LAST COUNTER FOR FUNCTION VARIABLE = 29
+# LAST COUNTER FOR FUNCTION VARIABLE = 30
 
-version="v2.3.1"
+version="v2.4.0"
 pid=$$
 distro=""
 de=""
@@ -21,6 +21,11 @@ config_macbook_camera_driver2_dir="$config_dir/macbook/camera2"
 user_package_dir="/usr/local/bin"
 install_dir="/usr/local/bin"
 script_name="umar.sh"
+macbook_platform_smc_dir="/sys/devices/platform/applesmc.768"
+macbook_platform_fan_min_filepath="$macbook_platform_smc_dir/fan1_min"
+macbook_platform_fan_max_filepath="$macbook_platform_smc_dir/fan1_max"
+macbook_platform_fan_manual_filepath="$macbook_platform_smc_dir/fan1_manual"
+macbook_platform_fan_output_filepath="$macbook_platform_smc_dir/fan1_output"
 
 color_green='\033[0;32m'
 color_cyan='\033[0;36m'
@@ -158,7 +163,7 @@ ${color_blue}**TEXT** ${color_cyan}**-u** ${color_blue}**URL**${color_reset}\`
 --------------:--------------------------
 macbookaudio:Configure audio for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
 macbookcamera:Configure camera for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
-macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Not yet implemented, on progress**${color_reset}
+macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}. ${color_blue}**Argument 1**${color_reset} is the fan speed RPM
 " | while IFS=: read -r _1_name _1_description; do
       printf "${color_green}%-17s ${color_reset}%b\n" "$_1_name" "$(printout "$_1_description" | markdown_parse)"
     done
@@ -181,6 +186,22 @@ macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Not yet implemented
 # ---------------------------------------------------------------------------------------------------------------------
 
 command_macbookfan() {
+  if is_no_argument "$@"; then
+    printout_exit "Current Macbook fan speed is $(read_file_content "$macbook_platform_fan_output_filepath")"
+  fi
+
+  _29_min_speed=$(read_file_content "$macbook_platform_fan_min_filepath")
+
+  if [ "$1" -lt "$_29_min_speed" ]; then
+    printout_exit "Value under minimum!"
+  fi
+
+  _29_max_speed=$(read_file_content "$macbook_platform_fan_max_filepath")
+
+  if [ "$1" -gt "$_29_max_speed" ]; then
+    printout_exit "Value above maximum!"
+  fi
+
   printout_markdown "${color_yellow}**This will configure Macbook Fan Speed. If you're not using Macbook device, you SHOULD NOT execute this command**${color_reset}"
 
   printout_blank_line
@@ -193,7 +214,7 @@ command_macbookfan() {
     printout_exit "Aborted!"
   fi
 
-  printout_exit "Not yet implemented!"
+  su -c "echo 1 > $macbook_platform_fan_manual_filepath && echo $1 > $macbook_platform_fan_output_filepath"
 }
 
 command_macbookcamera() {
