@@ -2,6 +2,9 @@
 
 ## 2024
 
+- **v2.5.4** (2024-09-25)
+  - Fix some issues
+
 - **v2.5.0 - v2.5.3** (2024-09-24)
   - Fix some issues
   - Add `setupdeveloper` command

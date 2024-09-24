@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 30
 
-version="v2.5.3"
+version="v2.5.4"
 pid=$$
 distro=""
 de=""
@@ -271,40 +271,40 @@ command_setupdeveloper() {
 
   if ! is_dir_exist "$datagrip_extracted_dir"; then
     create_dir "$config_datagrip_dir"
-    wget -O "$datagrip_downloaded_filepath" "$datagrip_download_url"
+    wget -c -O "$datagrip_downloaded_filepath" "$datagrip_download_url" &
   fi
 
   if ! is_dir_exist "$go_extracted_dir"; then
     create_dir "$config_go_dir"
-    wget -O "$go_downloaded_filepath" "$go_download_url"
+    wget -c -O "$go_downloaded_filepath" "$go_download_url" &
   fi
 
   if ! is_dir_exist "$goland_extracted_dir"; then
     create_dir "$config_goland_dir"
-    wget -O "$goland_downloaded_filepath" "$goland_download_url"
+    wget -c -O "$goland_downloaded_filepath" "$goland_download_url" &
   fi
 
   if ! is_dir_exist "$idea_extracted_dir"; then
     create_dir "$config_idea_dir"
-    wget -O "$idea_downloaded_filepath" "$idea_download_url"
+    wget -c -O "$idea_downloaded_filepath" "$idea_download_url" &
   fi
 
   create_dir "$config_postman_dir"
-  wget -O "$postman_downloaded_filepath" "$postman_download_url"
+  wget -c -O "$postman_downloaded_filepath" "$postman_download_url" &
 
   if ! is_dir_exist "$pycharm_extracted_dir"; then
     create_dir "$config_pycharm_dir"
-    wget -O "$pycharm_downloaded_filepath" "$pycharm_download_url"
+    wget -c -O "$pycharm_downloaded_filepath" "$pycharm_download_url" &
   fi
 
   if ! is_dir_exist "$rustrover_extracted_dir"; then
     create_dir "$config_rustrover_dir"
-    wget -O "$rustrover_downloaded_filepath" "$rustrover_download_url"
+    wget -c -O "$rustrover_downloaded_filepath" "$rustrover_download_url" &
   fi
 
   if ! is_dir_exist "$webstorm_extracted_dir"; then
     create_dir "$config_webstorm_dir"
-    wget -O "$webstorm_downloaded_filepath" "$webstorm_download_url"
+    wget -c -O "$webstorm_downloaded_filepath" "$webstorm_download_url" &
   fi
 
   if is_file_exist "$datagrip_downloaded_filepath"; then
