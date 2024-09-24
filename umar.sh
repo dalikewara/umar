@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 30
 
-version="v2.5.2"
+version="v2.5.3"
 pid=$$
 distro=""
 de=""
@@ -48,6 +48,7 @@ go_bin_dir="$go_dir/bin"
 go_version_dir_name="go1.21.6"
 go_downloaded_filepath="$config_go_dir/$go_version_tar_filename"
 go_extracted_dir="$config_go_dir/$go_version_dir_name"
+go_extracted_dir_path="$config_go_dir/go"
 go_installed_filepath="/usr/local/go"
 goland_version_tar_filename="goland-2023.3.2.tar.gz"
 goland_version_dir_name="GoLand-2023.3.2"
@@ -268,22 +269,22 @@ command_setupdeveloper() {
 
   check_requirements "tar" "wget"
 
-  if ! is_dir_exist "$datagrip_extracted_dir" && ! is_file_exist "$datagrip_downloaded_filepath"; then
+  if ! is_dir_exist "$datagrip_extracted_dir"; then
     create_dir "$config_datagrip_dir"
     wget -O "$datagrip_downloaded_filepath" "$datagrip_download_url"
   fi
 
-  if ! is_dir_exist "$go_extracted_dir"  && ! is_file_exist "$go_downloaded_filepath"; then
+  if ! is_dir_exist "$go_extracted_dir"; then
     create_dir "$config_go_dir"
     wget -O "$go_downloaded_filepath" "$go_download_url"
   fi
 
-  if ! is_dir_exist "$goland_extracted_dir"  && ! is_file_exist "$goland_downloaded_filepath"; then
+  if ! is_dir_exist "$goland_extracted_dir"; then
     create_dir "$config_goland_dir"
     wget -O "$goland_downloaded_filepath" "$goland_download_url"
   fi
 
-  if ! is_dir_exist "$idea_extracted_dir"  && ! is_file_exist "$idea_downloaded_filepath"; then
+  if ! is_dir_exist "$idea_extracted_dir"; then
     create_dir "$config_idea_dir"
     wget -O "$idea_downloaded_filepath" "$idea_download_url"
   fi
@@ -291,17 +292,17 @@ command_setupdeveloper() {
   create_dir "$config_postman_dir"
   wget -O "$postman_downloaded_filepath" "$postman_download_url"
 
-  if ! is_dir_exist "$pycharm_extracted_dir"  && ! is_file_exist "$pycharm_downloaded_filepath"; then
+  if ! is_dir_exist "$pycharm_extracted_dir"; then
     create_dir "$config_pycharm_dir"
     wget -O "$pycharm_downloaded_filepath" "$pycharm_download_url"
   fi
 
-  if ! is_dir_exist "$rustrover_extracted_dir"  && ! is_file_exist "$rustrover_downloaded_filepath"; then
+  if ! is_dir_exist "$rustrover_extracted_dir"; then
     create_dir "$config_rustrover_dir"
     wget -O "$rustrover_downloaded_filepath" "$rustrover_download_url"
   fi
 
-  if ! is_dir_exist "$webstorm_extracted_dir"  && ! is_file_exist "$webstorm_downloaded_filepath"; then
+  if ! is_dir_exist "$webstorm_extracted_dir"; then
     create_dir "$config_webstorm_dir"
     wget -O "$webstorm_downloaded_filepath" "$webstorm_download_url"
   fi
@@ -312,6 +313,7 @@ command_setupdeveloper() {
 
   if is_file_exist "$go_downloaded_filepath"; then
     tar -C "$config_go_dir" -xzf "$go_downloaded_filepath"
+    mv "$go_extracted_dir_path" "$go_extracted_dir"
   fi
 
   if is_file_exist "$goland_downloaded_filepath"; then
@@ -340,10 +342,10 @@ command_setupdeveloper() {
 
   sudo ln -sf "$datagrip_script_filepath" "$datagrip_installed_filepath" || true
   rm -rf "$datagrip_downloaded_filepath"
-  mkdir "$go_dir" || true
-  mkdir "$go_src_dir" || true
-  mkdir "$go_pkg_dir" || true
-  mkdir "$go_bin_dir" || true
+  mkdir "$go_dir" > /dev/null 2>&1 || true
+  mkdir "$go_src_dir" > /dev/null 2>&1 || true
+  mkdir "$go_pkg_dir" > /dev/null 2>&1 || true
+  mkdir "$go_bin_dir" > /dev/null 2>&1 || true
   cp -rf "$go_extracted_dir" "$go_installed_filepath"
   rm -rf "$go_downloaded_filepath"
   sudo ln -sf "$goland_script_filepath" "$goland_installed_filepath" || true
