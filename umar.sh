@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 30
 
-version="v2.5.7"
+version="v2.5.8"
 pid=$$
 distro=""
 de=""
@@ -288,45 +288,45 @@ command_setupdeveloper() {
 
   if ! is_dir_exist "$datagrip_extracted_dir"; then
     create_dir "$config_datagrip_dir"
-    wget -c -O "$datagrip_downloaded_filepath" "$datagrip_download_url" &
+    wget -c --timeout=10 --tries=1 -O "$datagrip_downloaded_filepath" "$datagrip_download_url" &
   fi
 
   if ! is_dir_exist "$go_extracted_dir"; then
     create_dir "$config_go_dir"
-    wget -c -O "$go_downloaded_filepath" "$go_download_url" &
+    wget -c --timeout=10 --tries=1 -O "$go_downloaded_filepath" "$go_download_url" &
   fi
 
   if ! is_dir_exist "$goland_extracted_dir"; then
     create_dir "$config_goland_dir"
-    wget -c -O "$goland_downloaded_filepath" "$goland_download_url" &
+    wget -c --timeout=10 --tries=1 -O "$goland_downloaded_filepath" "$goland_download_url" &
   fi
 
   if ! is_dir_exist "$idea_extracted_dir"; then
     create_dir "$config_idea_dir"
-    wget -c -O "$idea_downloaded_filepath" "$idea_download_url" &
+    wget -c --timeout=10 --tries=1 -O "$idea_downloaded_filepath" "$idea_download_url" &
   fi
 
   create_dir "$config_postman_dir"
-  wget -c -O "$postman_downloaded_filepath" "$postman_download_url" &
+  wget -c --timeout=10 --tries=1 -O "$postman_downloaded_filepath" "$postman_download_url" &
 
   if ! is_dir_exist "$pycharm_extracted_dir"; then
     create_dir "$config_pycharm_dir"
-    wget -c -O "$pycharm_downloaded_filepath" "$pycharm_download_url" &
+    wget -c --timeout=10 --tries=1 -O "$pycharm_downloaded_filepath" "$pycharm_download_url" &
   fi
 
   if ! is_dir_exist "$rustrover_extracted_dir"; then
     create_dir "$config_rustrover_dir"
-    wget -c -O "$rustrover_downloaded_filepath" "$rustrover_download_url" &
+    wget -c --timeout=10 --tries=1 -O "$rustrover_downloaded_filepath" "$rustrover_download_url" &
   fi
 
   if ! is_dir_exist "$webstorm_extracted_dir"; then
     create_dir "$config_webstorm_dir"
-    wget -c -O "$webstorm_downloaded_filepath" "$webstorm_download_url" &
+    wget -c --timeout=10 --tries=1 -O "$webstorm_downloaded_filepath" "$webstorm_download_url" &
   fi
 
   if ! is_dir_exist "$nodejs_extracted_dir"; then
     create_dir "$config_nodejs_dir"
-    wget -c -O "$nodejs_downloaded_filepath" "$nodejs_download_url" &
+    wget -c --timeout=10 --tries=1 -O "$nodejs_downloaded_filepath" "$nodejs_download_url" &
   fi
 
   wait
