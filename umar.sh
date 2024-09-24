@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 30
 
-version="v2.5.1"
+version="v2.5.2"
 pid=$$
 distro=""
 de=""
@@ -268,79 +268,75 @@ command_setupdeveloper() {
 
   check_requirements "tar" "wget"
 
-  if ! is_dir_exist "$datagrip_extracted_dir"; then
+  if ! is_dir_exist "$datagrip_extracted_dir" && ! is_file_exist "$datagrip_downloaded_filepath"; then
     create_dir "$config_datagrip_dir"
-    wget -O "$datagrip_downloaded_filepath" "$datagrip_download_url" &
+    wget -O "$datagrip_downloaded_filepath" "$datagrip_download_url"
   fi
 
-  if ! is_dir_exist "$go_extracted_dir"; then
+  if ! is_dir_exist "$go_extracted_dir"  && ! is_file_exist "$go_downloaded_filepath"; then
     create_dir "$config_go_dir"
-    wget -O "$go_downloaded_filepath" "$go_download_url" &
+    wget -O "$go_downloaded_filepath" "$go_download_url"
   fi
 
-  if ! is_dir_exist "$goland_extracted_dir"; then
+  if ! is_dir_exist "$goland_extracted_dir"  && ! is_file_exist "$goland_downloaded_filepath"; then
     create_dir "$config_goland_dir"
-    wget -O "$goland_downloaded_filepath" "$goland_download_url" &
+    wget -O "$goland_downloaded_filepath" "$goland_download_url"
   fi
 
-  if ! is_dir_exist "$idea_extracted_dir"; then
+  if ! is_dir_exist "$idea_extracted_dir"  && ! is_file_exist "$idea_downloaded_filepath"; then
     create_dir "$config_idea_dir"
-    wget -O "$idea_downloaded_filepath" "$idea_download_url" &
+    wget -O "$idea_downloaded_filepath" "$idea_download_url"
   fi
 
   create_dir "$config_postman_dir"
-  wget -O "$postman_downloaded_filepath" "$postman_download_url" &
+  wget -O "$postman_downloaded_filepath" "$postman_download_url"
 
-  if ! is_dir_exist "$pycharm_extracted_dir"; then
+  if ! is_dir_exist "$pycharm_extracted_dir"  && ! is_file_exist "$pycharm_downloaded_filepath"; then
     create_dir "$config_pycharm_dir"
-    wget -O "$pycharm_downloaded_filepath" "$pycharm_download_url" &
+    wget -O "$pycharm_downloaded_filepath" "$pycharm_download_url"
   fi
 
-  if ! is_dir_exist "$rustrover_extracted_dir"; then
+  if ! is_dir_exist "$rustrover_extracted_dir"  && ! is_file_exist "$rustrover_downloaded_filepath"; then
     create_dir "$config_rustrover_dir"
-    wget -O "$rustrover_downloaded_filepath" "$rustrover_download_url" &
+    wget -O "$rustrover_downloaded_filepath" "$rustrover_download_url"
   fi
 
-  if ! is_dir_exist "$webstorm_extracted_dir"; then
+  if ! is_dir_exist "$webstorm_extracted_dir"  && ! is_file_exist "$webstorm_downloaded_filepath"; then
     create_dir "$config_webstorm_dir"
-    wget -O "$webstorm_downloaded_filepath" "$webstorm_download_url" &
+    wget -O "$webstorm_downloaded_filepath" "$webstorm_download_url"
   fi
-
-  wait
 
   if is_file_exist "$datagrip_downloaded_filepath"; then
-    tar -C "$config_datagrip_dir" -xzf "$datagrip_downloaded_filepath" &
+    tar -C "$config_datagrip_dir" -xzf "$datagrip_downloaded_filepath"
   fi
 
   if is_file_exist "$go_downloaded_filepath"; then
-    tar -C "$config_go_dir" -xzf "$go_downloaded_filepath" &
+    tar -C "$config_go_dir" -xzf "$go_downloaded_filepath"
   fi
 
   if is_file_exist "$goland_downloaded_filepath"; then
-    tar -C "$config_goland_dir" -xzf "$goland_downloaded_filepath" &
+    tar -C "$config_goland_dir" -xzf "$goland_downloaded_filepath"
   fi
 
   if is_file_exist "$idea_downloaded_filepath"; then
-    tar -C "$config_idea_dir" -xzf "$idea_downloaded_filepath" &
+    tar -C "$config_idea_dir" -xzf "$idea_downloaded_filepath"
   fi
 
   if is_file_exist "$postman_downloaded_filepath"; then
-    tar -C "$config_postman_dir" -xzf "$postman_downloaded_filepath" &
+    tar -C "$config_postman_dir" -xzf "$postman_downloaded_filepath"
   fi
 
   if is_file_exist "$pycharm_downloaded_filepath"; then
-    tar -C "$config_pycharm_dir" -xzf "$pycharm_downloaded_filepath" &
+    tar -C "$config_pycharm_dir" -xzf "$pycharm_downloaded_filepath"
   fi
 
   if is_file_exist "$rustrover_downloaded_filepath"; then
-    tar -C "$config_rustrover_dir" -xzf "$rustrover_downloaded_filepath" &
+    tar -C "$config_rustrover_dir" -xzf "$rustrover_downloaded_filepath"
   fi
 
   if is_file_exist "$webstorm_downloaded_filepath"; then
-    tar -C "$config_webstorm_dir" -xzf "$webstorm_downloaded_filepath" &
+    tar -C "$config_webstorm_dir" -xzf "$webstorm_downloaded_filepath"
   fi
-
-  wait
 
   sudo ln -sf "$datagrip_script_filepath" "$datagrip_installed_filepath" || true
   rm -rf "$datagrip_downloaded_filepath"
