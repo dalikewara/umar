@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 30
 
-version="v2.5.5"
+version="v2.5.6"
 pid=$$
 distro=""
 de=""
@@ -26,6 +26,10 @@ config_postman_dir="$config_dir/postman"
 config_pycharm_dir="$config_dir/pycharm"
 config_rustrover_dir="$config_dir/rustrover"
 config_webstorm_dir="$config_dir/webstorm"
+config_nodejs_dir="$config_dir/nodejs"
+bash_profile_filepath="$HOME/.bash_profile"
+bashrc_filepath="$HOME/.bashrc"
+profile_filepath="$HOME/.profile"
 user_package_dir="/usr/local/bin"
 install_dir="/usr/local/bin"
 script_name="umar.sh"
@@ -50,6 +54,7 @@ go_downloaded_filepath="$config_go_dir/$go_version_tar_filename"
 go_extracted_dir="$config_go_dir/$go_version_dir_name"
 go_extracted_dir_path="$config_go_dir/go"
 go_installed_filepath="/usr/local/go"
+go_installed_bin_dir="/usr/local/go/bin"
 goland_version_tar_filename="goland-2023.3.2.tar.gz"
 goland_version_dir_name="GoLand-2023.3.2"
 goland_downloaded_filepath="$config_goland_dir/$goland_version_tar_filename"
@@ -85,6 +90,17 @@ webstorm_downloaded_filepath="$config_webstorm_dir/$webstorm_version_tar_filenam
 webstorm_extracted_dir="$config_webstorm_dir/$webstorm_version_dir_name"
 webstorm_script_filepath="$config_webstorm_dir/$webstorm_version_dir_name/bin/webstorm.sh"
 webstorm_installed_filepath="/usr/local/bin/webstorm"
+nodejs_version_tar_filename="node-v21.6.1-linux-x64.tar.xz"
+nodejs_dir="$HOME/nodejs"
+nodejs_npm_global_dir="$HOME/.npm-global"
+nodejs_npm_global_bin_dir="$nodejs_npm_global_dir/bin"
+nodejs_version_dir_name="v21.6.1"
+nodejs_downloaded_filepath="$config_nodejs_dir/$nodejs_version_tar_filename"
+nodejs_extracted_dir="$config_nodejs_dir/$nodejs_version_dir_name"
+nodejs_extracted_dir_path="$config_nodejs_dir/node-v21.6.1-linux-x64"
+nodejs_installed_filepath="/usr/local/lib/nodejs"
+nodejs_installed_version_filepath="$nodejs_installed_filepath/node-v21.6.1-linux-x64"
+nodejs_installed_version_bin_dir="$nodejs_installed_version_filepath/bin"
 
 color_green='\033[0;32m'
 color_cyan='\033[0;36m'
@@ -107,6 +123,7 @@ postman_download_url="https://dl.pstmn.io/download/latest/linux_64"
 pycharm_download_url="https://download.jetbrains.com/python/$pycharm_version_tar_filename"
 rustrover_download_url="https://download.jetbrains.com/rustrover/$rustrover_version_tar_filename"
 webstorm_download_url="https://download.jetbrains.com/webstorm/$webstorm_version_tar_filename"
+nodejs_download_url="https://nodejs.org/dist/$nodejs_version_dir_name/$nodejs_version_tar_filename"
 
 # shellcheck disable=SC2034
 gemini_model_1="gemini-1.0-pro"
@@ -255,7 +272,7 @@ macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Tested on MBP 2017*
 # ---------------------------------------------------------------------------------------------------------------------
 
 command_setupdeveloper() {
-  printout_markdown "${color_yellow}**THIS WILL INSTALL SOME DEVELOPER TOOLS**${color_reset}"
+  printout_markdown "${color_yellow}**THIS WILL INSTALL SOME DEVELOPER TOOLS. WARNING!!! THIS WILL REPLACE YOUR EXISTING PACKAGES**${color_reset}"
 
   printout_blank_line
 
@@ -307,6 +324,11 @@ command_setupdeveloper() {
     wget -c -O "$webstorm_downloaded_filepath" "$webstorm_download_url" &
   fi
 
+  if ! is_dir_exist "$nodejs_extracted_dir"; then
+    create_dir "$config_nodejs_dir"
+    wget -c -O "$nodejs_downloaded_filepath" "$nodejs_download_url" &
+  fi
+
   wait
 
   if is_file_exist "$datagrip_downloaded_filepath"; then
@@ -341,7 +363,19 @@ command_setupdeveloper() {
     tar -C "$config_webstorm_dir" -xzf "$webstorm_downloaded_filepath" &
   fi
 
+  if is_file_exist "$nodejs_downloaded_filepath"; then
+    tar -C "$config_nodejs_dir" -xzf "$nodejs_downloaded_filepath" &
+  fi
+
   wait
+
+  if is_file_exist "$go_downloaded_filepath"; then
+    mv "$go_extracted_dir_path" "$go_extracted_dir"
+  fi
+
+  if is_file_exist "$nodejs_downloaded_filepath"; then
+    mv "$nodejs_extracted_dir_path" "$nodejs_extracted_dir"
+  fi
 
   sudo ln -sf "$datagrip_script_filepath" "$datagrip_installed_filepath" || true
   rm -rf "$datagrip_downloaded_filepath"
@@ -349,8 +383,7 @@ command_setupdeveloper() {
   mkdir "$go_src_dir" > /dev/null 2>&1 || true
   mkdir "$go_pkg_dir" > /dev/null 2>&1 || true
   mkdir "$go_bin_dir" > /dev/null 2>&1 || true
-  mv "$go_extracted_dir_path" "$go_extracted_dir"
-  cp -rf "$go_extracted_dir" "$go_installed_filepath"
+  sudo cp -rf "$go_extracted_dir" "$go_installed_filepath"
   rm -rf "$go_downloaded_filepath"
   sudo ln -sf "$goland_script_filepath" "$goland_installed_filepath" || true
   rm -rf "$goland_downloaded_filepath"
@@ -364,6 +397,91 @@ command_setupdeveloper() {
   rm -rf "$rustrover_downloaded_filepath"
   sudo ln -sf "$webstorm_script_filepath" "$webstorm_installed_filepath" || true
   rm -rf "$webstorm_downloaded_filepath"
+  mkdir "$nodejs_dir" > /dev/null 2>&1 || true
+  mkdir "$nodejs_npm_global_dir" > /dev/null 2>&1 || true
+  sudo mkdir -p "$nodejs_installed_filepath"
+  sudo cp -rf "$nodejs_extracted_dir" "$nodejs_installed_version_filepath"
+  rm -rf "$nodejs_downloaded_filepath"
+
+  if is_file_exist "$bash_profile_filepath"; then
+    if ! grep -q "export PATH=\$PATH:$go_installed_bin_dir" "$bash_profile_filepath"; then
+      echo "export PATH=\$PATH:$go_installed_bin_dir" >> "$bash_profile_filepath"
+    fi
+
+    if ! grep -q "export GOPATH=$go_dir" "$bash_profile_filepath"; then
+      echo "export GOPATH=$go_dir" >> "$bash_profile_filepath"
+    fi
+
+    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$bash_profile_filepath"; then
+      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$bash_profile_filepath"
+    fi
+
+    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$bash_profile_filepath"; then
+      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$bash_profile_filepath"
+    fi
+
+    if ! grep -q "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$bash_profile_filepath"; then
+      echo "export PATH=$nodejs_installed_version_bin_dir:\$PATH" >> "$bash_profile_filepath"
+    fi
+
+    if ! grep -q "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$bash_profile_filepath"; then
+      echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$bash_profile_filepath"
+    fi
+  fi
+
+  if is_file_exist "$bashrc_filepath"; then
+    if ! grep -q "export PATH=\$PATH:$go_installed_bin_dir" "$bashrc_filepath"; then
+      echo "export PATH=\$PATH:$go_installed_bin_dir" >> "$bashrc_filepath"
+    fi
+
+    if ! grep -q "export GOPATH=$go_dir" "$bashrc_filepath"; then
+      echo "export GOPATH=$go_dir" >> "$bashrc_filepath"
+    fi
+
+    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$bashrc_filepath"; then
+      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$bashrc_filepath"
+    fi
+
+    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$bashrc_filepath"; then
+      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$bashrc_filepath"
+    fi
+
+    if ! grep -q "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$bashrc_filepath"; then
+      echo "export PATH=$nodejs_installed_version_bin_dir:\$PATH" >> "$bashrc_filepath"
+    fi
+
+    if ! grep -q "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$bashrc_filepath"; then
+      echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$bashrc_filepath"
+    fi
+  fi
+
+  if is_file_exist "$profile_filepath"; then
+    if ! grep -q "export PATH=\$PATH:$go_installed_bin_dir" "$profile_filepath"; then
+      echo "export PATH=\$PATH:$go_installed_bin_dir" >> "$profile_filepath"
+    fi
+
+    if ! grep -q "export GOPATH=$go_dir" "$profile_filepath"; then
+      echo "export GOPATH=$go_dir" >> "$profile_filepath"
+    fi
+
+    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$profile_filepath"; then
+      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$profile_filepath"
+    fi
+
+    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$profile_filepath"; then
+      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$profile_filepath"
+    fi
+
+    if ! grep -q "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$profile_filepath"; then
+      echo "export PATH=$nodejs_installed_version_bin_dir:\$PATH" >> "$profile_filepath"
+    fi
+
+    if ! grep -q "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$profile_filepath"; then
+      echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$profile_filepath"
+    fi
+  fi
+
+  npm config set prefix "$nodejs_npm_global_dir" > /dev/null 2>&1 || true
 }
 
 command_macbookfan() {
