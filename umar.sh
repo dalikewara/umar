@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 30
 
-version="v2.5.0"
+version="v2.5.1"
 pid=$$
 distro=""
 de=""
@@ -102,7 +102,7 @@ datagrip_download_url="https://download.jetbrains.com/datagrip/$datagrip_version
 go_download_url="https://go.dev/dl/$go_version_tar_filename"
 goland_download_url="https://download.jetbrains.com/go/$goland_version_tar_filename"
 idea_download_url="https://download-cdn.jetbrains.com/idea/$idea_version_tar_filename"
-postman_download_url="https://dl.pstmn.io/download/latest/linux_64e"
+postman_download_url="https://dl.pstmn.io/download/latest/linux_64"
 pycharm_download_url="https://download.jetbrains.com/python/$pycharm_version_tar_filename"
 rustrover_download_url="https://download.jetbrains.com/rustrover/$rustrover_version_tar_filename"
 webstorm_download_url="https://download.jetbrains.com/webstorm/$webstorm_version_tar_filename"
