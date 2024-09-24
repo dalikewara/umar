@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 30
 
-version="v2.5.4"
+version="v2.5.5"
 pid=$$
 distro=""
 de=""
@@ -307,38 +307,41 @@ command_setupdeveloper() {
     wget -c -O "$webstorm_downloaded_filepath" "$webstorm_download_url" &
   fi
 
+  wait
+
   if is_file_exist "$datagrip_downloaded_filepath"; then
-    tar -C "$config_datagrip_dir" -xzf "$datagrip_downloaded_filepath"
+    tar -C "$config_datagrip_dir" -xzf "$datagrip_downloaded_filepath" &
   fi
 
   if is_file_exist "$go_downloaded_filepath"; then
-    tar -C "$config_go_dir" -xzf "$go_downloaded_filepath"
-    mv "$go_extracted_dir_path" "$go_extracted_dir"
+    tar -C "$config_go_dir" -xzf "$go_downloaded_filepath" &
   fi
 
   if is_file_exist "$goland_downloaded_filepath"; then
-    tar -C "$config_goland_dir" -xzf "$goland_downloaded_filepath"
+    tar -C "$config_goland_dir" -xzf "$goland_downloaded_filepath" &
   fi
 
   if is_file_exist "$idea_downloaded_filepath"; then
-    tar -C "$config_idea_dir" -xzf "$idea_downloaded_filepath"
+    tar -C "$config_idea_dir" -xzf "$idea_downloaded_filepath" &
   fi
 
   if is_file_exist "$postman_downloaded_filepath"; then
-    tar -C "$config_postman_dir" -xzf "$postman_downloaded_filepath"
+    tar -C "$config_postman_dir" -xzf "$postman_downloaded_filepath" &
   fi
 
   if is_file_exist "$pycharm_downloaded_filepath"; then
-    tar -C "$config_pycharm_dir" -xzf "$pycharm_downloaded_filepath"
+    tar -C "$config_pycharm_dir" -xzf "$pycharm_downloaded_filepath" &
   fi
 
   if is_file_exist "$rustrover_downloaded_filepath"; then
-    tar -C "$config_rustrover_dir" -xzf "$rustrover_downloaded_filepath"
+    tar -C "$config_rustrover_dir" -xzf "$rustrover_downloaded_filepath" &
   fi
 
   if is_file_exist "$webstorm_downloaded_filepath"; then
-    tar -C "$config_webstorm_dir" -xzf "$webstorm_downloaded_filepath"
+    tar -C "$config_webstorm_dir" -xzf "$webstorm_downloaded_filepath" &
   fi
+
+  wait
 
   sudo ln -sf "$datagrip_script_filepath" "$datagrip_installed_filepath" || true
   rm -rf "$datagrip_downloaded_filepath"
@@ -346,6 +349,7 @@ command_setupdeveloper() {
   mkdir "$go_src_dir" > /dev/null 2>&1 || true
   mkdir "$go_pkg_dir" > /dev/null 2>&1 || true
   mkdir "$go_bin_dir" > /dev/null 2>&1 || true
+  mv "$go_extracted_dir_path" "$go_extracted_dir"
   cp -rf "$go_extracted_dir" "$go_installed_filepath"
   rm -rf "$go_downloaded_filepath"
   sudo ln -sf "$goland_script_filepath" "$goland_installed_filepath" || true
