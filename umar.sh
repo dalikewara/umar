@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 30
 
-version="v2.5.6"
+version="v2.5.7"
 pid=$$
 distro=""
 de=""
@@ -332,39 +332,39 @@ command_setupdeveloper() {
   wait
 
   if is_file_exist "$datagrip_downloaded_filepath"; then
-    tar -C "$config_datagrip_dir" -xzf "$datagrip_downloaded_filepath" &
+    tar -v -C "$config_datagrip_dir" -xzf "$datagrip_downloaded_filepath" &
   fi
 
   if is_file_exist "$go_downloaded_filepath"; then
-    tar -C "$config_go_dir" -xzf "$go_downloaded_filepath" &
+    tar -v -C "$config_go_dir" -xzf "$go_downloaded_filepath" &
   fi
 
   if is_file_exist "$goland_downloaded_filepath"; then
-    tar -C "$config_goland_dir" -xzf "$goland_downloaded_filepath" &
+    tar -v -C "$config_goland_dir" -xzf "$goland_downloaded_filepath" &
   fi
 
   if is_file_exist "$idea_downloaded_filepath"; then
-    tar -C "$config_idea_dir" -xzf "$idea_downloaded_filepath" &
+    tar -v -C "$config_idea_dir" -xzf "$idea_downloaded_filepath" &
   fi
 
   if is_file_exist "$postman_downloaded_filepath"; then
-    tar -C "$config_postman_dir" -xzf "$postman_downloaded_filepath" &
+    tar -v -C "$config_postman_dir" -xzf "$postman_downloaded_filepath" &
   fi
 
   if is_file_exist "$pycharm_downloaded_filepath"; then
-    tar -C "$config_pycharm_dir" -xzf "$pycharm_downloaded_filepath" &
+    tar -v -C "$config_pycharm_dir" -xzf "$pycharm_downloaded_filepath" &
   fi
 
   if is_file_exist "$rustrover_downloaded_filepath"; then
-    tar -C "$config_rustrover_dir" -xzf "$rustrover_downloaded_filepath" &
+    tar -v -C "$config_rustrover_dir" -xzf "$rustrover_downloaded_filepath" &
   fi
 
   if is_file_exist "$webstorm_downloaded_filepath"; then
-    tar -C "$config_webstorm_dir" -xzf "$webstorm_downloaded_filepath" &
+    tar -v -C "$config_webstorm_dir" -xzf "$webstorm_downloaded_filepath" &
   fi
 
   if is_file_exist "$nodejs_downloaded_filepath"; then
-    tar -C "$config_nodejs_dir" -xzf "$nodejs_downloaded_filepath" &
+    tar -v -C "$config_nodejs_dir" -xzf "$nodejs_downloaded_filepath" &
   fi
 
   wait
