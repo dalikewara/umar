@@ -2,6 +2,10 @@
 
 ## 2024
 
+- **v2.5.0** (2024-09-24)
+  - Fix some issues
+  - Add `setupdeveloper` command
+
 - **v2.3.1 - v2.4.1** (2024-09-21)
   - Fix some issues
   - Add `macbookfan` command

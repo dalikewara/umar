@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# LAST COUNTER FOR FUNCTION VARIABLE = 29
+# LAST COUNTER FOR FUNCTION VARIABLE = 30
 
-version="v2.4.1"
+version="v2.5.0"
 pid=$$
 distro=""
 de=""
@@ -18,6 +18,14 @@ config_macbook_audio_driver1_dir="$config_dir/macbook/audio"
 config_macbook_audio_driver1_installation_script_name="install.cirrus.driver.sh"
 config_macbook_camera_driver1_dir="$config_dir/macbook/camera1"
 config_macbook_camera_driver2_dir="$config_dir/macbook/camera2"
+config_datagrip_dir="$config_dir/datagrip"
+config_go_dir="$config_dir/go"
+config_goland_dir="$config_dir/goland"
+config_idea_dir="$config_dir/idea"
+config_postman_dir="$config_dir/postman"
+config_pycharm_dir="$config_dir/pycharm"
+config_rustrover_dir="$config_dir/rustrover"
+config_webstorm_dir="$config_dir/webstorm"
 user_package_dir="/usr/local/bin"
 install_dir="/usr/local/bin"
 script_name="umar.sh"
@@ -26,6 +34,56 @@ macbook_platform_fan_min_filepath="$macbook_platform_smc_dir/fan1_min"
 macbook_platform_fan_max_filepath="$macbook_platform_smc_dir/fan1_max"
 macbook_platform_fan_manual_filepath="$macbook_platform_smc_dir/fan1_manual"
 macbook_platform_fan_output_filepath="$macbook_platform_smc_dir/fan1_output"
+datagrip_version_tar_filename="datagrip-2023.3.3.tar.gz"
+datagrip_version_dir_name="DataGrip-2023.3.3"
+datagrip_downloaded_filepath="$config_datagrip_dir/$datagrip_version_tar_filename"
+datagrip_extracted_dir="$config_datagrip_dir/$datagrip_version_dir_name"
+datagrip_script_filepath="$config_datagrip_dir/$datagrip_version_dir_name/bin/datagrip.sh"
+datagrip_installed_filepath="/usr/local/bin/datagrip"
+go_version_tar_filename="go1.21.6.linux-amd64.tar.gz"
+go_dir="$HOME/go"
+go_src_dir="$go_dir/src"
+go_pkg_dir="$go_dir/pkg"
+go_bin_dir="$go_dir/bin"
+go_version_dir_name="go1.21.6"
+go_downloaded_filepath="$config_go_dir/$go_version_tar_filename"
+go_extracted_dir="$config_go_dir/$go_version_dir_name"
+go_installed_filepath="/usr/local/go"
+goland_version_tar_filename="goland-2023.3.2.tar.gz"
+goland_version_dir_name="GoLand-2023.3.2"
+goland_downloaded_filepath="$config_goland_dir/$goland_version_tar_filename"
+goland_extracted_dir="$config_goland_dir/$goland_version_dir_name"
+goland_script_filepath="$config_goland_dir/$goland_version_dir_name/bin/goland.sh"
+goland_installed_filepath="/usr/local/bin/goland"
+idea_version_tar_filename="ideaIU-2023.3.2.tar.gz"
+idea_version_dir_name="idea-IU-233.13135.103"
+idea_downloaded_filepath="$config_idea_dir/$idea_version_tar_filename"
+idea_extracted_dir="$config_idea_dir/$idea_version_dir_name"
+idea_script_filepath="$config_idea_dir/$idea_version_dir_name/bin/idea.sh"
+idea_installed_filepath="/usr/local/bin/idea"
+postman_version_tar_filename="postman.tar.gz"
+postman_version_dir_name="Postman"
+postman_downloaded_filepath="$config_postman_dir/$postman_version_tar_filename"
+postman_script_filepath="$config_postman_dir/$postman_version_dir_name/app/Postman"
+postman_installed_filepath="/usr/local/bin/postman"
+pycharm_version_tar_filename="pycharm-professional-2023.3.2.tar.gz"
+pycharm_version_dir_name="pycharm-2023.3.2"
+pycharm_downloaded_filepath="$config_pycharm_dir/$pycharm_version_tar_filename"
+pycharm_extracted_dir="$config_pycharm_dir/$pycharm_version_dir_name"
+pycharm_script_filepath="$config_pycharm_dir/$pycharm_version_dir_name/bin/pycharm.sh"
+pycharm_installed_filepath="/usr/local/bin/pycharm"
+rustrover_version_tar_filename="RustRover-2024.1.tar.gz"
+rustrover_version_dir_name="RustRover-2024.1"
+rustrover_downloaded_filepath="$config_rustrover_dir/$rustrover_version_tar_filename"
+rustrover_extracted_dir="$config_rustrover_dir/$rustrover_version_dir_name"
+rustrover_script_filepath="$config_rustrover_dir/$rustrover_version_dir_name/bin/rustrover.sh"
+rustrover_installed_filepath="/usr/local/bin/rustrover"
+webstorm_version_tar_filename="WebStorm-2024.1.3.tar.gz"
+webstorm_version_dir_name="WebStorm-241.17011.90"
+webstorm_downloaded_filepath="$config_webstorm_dir/$webstorm_version_tar_filename"
+webstorm_extracted_dir="$config_webstorm_dir/$webstorm_version_dir_name"
+webstorm_script_filepath="$config_webstorm_dir/$webstorm_version_dir_name/bin/webstorm.sh"
+webstorm_installed_filepath="/usr/local/bin/webstorm"
 
 color_green='\033[0;32m'
 color_cyan='\033[0;36m'
@@ -40,6 +98,14 @@ generative_ai_url="https://generativelanguage.googleapis.com/v1beta/models"
 macbook_audio_driver1_url="https://github.com/davidjo/snd_hda_macbookpro.git"
 macbook_camera_driver1_url="https://github.com/patjak/facetimehd-firmware.git"
 macbook_camera_driver2_url="https://github.com/patjak/facetimehd.git"
+datagrip_download_url="https://download.jetbrains.com/datagrip/$datagrip_version_tar_filename"
+go_download_url="https://go.dev/dl/$go_version_tar_filename"
+goland_download_url="https://download.jetbrains.com/go/$goland_version_tar_filename"
+idea_download_url="https://download-cdn.jetbrains.com/idea/$idea_version_tar_filename"
+postman_download_url="https://dl.pstmn.io/download/latest/linux_64e"
+pycharm_download_url="https://download.jetbrains.com/python/$pycharm_version_tar_filename"
+rustrover_download_url="https://download.jetbrains.com/rustrover/$rustrover_version_tar_filename"
+webstorm_download_url="https://download.jetbrains.com/webstorm/$webstorm_version_tar_filename"
 
 # shellcheck disable=SC2034
 gemini_model_1="gemini-1.0-pro"
@@ -161,6 +227,8 @@ testhttp:Test and benchmark HTTP URL -> \`${color_cyan}**-c** ${color_blue}**NUM
 ${color_blue}**SECONDS** ${color_cyan}**-header** ${color_blue}**TEXT** ${color_cyan}**-userAgent** ${color_blue}**TEXT** ${color_cyan}**-contentType** \
 ${color_blue}**TEXT** ${color_cyan}**-u** ${color_blue}**URL**${color_reset}\`
 --------------:--------------------------
+setupdeveloper:Install some developer tools
+--------------:--------------------------
 macbookaudio:Configure audio for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
 macbookcamera:Configure camera for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
 macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}. ${color_blue}**Argument 1**${color_reset} is the fan speed RPM
@@ -184,6 +252,117 @@ macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Tested on MBP 2017*
 # Provides available Umar's command(s)
 #
 # ---------------------------------------------------------------------------------------------------------------------
+
+command_setupdeveloper() {
+  printout_markdown "${color_yellow}**THIS WILL INSTALL SOME DEVELOPER TOOLS**${color_reset}"
+
+  printout_blank_line
+
+  printout_no_enter "Are you sure to continue this process [N/y] "
+
+  _30_confirmation=$(read_input)
+
+  if ! is_equal "$_30_confirmation" "y"; then
+    printout_exit "Aborted!"
+  fi
+
+  check_requirements "tar" "wget"
+
+  if ! is_dir_exist "$datagrip_extracted_dir"; then
+    create_dir "$config_datagrip_dir"
+    wget -O "$datagrip_downloaded_filepath" "$datagrip_download_url" &
+  fi
+
+  if ! is_dir_exist "$go_extracted_dir"; then
+    create_dir "$config_go_dir"
+    wget -O "$go_downloaded_filepath" "$go_download_url" &
+  fi
+
+  if ! is_dir_exist "$goland_extracted_dir"; then
+    create_dir "$config_goland_dir"
+    wget -O "$goland_downloaded_filepath" "$goland_download_url" &
+  fi
+
+  if ! is_dir_exist "$idea_extracted_dir"; then
+    create_dir "$config_idea_dir"
+    wget -O "$idea_downloaded_filepath" "$idea_download_url" &
+  fi
+
+  create_dir "$config_postman_dir"
+  wget -O "$postman_downloaded_filepath" "$postman_download_url" &
+
+  if ! is_dir_exist "$pycharm_extracted_dir"; then
+    create_dir "$config_pycharm_dir"
+    wget -O "$pycharm_downloaded_filepath" "$pycharm_download_url" &
+  fi
+
+  if ! is_dir_exist "$rustrover_extracted_dir"; then
+    create_dir "$config_rustrover_dir"
+    wget -O "$rustrover_downloaded_filepath" "$rustrover_download_url" &
+  fi
+
+  if ! is_dir_exist "$webstorm_extracted_dir"; then
+    create_dir "$config_webstorm_dir"
+    wget -O "$webstorm_downloaded_filepath" "$webstorm_download_url" &
+  fi
+
+  wait
+
+  if is_file_exist "$datagrip_downloaded_filepath"; then
+    tar -C "$config_datagrip_dir" -xzf "$datagrip_downloaded_filepath" &
+  fi
+
+  if is_file_exist "$go_downloaded_filepath"; then
+    tar -C "$config_go_dir" -xzf "$go_downloaded_filepath" &
+  fi
+
+  if is_file_exist "$goland_downloaded_filepath"; then
+    tar -C "$config_goland_dir" -xzf "$goland_downloaded_filepath" &
+  fi
+
+  if is_file_exist "$idea_downloaded_filepath"; then
+    tar -C "$config_idea_dir" -xzf "$idea_downloaded_filepath" &
+  fi
+
+  if is_file_exist "$postman_downloaded_filepath"; then
+    tar -C "$config_postman_dir" -xzf "$postman_downloaded_filepath" &
+  fi
+
+  if is_file_exist "$pycharm_downloaded_filepath"; then
+    tar -C "$config_pycharm_dir" -xzf "$pycharm_downloaded_filepath" &
+  fi
+
+  if is_file_exist "$rustrover_downloaded_filepath"; then
+    tar -C "$config_rustrover_dir" -xzf "$rustrover_downloaded_filepath" &
+  fi
+
+  if is_file_exist "$webstorm_downloaded_filepath"; then
+    tar -C "$config_webstorm_dir" -xzf "$webstorm_downloaded_filepath" &
+  fi
+
+  wait
+
+  sudo ln -sf "$datagrip_script_filepath" "$datagrip_installed_filepath" || true
+  rm -rf "$datagrip_downloaded_filepath"
+  mkdir "$go_dir" || true
+  mkdir "$go_src_dir" || true
+  mkdir "$go_pkg_dir" || true
+  mkdir "$go_bin_dir" || true
+  cp -rf "$go_extracted_dir" "$go_installed_filepath"
+  rm -rf "$go_downloaded_filepath"
+  sudo ln -sf "$goland_script_filepath" "$goland_installed_filepath" || true
+  rm -rf "$goland_downloaded_filepath"
+  sudo ln -sf "$idea_script_filepath" "$idea_installed_filepath" || true
+  rm -rf "$idea_downloaded_filepath"
+  sudo ln -sf "$postman_script_filepath" "$postman_installed_filepath" || true
+  rm -rf "$postman_downloaded_filepath"
+  sudo ln -sf "$pycharm_script_filepath" "$pycharm_installed_filepath" || true
+  rm -rf "$pycharm_downloaded_filepath"
+  sudo ln -sf "$rustrover_script_filepath" "$rustrover_installed_filepath" || true
+  rm -rf "$rustrover_downloaded_filepath"
+  sudo ln -sf "$webstorm_script_filepath" "$webstorm_installed_filepath" || true
+  rm -rf "$webstorm_downloaded_filepath"
+}
 
 command_macbookfan() {
   if is_no_argument "$@"; then
@@ -218,7 +397,6 @@ command_macbookfan() {
 }
 
 command_macbookcamera() {
-  check_requirements "git" "sudo" "make"
   printout_markdown "${color_yellow}**This will configure Macbook Camera. If you're not using Macbook device, you SHOULD NOT execute this command**${color_reset}"
 
   printout_blank_line
@@ -230,6 +408,8 @@ command_macbookcamera() {
   if ! is_equal "$_28_confirmation" "y"; then
     printout_exit "Aborted!"
   fi
+
+  check_requirements "git" "sudo" "make"
 
   if ! is_dir_exist "$config_macbook_camera_driver1_dir"; then
     git clone "$macbook_camera_driver1_url" "$config_macbook_camera_driver1_dir"
@@ -261,7 +441,6 @@ command_macbookcamera() {
 }
 
 command_macbookaudio() {
-  check_requirements "git" "sudo"
   printout_markdown "${color_yellow}**This will configure Macbook Audio. If you're not using Macbook device, you SHOULD NOT execute this command**${color_reset}"
 
   printout_blank_line
@@ -273,6 +452,8 @@ command_macbookaudio() {
   if ! is_equal "$_27_confirmation" "y"; then
     printout_exit "Aborted!"
   fi
+
+  check_requirements "git" "sudo"
 
   if ! is_dir_exist "$config_macbook_audio_driver1_dir"; then
     git clone "$macbook_audio_driver1_url" "$config_macbook_audio_driver1_dir"
