@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 30
 
-version="v2.5.8"
+version="v2.5.9"
 pid=$$
 distro=""
 de=""
@@ -284,7 +284,7 @@ command_setupdeveloper() {
     printout_exit "Aborted!"
   fi
 
-  check_requirements "tar" "wget"
+  check_requirements "tar" "wget" "gzip"
 
   if ! is_dir_exist "$datagrip_extracted_dir"; then
     create_dir "$config_datagrip_dir"
@@ -364,7 +364,7 @@ command_setupdeveloper() {
   fi
 
   if is_file_exist "$nodejs_downloaded_filepath"; then
-    tar -v -C "$config_nodejs_dir" -xzf "$nodejs_downloaded_filepath" &
+    tar -v -C "$config_nodejs_dir" -xJvf "$nodejs_downloaded_filepath" &
   fi
 
   wait
