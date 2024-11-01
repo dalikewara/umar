@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 30
 
-version="v2.5.9"
+version="v2.5.10"
 pid=$$
 distro=""
 de=""
@@ -27,9 +27,11 @@ config_pycharm_dir="$config_dir/pycharm"
 config_rustrover_dir="$config_dir/rustrover"
 config_webstorm_dir="$config_dir/webstorm"
 config_nodejs_dir="$config_dir/nodejs"
+config_pyenv_dir="$HOME/.pyenv"
 bash_profile_filepath="$HOME/.bash_profile"
 bashrc_filepath="$HOME/.bashrc"
 profile_filepath="$HOME/.profile"
+zshrc_filepath="$HOME/.zshrc"
 user_package_dir="/usr/local/bin"
 install_dir="/usr/local/bin"
 script_name="umar.sh"
@@ -42,14 +44,15 @@ datagrip_version_tar_filename="datagrip-2023.3.3.tar.gz"
 datagrip_version_dir_name="DataGrip-2023.3.3"
 datagrip_downloaded_filepath="$config_datagrip_dir/$datagrip_version_tar_filename"
 datagrip_extracted_dir="$config_datagrip_dir/$datagrip_version_dir_name"
-datagrip_script_filepath="$config_datagrip_dir/$datagrip_version_dir_name/bin/datagrip.sh"
+datagrip_script_filepath="$datagrip_extracted_dir/bin/datagrip.sh"
+datagrip_chrome_sandbox_filepath="$datagrip_extracted_dir/jbr/lib/chrome-sandbox"
 datagrip_installed_filepath="/usr/local/bin/datagrip"
-go_version_tar_filename="go1.21.6.linux-amd64.tar.gz"
+go_version_tar_filename="go1.23.2.linux-amd64.tar.gz"
 go_dir="$HOME/go"
 go_src_dir="$go_dir/src"
 go_pkg_dir="$go_dir/pkg"
 go_bin_dir="$go_dir/bin"
-go_version_dir_name="go1.21.6"
+go_version_dir_name="go1.23.2"
 go_downloaded_filepath="$config_go_dir/$go_version_tar_filename"
 go_extracted_dir="$config_go_dir/$go_version_dir_name"
 go_extracted_dir_path="$config_go_dir/go"
@@ -59,13 +62,15 @@ goland_version_tar_filename="goland-2023.3.2.tar.gz"
 goland_version_dir_name="GoLand-2023.3.2"
 goland_downloaded_filepath="$config_goland_dir/$goland_version_tar_filename"
 goland_extracted_dir="$config_goland_dir/$goland_version_dir_name"
-goland_script_filepath="$config_goland_dir/$goland_version_dir_name/bin/goland.sh"
+goland_script_filepath="$goland_extracted_dir/bin/goland.sh"
+goland_chrome_sandbox_filepath="$goland_extracted_dir/jbr/lib/chrome-sandbox"
 goland_installed_filepath="/usr/local/bin/goland"
 idea_version_tar_filename="ideaIU-2023.3.2.tar.gz"
 idea_version_dir_name="idea-IU-233.13135.103"
 idea_downloaded_filepath="$config_idea_dir/$idea_version_tar_filename"
 idea_extracted_dir="$config_idea_dir/$idea_version_dir_name"
-idea_script_filepath="$config_idea_dir/$idea_version_dir_name/bin/idea.sh"
+idea_script_filepath="$idea_extracted_dir/bin/idea.sh"
+idea_chrome_sandbox_filepath="$idea_extracted_dir/jbr/lib/chrome-sandbox"
 idea_installed_filepath="/usr/local/bin/idea"
 postman_version_tar_filename="postman.tar.gz"
 postman_version_dir_name="Postman"
@@ -76,19 +81,22 @@ pycharm_version_tar_filename="pycharm-professional-2023.3.2.tar.gz"
 pycharm_version_dir_name="pycharm-2023.3.2"
 pycharm_downloaded_filepath="$config_pycharm_dir/$pycharm_version_tar_filename"
 pycharm_extracted_dir="$config_pycharm_dir/$pycharm_version_dir_name"
-pycharm_script_filepath="$config_pycharm_dir/$pycharm_version_dir_name/bin/pycharm.sh"
+pycharm_script_filepath="$pycharm_extracted_dir/bin/pycharm.sh"
+pycharm_chrome_sandbox_filepath="$pycharm_extracted_dir/jbr/lib/chrome-sandbox"
 pycharm_installed_filepath="/usr/local/bin/pycharm"
 rustrover_version_tar_filename="RustRover-2024.1.tar.gz"
 rustrover_version_dir_name="RustRover-2024.1"
 rustrover_downloaded_filepath="$config_rustrover_dir/$rustrover_version_tar_filename"
 rustrover_extracted_dir="$config_rustrover_dir/$rustrover_version_dir_name"
-rustrover_script_filepath="$config_rustrover_dir/$rustrover_version_dir_name/bin/rustrover.sh"
+rustrover_script_filepath="$rustrover_extracted_dir/bin/rustrover.sh"
+rustrover_chrome_sandbox_filepath="$rustrover_extracted_dir/jbr/lib/chrome-sandbox"
 rustrover_installed_filepath="/usr/local/bin/rustrover"
 webstorm_version_tar_filename="WebStorm-2024.1.3.tar.gz"
 webstorm_version_dir_name="WebStorm-241.17011.90"
 webstorm_downloaded_filepath="$config_webstorm_dir/$webstorm_version_tar_filename"
 webstorm_extracted_dir="$config_webstorm_dir/$webstorm_version_dir_name"
-webstorm_script_filepath="$config_webstorm_dir/$webstorm_version_dir_name/bin/webstorm.sh"
+webstorm_script_filepath="$webstorm_extracted_dir/bin/webstorm.sh"
+webstorm_chrome_sandbox_filepath="$webstorm_extracted_dir/jbr/lib/chrome-sandbox"
 webstorm_installed_filepath="/usr/local/bin/webstorm"
 nodejs_version_tar_filename="node-v21.6.1-linux-x64.tar.xz"
 nodejs_dir="$HOME/nodejs"
@@ -101,6 +109,7 @@ nodejs_extracted_dir_path="$config_nodejs_dir/node-v21.6.1-linux-x64"
 nodejs_installed_filepath="/usr/local/lib/nodejs"
 nodejs_installed_version_filepath="$nodejs_installed_filepath/node-v21.6.1-linux-x64"
 nodejs_installed_version_bin_dir="$nodejs_installed_version_filepath/bin"
+ssh_keygen_filepath="$HOME/.ssh/id_ed25519.pub"
 
 color_green='\033[0;32m'
 color_cyan='\033[0;36m'
@@ -124,6 +133,8 @@ pycharm_download_url="https://download.jetbrains.com/python/$pycharm_version_tar
 rustrover_download_url="https://download.jetbrains.com/rustrover/$rustrover_version_tar_filename"
 webstorm_download_url="https://download.jetbrains.com/webstorm/$webstorm_version_tar_filename"
 nodejs_download_url="https://nodejs.org/dist/$nodejs_version_dir_name/$nodejs_version_tar_filename"
+rust_download_url="https://sh.rustup.rs"
+pyenv_download_url="https://pyenv.run"
 
 # shellcheck disable=SC2034
 gemini_model_1="gemini-1.0-pro"
@@ -286,6 +297,12 @@ command_setupdeveloper() {
 
   check_requirements "tar" "wget" "gzip"
 
+  install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh"
+
+  if ! is_file_exist "$ssh_keygen_filepath"; then
+    ssh-keygen -t ed25519
+  fi
+
   if ! is_dir_exist "$datagrip_extracted_dir"; then
     create_dir "$config_datagrip_dir"
     wget -c --timeout=10 --tries=1 -O "$datagrip_downloaded_filepath" "$datagrip_download_url" &
@@ -369,6 +386,9 @@ command_setupdeveloper() {
 
   wait
 
+  curl --proto '=https' --tlsv1.2 -sSf "$rust_download_url" | sh || true
+  curl "$pyenv_download_url" | bash || true
+
   if is_file_exist "$go_downloaded_filepath"; then
     mv "$go_extracted_dir_path" "$go_extracted_dir"
   fi
@@ -377,6 +397,8 @@ command_setupdeveloper() {
     mv "$nodejs_extracted_dir_path" "$nodejs_extracted_dir"
   fi
 
+  sudo chmod 4755 "$datagrip_chrome_sandbox_filepath"
+  sudo chmod 4755 "$datagrip_extracted_dir"
   sudo ln -sf "$datagrip_script_filepath" "$datagrip_installed_filepath" || true
   rm -rf "$datagrip_downloaded_filepath"
   mkdir "$go_dir" > /dev/null 2>&1 || true
@@ -385,16 +407,26 @@ command_setupdeveloper() {
   mkdir "$go_bin_dir" > /dev/null 2>&1 || true
   sudo cp -rf "$go_extracted_dir" "$go_installed_filepath"
   rm -rf "$go_downloaded_filepath"
+  sudo chmod 4755 "$goland_chrome_sandbox_filepath"
+  sudo chmod 4755 "$goland_extracted_dir"
   sudo ln -sf "$goland_script_filepath" "$goland_installed_filepath" || true
   rm -rf "$goland_downloaded_filepath"
+  sudo chmod 4755 "$idea_chrome_sandbox_filepath"
+  sudo chmod 4755 "$idea_extracted_dir"
   sudo ln -sf "$idea_script_filepath" "$idea_installed_filepath" || true
   rm -rf "$idea_downloaded_filepath"
   sudo ln -sf "$postman_script_filepath" "$postman_installed_filepath" || true
   rm -rf "$postman_downloaded_filepath"
+  sudo chmod 4755 "$pycharm_chrome_sandbox_filepath"
+  sudo chmod 4755 "$pycharm_extracted_dir"
   sudo ln -sf "$pycharm_script_filepath" "$pycharm_installed_filepath" || true
   rm -rf "$pycharm_downloaded_filepath"
+  sudo chmod 4755 "$rustrover_chrome_sandbox_filepath"
+  sudo chmod 4755 "$rustrover_extracted_dir"
   sudo ln -sf "$rustrover_script_filepath" "$rustrover_installed_filepath" || true
   rm -rf "$rustrover_downloaded_filepath"
+  sudo chmod 4755 "$webstorm_chrome_sandbox_filepath"
+  sudo chmod 4755 "$webstorm_extracted_dir"
   sudo ln -sf "$webstorm_script_filepath" "$webstorm_installed_filepath" || true
   rm -rf "$webstorm_downloaded_filepath"
   mkdir "$nodejs_dir" > /dev/null 2>&1 || true
@@ -427,6 +459,14 @@ command_setupdeveloper() {
     if ! grep -q "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$bash_profile_filepath"; then
       echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$bash_profile_filepath"
     fi
+
+    if ! grep -q "export PYENV_ROOT=$config_pyenv_dir" "$bash_profile_filepath"; then
+      echo "export PYENV_ROOT=$config_pyenv_dir" >> "$bash_profile_filepath"
+    fi
+
+    if ! grep -q "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" "$bash_profile_filepath"; then
+      echo "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$bash_profile_filepath"
+    fi
   fi
 
   if is_file_exist "$bashrc_filepath"; then
@@ -453,6 +493,14 @@ command_setupdeveloper() {
     if ! grep -q "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$bashrc_filepath"; then
       echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$bashrc_filepath"
     fi
+
+    if ! grep -q "export PYENV_ROOT=$config_pyenv_dir" "$bashrc_filepath"; then
+      echo "export PYENV_ROOT=$config_pyenv_dir" >> "$bashrc_filepath"
+    fi
+
+    if ! grep -q "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" "$bashrc_filepath"; then
+      echo "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$bashrc_filepath"
+    fi
   fi
 
   if is_file_exist "$profile_filepath"; then
@@ -478,6 +526,48 @@ command_setupdeveloper() {
 
     if ! grep -q "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$profile_filepath"; then
       echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$profile_filepath"
+    fi
+
+    if ! grep -q "export PYENV_ROOT=$config_pyenv_dir" "$profile_filepath"; then
+      echo "export PYENV_ROOT=$config_pyenv_dir" >> "$profile_filepath"
+    fi
+
+    if ! grep -q "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" "$profile_filepath"; then
+      echo "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$profile_filepath"
+    fi
+  fi
+
+  if is_file_exist "$zshrc_filepath"; then
+    if ! grep -q "export PATH=\$PATH:$go_installed_bin_dir" "$zshrc_filepath"; then
+      echo "export PATH=\$PATH:$go_installed_bin_dir" >> "$zshrc_filepath"
+    fi
+
+    if ! grep -q "export GOPATH=$go_dir" "$zshrc_filepath"; then
+      echo "export GOPATH=$go_dir" >> "$zshrc_filepath"
+    fi
+
+    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$zshrc_filepath"; then
+      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$zshrc_filepath"
+    fi
+
+    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$zshrc_filepath"; then
+      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$zshrc_filepath"
+    fi
+
+    if ! grep -q "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$zshrc_filepath"; then
+      echo "export PATH=$nodejs_installed_version_bin_dir:\$PATH" >> "$zshrc_filepath"
+    fi
+
+    if ! grep -q "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$zshrc_filepath"; then
+      echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$zshrc_filepath"
+    fi
+
+    if ! grep -q "export PYENV_ROOT=$config_pyenv_dir" "$zshrc_filepath"; then
+      echo "export PYENV_ROOT=$config_pyenv_dir" >> "$zshrc_filepath"
+    fi
+
+    if ! grep -q "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" "$zshrc_filepath"; then
+      echo "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$zshrc_filepath"
     fi
   fi
 
