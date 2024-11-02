@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.3"
+version="v2.6.4"
 pid=$$
 distro=""
 de=""
@@ -323,7 +323,7 @@ command_setupfresharch() {
   install_package "git" "vim" "curl" "htop" "neofetch" "bash" "zsh" "chromium" "make" "xorg-xrandr" "libinput" "xf86-input-libinput" \
   "xorg-server" "xorg-xinput" "polkit" "pulsemixer" "xfce4-terminal" "iwd" "amd-ucode" "intel-ucode" "lm_sensors" "bc" "base-devel" \
   "linux-lts-headers" "pipewire" "pipewire-audio" "pipewire-pulse" "wget" "xsensors" "unzip" "sof-firmware" "alsa-firmware" "pipewire-alsa" \
-  "pipewire-jack" "wireplumber" "pavucontrol" "alsa-card-profiles"
+  "pipewire-jack" "wireplumber" "pavucontrol" "alsa-card-profiles" "openssh"
 
   if ! is_file_exist "$ssh_keygen_filepath"; then
     ssh-keygen -t ed25519
@@ -539,7 +539,7 @@ command_setupdeveloper() {
 
   check_requirements "tar" "wget" "gzip"
 
-  install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "docker" "docker-compose" "make"
+  install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "docker" "docker-compose" "make" "openssh"
 
   if ! is_file_exist "$ssh_keygen_filepath"; then
     ssh-keygen -t ed25519
