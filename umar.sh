@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.7"
+version="v2.6.8"
 pid=$$
 distro=""
 de=""
@@ -384,11 +384,7 @@ command_setupfresharchi3wm() {
     echo "exec i3" >> "$xinitrc_filepath"
   fi
 
-  if ! grep -q "
-if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then
-  exec startx
-fi
-" "$xinitrc_filepath"; then
+  if ! grep -q "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$xinitrc_filepath"; then
     echo "
 if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then
   exec startx
