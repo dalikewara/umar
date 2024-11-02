@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.11"
+version="v2.6.12"
 pid=$$
 distro=""
 de=""
@@ -333,6 +333,7 @@ command_setupfresharch() {
   "xorg-server" "xorg-xinput" "polkit" "pulsemixer" "xfce4-terminal" "iwd" "amd-ucode" "intel-ucode" "lm_sensors" "bc" "base-devel" \
   "linux-lts-headers" "pipewire" "pipewire-audio" "pipewire-pulse" "wget" "xsensors" "unzip" "sof-firmware" "alsa-firmware" "pipewire-alsa" \
   "pipewire-jack" "wireplumber" "pavucontrol" "alsa-card-profiles" "openssh" "sudo" "xorg" "xorg-xinit"
+  printout "Configuring ssh..."
 
   if ! is_file_exist "$ssh_keygen_filepath"; then
     ssh-keygen -t ed25519
@@ -340,6 +341,7 @@ command_setupfresharch() {
     ssh-add "$ssh_keygen_dir"
   fi
 
+  printout "Configuring git..."
   printout_no_enter "Enter your git user.email...  "
 
   _32_git_email=$(read_input)
@@ -350,14 +352,14 @@ command_setupfresharch() {
 
   git config --global user.email "$_32_git_email"
   git config --global user.name "$_32_git_name"
-
+  printout "Configuring others..."
   sudo ln -sf /dev/null /etc/udev/rules.d/80-net-setup-link.rules
-
   sudo sed -i -E 's/GRUB_TIMEOUT=([0-9]+)/GRUB_TIMEOUT=0/g' /etc/default/grub
   sudo grub-mkconfig -o /boot/grub/grub.cfg
   sudo sensors-detect
   sudo sensors
   sudo pwmconfig
+  printout "Done"
 }
 
 command_setupfresharchi3wm() {
@@ -378,19 +380,19 @@ command_setupfresharchi3wm() {
   fi
 
   sudo echo "Configuring..."
-
   install_package "i3" "xorg" "xorg-xinit" "xfce4-terminal" "polybar" "pavucontrol"
-
-  printout "Configuring..."
+  printout "Copying .xinitrc..."
 
   if ! is_file_exist "$xinitrc_filepath"; then
     cp "$xinitrc_system_filepath" "$xinitrc_filepath"
   fi
 
+  printout "Configuring profiles..."
+
   if is_file_exist "$bash_profile_filepath"; then
-    if ! grep -q "if [[ -z \$DISPLAY ]] && [[ \$(tty) = /dev/tty1 ]]; then" "$bash_profile_filepath"; then
+    if ! grep -q "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$bash_profile_filepath"; then
       echo "
-if [[ -z \$DISPLAY ]] && [[ \$(tty) = /dev/tty1 ]]; then
+if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then
   exec startx
 fi
 " >> "$bash_profile_filepath"
@@ -398,9 +400,9 @@ fi
   fi
 
   if is_file_exist "$profile_filepath"; then
-    if ! grep -q "if [[ -z \$DISPLAY ]] && [[ \$(tty) = /dev/tty1 ]]; then" "$profile_filepath"; then
+    if ! grep -q "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$profile_filepath"; then
       echo "
-if [[ -z \$DISPLAY ]] && [[ \$(tty) = /dev/tty1 ]]; then
+if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then
   exec startx
 fi
 " >> "$profile_filepath"
@@ -408,9 +410,9 @@ fi
   fi
 
   if is_file_exist "$zprofile_filepath"; then
-    if ! grep -q "if [[ -z \$DISPLAY ]] && [[ \$(tty) = /dev/tty1 ]]; then" "$zprofile_filepath"; then
+    if ! grep -q "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$zprofile_filepath"; then
       echo "
-if [[ -z \$DISPLAY ]] && [[ \$(tty) = /dev/tty1 ]]; then
+if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then
   exec startx
 fi
 " >> "$zprofile_filepath"
@@ -423,6 +425,7 @@ fi
     fi
   fi
 
+  printout "Configuring i3wm..."
   create_dir "$config_config_dir"
   create_dir "$config_i3wm_dir"
   create_dir "$config_i3status_dir"
@@ -440,7 +443,7 @@ fi
     cp "$config_polybar_system_filepath" "$config_polybar_filepath"
   fi
 
-   if ! is_file_exist "$config_polybarlaunch_filepath"; then
+  if ! is_file_exist "$config_polybarlaunch_filepath"; then
     create_file "$config_polybarlaunch_filepath"
     echo "
 #!/usr/bin/env bash
@@ -515,6 +518,7 @@ label-low = %percentage%%
 " >> "$config_polybar_filepath"
   fi
 
+  printout "Configuring xfce4-terminal..."
   create_dir "$config_xfce4_dir"
   create_dir "$config_xfce4_xfconf_dir"
   create_dir "$config_xfce4_xfconf_xfce_perchannel_xml_dir"
@@ -550,6 +554,8 @@ xfconf-query -c xfce4-terminal -p /misc-show-unsafe-paste-dialog -n -t bool -s f
 xfconf-query -c xfce4-terminal -p /misc-confirm-close -n -t bool -s false
 " > "$config_xfce4launch_filepath"
 
+  printout "Configuring .xinitrc..."
+
   if ! grep -q "$config_xfce4launch_filepath &" "$xinitrc_filepath"; then
     echo "$config_xfce4launch_filepath &" >> "$xinitrc_filepath"
   fi
@@ -557,6 +563,8 @@ xfconf-query -c xfce4-terminal -p /misc-confirm-close -n -t bool -s false
   if ! grep -q "exec i3" "$xinitrc_filepath"; then
     echo "exec i3" >> "$xinitrc_filepath"
   fi
+
+  printout "Done"
 }
 
 command_setupdeveloper() {
@@ -573,16 +581,17 @@ command_setupdeveloper() {
   fi
 
   sudo echo "Configuring..."
-
   check_requirements "tar" "wget" "gzip"
-
   install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "docker" "docker-compose" "make" "openssh"
+  printout "Configuring ssh..."
 
   if ! is_file_exist "$ssh_keygen_filepath"; then
     ssh-keygen -t ed25519
     eval "$(ssh-agent -s)"
     ssh-add "$ssh_keygen_dir"
   fi
+
+  printout "Downloading tools..."
 
   if ! is_dir_exist "$datagrip_extracted_dir"; then
     create_dir "$config_datagrip_dir"
@@ -629,6 +638,8 @@ command_setupdeveloper() {
 
   wait
 
+  printout "Extracting tools..."
+
   if is_file_exist "$datagrip_downloaded_filepath"; then
     tar -v -C "$config_datagrip_dir" -xzf "$datagrip_downloaded_filepath" &
   fi
@@ -667,6 +678,7 @@ command_setupdeveloper() {
 
   wait
 
+  printout "Configuring tools..."
   curl --proto '=https' --tlsv1.2 -sSf "$rust_download_url" | sh || true
   curl "$pyenv_download_url" | bash || true
 
@@ -715,6 +727,7 @@ command_setupdeveloper() {
   sudo mkdir -p "$nodejs_installed_filepath"
   sudo cp -rf "$nodejs_extracted_dir" "$nodejs_installed_version_filepath"
   rm -rf "$nodejs_downloaded_filepath"
+  printout "Configuring profiles..."
 
   if is_file_exist "$bash_profile_filepath"; then
     if ! grep -q "export PATH=\$PATH:$go_installed_bin_dir" "$bash_profile_filepath"; then
@@ -891,6 +904,7 @@ command_setupdeveloper() {
   fi
 
   npm config set prefix "$nodejs_npm_global_dir" > /dev/null 2>&1 || true
+  printout "Done"
 }
 
 command_macbookfan() {
