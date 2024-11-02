@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.9"
+version="v2.6.10"
 pid=$$
 distro=""
 de=""
@@ -322,6 +322,12 @@ command_setupfresharch() {
 
   sudo echo "Configuring..."
 
+  if is_file_exist "$bashrc_filepath"; then
+    if ! grep -q "[[ \$- != *i* ]] && return" "$bashrc_filepath"; then
+      echo "[[ \$- != *i* ]] && return" >> "$bashrc_filepath"
+    fi
+  fi
+
   install_package "git" "vim" "curl" "htop" "neofetch" "bash" "zsh" "chromium" "make" "xorg-xrandr" "libinput" "xf86-input-libinput" \
   "xorg-server" "xorg-xinput" "polkit" "pulsemixer" "xfce4-terminal" "iwd" "amd-ucode" "intel-ucode" "lm_sensors" "bc" "base-devel" \
   "linux-lts-headers" "pipewire" "pipewire-audio" "pipewire-pulse" "wget" "xsensors" "unzip" "sof-firmware" "alsa-firmware" "pipewire-alsa" \
@@ -380,14 +386,10 @@ command_setupfresharchi3wm() {
     cp "$xinitrc_system_filepath" "$xinitrc_filepath"
   fi
 
-  if ! grep -q "exec i3" "$xinitrc_filepath"; then
-    echo "exec i3" >> "$xinitrc_filepath"
-  fi
-
   if is_file_exist "$bash_profile_filepath"; then
-    if ! grep -q "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$bash_profile_filepath"; then
+    if ! grep -q "if [[ -z \$DISPLAY ]] && [[ \$(tty) = /dev/tty1 ]]; then" "$bash_profile_filepath"; then
       echo "
-if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then
+if [[ -z \$DISPLAY ]] && [[ \$(tty) = /dev/tty1 ]]; then
   exec startx
 fi
 " >> "$bash_profile_filepath"
@@ -395,12 +397,18 @@ fi
   fi
 
   if is_file_exist "$profile_filepath"; then
-    if ! grep -q "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$profile_filepath"; then
-        echo "
-if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then
+    if ! grep -q "if [[ -z \$DISPLAY ]] && [[ \$(tty) = /dev/tty1 ]]; then" "$profile_filepath"; then
+      echo "
+if [[ -z \$DISPLAY ]] && [[ \$(tty) = /dev/tty1 ]]; then
   exec startx
 fi
 " >> "$profile_filepath"
+    fi
+  fi
+
+  if is_file_exist "$bashrc_filepath"; then
+    if ! grep -q "[[ \$- != *i* ]] && return" "$bashrc_filepath"; then
+      echo "[[ \$- != *i* ]] && return" >> "$bashrc_filepath"
     fi
   fi
 
@@ -533,6 +541,10 @@ xfconf-query -c xfce4-terminal -p /misc-confirm-close -n -t bool -s false
 
   if ! grep -q "exec $config_xfce4launch_filepath" "$xinitrc_filepath"; then
     echo "exec $config_xfce4launch_filepath" >> "$xinitrc_filepath"
+  fi
+
+  if ! grep -q "exec i3" "$xinitrc_filepath"; then
+    echo "exec i3" >> "$xinitrc_filepath"
   fi
 }
 
@@ -728,6 +740,10 @@ command_setupdeveloper() {
   fi
 
   if is_file_exist "$bashrc_filepath"; then
+    if ! grep -q "[[ \$- != *i* ]] && return" "$bashrc_filepath"; then
+      echo "[[ \$- != *i* ]] && return" >> "$bashrc_filepath"
+    fi
+
     if ! grep -q "export PATH=\$PATH:$go_installed_bin_dir" "$bashrc_filepath"; then
       echo "export PATH=\$PATH:$go_installed_bin_dir" >> "$bashrc_filepath"
     fi
