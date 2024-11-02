@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.10"
+version="v2.6.11"
 pid=$$
 distro=""
 de=""
@@ -48,6 +48,7 @@ bash_profile_filepath="$HOME/.bash_profile"
 bashrc_filepath="$HOME/.bashrc"
 profile_filepath="$HOME/.profile"
 zshrc_filepath="$HOME/.zshrc"
+zprofile_filepath="$HOME/.zprofile"
 xinitrc_filepath="$HOME/.xinitrc"
 xinitrc_system_filepath="/etc/X11/xinit/xinitrc"
 user_package_dir="/usr/local/bin"
@@ -406,6 +407,16 @@ fi
     fi
   fi
 
+  if is_file_exist "$zprofile_filepath"; then
+    if ! grep -q "if [[ -z \$DISPLAY ]] && [[ \$(tty) = /dev/tty1 ]]; then" "$zprofile_filepath"; then
+      echo "
+if [[ -z \$DISPLAY ]] && [[ \$(tty) = /dev/tty1 ]]; then
+  exec startx
+fi
+" >> "$zprofile_filepath"
+    fi
+  fi
+
   if is_file_exist "$bashrc_filepath"; then
     if ! grep -q "[[ \$- != *i* ]] && return" "$bashrc_filepath"; then
       echo "[[ \$- != *i* ]] && return" >> "$bashrc_filepath"
@@ -539,8 +550,8 @@ xfconf-query -c xfce4-terminal -p /misc-show-unsafe-paste-dialog -n -t bool -s f
 xfconf-query -c xfce4-terminal -p /misc-confirm-close -n -t bool -s false
 " > "$config_xfce4launch_filepath"
 
-  if ! grep -q "exec $config_xfce4launch_filepath" "$xinitrc_filepath"; then
-    echo "exec $config_xfce4launch_filepath" >> "$xinitrc_filepath"
+  if ! grep -q "$config_xfce4launch_filepath &" "$xinitrc_filepath"; then
+    echo "$config_xfce4launch_filepath &" >> "$xinitrc_filepath"
   fi
 
   if ! grep -q "exec i3" "$xinitrc_filepath"; then
@@ -842,6 +853,40 @@ command_setupdeveloper() {
 
     if ! grep -q "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" "$zshrc_filepath"; then
       echo "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$zshrc_filepath"
+    fi
+  fi
+
+  if is_file_exist "$zprofile_filepath"; then
+    if ! grep -q "export PATH=\$PATH:$go_installed_bin_dir" "$zprofile_filepath"; then
+      echo "export PATH=\$PATH:$go_installed_bin_dir" >> "$zprofile_filepath"
+    fi
+
+    if ! grep -q "export GOPATH=$go_dir" "$zprofile_filepath"; then
+      echo "export GOPATH=$go_dir" >> "$zprofile_filepath"
+    fi
+
+    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$zprofile_filepath"; then
+      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$zprofile_filepath"
+    fi
+
+    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$zprofile_filepath"; then
+      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$zprofile_filepath"
+    fi
+
+    if ! grep -q "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$zprofile_filepath"; then
+      echo "export PATH=$nodejs_installed_version_bin_dir:\$PATH" >> "$zprofile_filepath"
+    fi
+
+    if ! grep -q "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$zprofile_filepath"; then
+      echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$zprofile_filepath"
+    fi
+
+    if ! grep -q "export PYENV_ROOT=$config_pyenv_dir" "$zprofile_filepath"; then
+      echo "export PYENV_ROOT=$config_pyenv_dir" >> "$zprofile_filepath"
+    fi
+
+    if ! grep -q "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" "$zprofile_filepath"; then
+      echo "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$zprofile_filepath"
     fi
   fi
 
