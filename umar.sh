@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.5"
+version="v2.6.6"
 pid=$$
 distro=""
 de=""
@@ -320,6 +320,8 @@ command_setupfresharch() {
     printout_exit "Aborted!"
   fi
 
+  sudo echo "Configuring..."
+
   install_package "git" "vim" "curl" "htop" "neofetch" "bash" "zsh" "chromium" "make" "xorg-xrandr" "libinput" "xf86-input-libinput" \
   "xorg-server" "xorg-xinput" "polkit" "pulsemixer" "xfce4-terminal" "iwd" "amd-ucode" "intel-ucode" "lm_sensors" "bc" "base-devel" \
   "linux-lts-headers" "pipewire" "pipewire-audio" "pipewire-pulse" "wget" "xsensors" "unzip" "sof-firmware" "alsa-firmware" "pipewire-alsa" \
@@ -367,6 +369,8 @@ command_setupfresharchi3wm() {
   if ! is_equal "$_31_confirmation" "y"; then
     printout_exit "Aborted!"
   fi
+
+  sudo echo "Configuring..."
 
   install_package "i3" "xorg" "xorg-xinit" "xfce4-terminal" "polybar" "pavucontrol"
 
@@ -536,6 +540,8 @@ command_setupdeveloper() {
   if ! is_equal "$_30_confirmation" "y"; then
     printout_exit "Aborted!"
   fi
+
+  sudo echo "Configuring..."
 
   check_requirements "tar" "wget" "gzip"
 
