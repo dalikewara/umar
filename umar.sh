@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# LAST COUNTER FOR FUNCTION VARIABLE = 30
+# LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.5.10"
+version="v2.6.0"
 pid=$$
 distro=""
 de=""
@@ -28,10 +28,28 @@ config_rustrover_dir="$config_dir/rustrover"
 config_webstorm_dir="$config_dir/webstorm"
 config_nodejs_dir="$config_dir/nodejs"
 config_pyenv_dir="$HOME/.pyenv"
+config_config_dir="$HOME/.config"
+config_i3wm_dir="$config_config_dir/i3"
+config_i3wm_filepath="$config_i3wm_dir/config"
+config_i3wm_system_filepath="/etc/i3/config"
+config_i3status_dir="$config_config_dir/i3status"
+config_i3status_filepath="$config_i3status_dir/config"
+config_i3status_system_filepath="/etc/i3status.conf"
+config_polybar_dir="$config_config_dir/polybar"
+config_polybar_filepath="$config_polybar_dir/config.ini"
+config_polybar_system_filepath="/etc/polybar/config.ini"
+config_polybarlaunch_filepath="$config_polybar_dir/launch.sh"
+config_xfce4_dir="$config_config_dir/xfce4"
+config_xfce4_xfconf_dir="$config_xfce4_dir/xfconf"
+config_xfce4_xfconf_xfce_perchannel_xml_dir="$config_xfce4_dir/xfce-perchannel-xml"
+config_xfce4_filepath="$config_xfce4_xfconf_xfce_perchannel_xml_dir/xfce4-terminal.xml"
+config_xfce4launch_filepath="$config_xfce4_xfconf_xfce_perchannel_xml_dir/xfce4-terminal-launch.sh"
 bash_profile_filepath="$HOME/.bash_profile"
 bashrc_filepath="$HOME/.bashrc"
 profile_filepath="$HOME/.profile"
 zshrc_filepath="$HOME/.zshrc"
+xinitrc_filepath="$HOME/.xinitrc"
+xinitrc_system_filepath="/etc/X11/xinit/xinitrc"
 user_package_dir="/usr/local/bin"
 install_dir="/usr/local/bin"
 script_name="umar.sh"
@@ -109,6 +127,7 @@ nodejs_extracted_dir_path="$config_nodejs_dir/node-v21.6.1-linux-x64"
 nodejs_installed_filepath="/usr/local/lib/nodejs"
 nodejs_installed_version_filepath="$nodejs_installed_filepath/node-v21.6.1-linux-x64"
 nodejs_installed_version_bin_dir="$nodejs_installed_version_filepath/bin"
+ssh_keygen_dir="$HOME/.ssh/id_ed25519"
 ssh_keygen_filepath="$HOME/.ssh/id_ed25519.pub"
 
 color_green='\033[0;32m'
@@ -256,6 +275,8 @@ testhttp:Test and benchmark HTTP URL -> \`${color_cyan}**-c** ${color_blue}**NUM
 ${color_blue}**SECONDS** ${color_cyan}**-header** ${color_blue}**TEXT** ${color_cyan}**-userAgent** ${color_blue}**TEXT** ${color_cyan}**-contentType** \
 ${color_blue}**TEXT** ${color_cyan}**-u** ${color_blue}**URL**${color_reset}\`
 --------------:--------------------------
+setupfresharch:Set up a fresh Arch Linux installation
+setupfresharchi3wm:Install and set up i3-wm on a fresh Arch Linux installation
 setupdeveloper:Install some developer tools
 --------------:--------------------------
 macbookaudio:Configure audio for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
@@ -282,8 +303,228 @@ macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Tested on MBP 2017*
 #
 # ---------------------------------------------------------------------------------------------------------------------
 
+command_setupfresharch() {
+  if ! is_arch; then
+    printout_exit "You're not using Arch Linux!"
+  fi
+
+  printout_markdown "${color_yellow}**THIS WILL SET UP A FRESH ARCH LINUX INSTALLATION. ${color_red}WARNING!!! THIS WILL REPLACE YOUR EXISTING CONFIGURATION!!! DON'T DO THIS IF YOU'RE NOT AWARE!!!**${color_reset}"
+
+  printout_blank_line
+
+  printout_no_enter "Are you sure to continue this process [N/y] "
+
+  _32_confirmation=$(read_input)
+
+  if ! is_equal "$_32_confirmation" "y"; then
+    printout_exit "Aborted!"
+  fi
+
+  install_package "git" "vim" "curl" "htop" "neofetch" "bash" "zsh" "chromium" "make" "xorg-xrandr" "libinput" "xf86-input-libinput" \
+  "xorg-server" "xorg-xinput" "polkit" "pulsemixer" "xfce4-terminal" "iwd" "amd-ucode" "intel-ucode" "lm_sensors" "bc" "base-devel" \
+  "linux-lts-headers" "pipewire" "pipewire-pulse" "wget" "xsensors" "unzip"
+
+  if ! is_file_exist "$ssh_keygen_filepath"; then
+    ssh-keygen -t ed25519
+    eval "$(ssh-agent -s)"
+    ssh-add "$ssh_keygen_dir"
+  fi
+
+  printout_no_enter "Enter your git user.email...  "
+
+  _32_git_email=$(read_input)
+
+  printout_no_enter "Enter your git user.name...  "
+
+  _32_git_name=$(read_input)
+
+  git config --global user.email "$_32_git_email"
+  git config --global user.name "$_32_git_name"
+
+  sudo ln -sf /dev/null /etc/udev/rules.d/80-net-setup-link.rules
+
+  sudo sed -i -E 's/GRUB_TIMEOUT=([0-9]+)/GRUB_TIMEOUT=0/g' /etc/default/grub
+  sudo grub-mkconfig -o /boot/grub/grub.cfg
+  sudo sensors-detect
+  sudo sensors
+  sudo pwmconfig
+}
+
+command_setupfresharchi3wm() {
+  if ! is_arch; then
+    printout_exit "You're not using Arch Linux!"
+  fi
+
+  printout_markdown "${color_yellow}**THIS WILL INSTALL & SET UP I3WM ON A FRESH ARCH LINUX INSTALLATION. ${color_red}WARNING!!! THIS WILL REPLACE YOUR EXISTING WINDOW MANAGER OR DESKTOP ENVIRONMENT!!! DON'T DO THIS IF YOU'RE NOT AWARE!!!**${color_reset}"
+
+  printout_blank_line
+
+  printout_no_enter "Are you sure to continue this process [N/y] "
+
+  _31_confirmation=$(read_input)
+
+  if ! is_equal "$_31_confirmation" "y"; then
+    printout_exit "Aborted!"
+  fi
+
+  install_package "i3" "xorg" "xorg-xinit" "xfce4-terminal" "polybar" "pavucontrol"
+
+  printout "Configuring..."
+
+  if ! is_file_exist "$xinitrc_filepath"; then
+    cp "$xinitrc_system_filepath" "$xinitrc_filepath"
+  fi
+
+  if ! grep -q "exec i3" "$xinitrc_filepath"; then
+    echo "exec i3" >> "$xinitrc_filepath"
+  fi
+
+  if ! grep -q "
+if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then
+  exec startx
+fi
+" "$xinitrc_filepath"; then
+    echo "
+if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then
+  exec startx
+fi
+" >> "$xinitrc_filepath"
+  fi
+
+  create_dir "$config_config_dir"
+  create_dir "$config_i3wm_dir"
+  create_dir "$config_i3status_dir"
+  create_dir "$config_polybar_dir"
+
+  if ! is_file_exist "$config_i3wm_filepath"; then
+    cp "$config_i3wm_system_filepath" "$config_i3wm_filepath"
+  fi
+
+  if ! is_file_exist "$config_i3status_filepath"; then
+    cp "$config_i3status_system_filepath" "$config_i3status_filepath"
+  fi
+
+  if ! is_file_exist "$config_polybar_filepath"; then
+    cp "$config_polybar_system_filepath" "$config_polybar_filepath"
+  fi
+
+   if ! is_file_exist "$config_polybarlaunch_filepath"; then
+    create_file "$config_polybarlaunch_filepath"
+    echo "
+#!/usr/bin/env bash
+
+killall -q polybar
+echo \"---\" | tee -a /tmp/polybar1.log
+polybar bar 2>&1 | tee -a /tmp/polybar1.log & disown
+" > "$config_polybarlaunch_filepath"
+    chmod +x "$config_polybarlaunch_filepath"
+  fi
+
+  sed -i '/^bar {$/,/^}/s/^/#/' "$config_i3wm_filepath"
+
+  if ! grep -q "bindsym \$mod+Return exec xfce4-terminal" "$config_i3wm_filepath"; then
+    echo "bindsym \$mod+Return exec xfce4-terminal" >> "$config_i3wm_filepath"
+  fi
+
+  if ! grep -q "default_border pixel 0px" "$config_i3wm_filepath"; then
+    echo "default_border pixel 0px" >> "$config_i3wm_filepath"
+  fi
+
+  if ! grep -q "gaps inner 0px" "$config_i3wm_filepath"; then
+    echo "gaps inner 0px" >> "$config_i3wm_filepath"
+  fi
+
+  if ! grep -q "gaps outer 0px" "$config_i3wm_filepath"; then
+    echo "gaps outer 0px" >> "$config_i3wm_filepath"
+  fi
+
+  if ! grep -q "exec_always --no-startup-id $config_polybarlaunch_filepath" "$config_i3wm_filepath"; then
+    echo "exec_always --no-startup-id $config_polybarlaunch_filepath" >> "$config_i3wm_filepath"
+  fi
+
+  sed -i 's/background = #282A2E/background = #000000/' "$config_polybar_filepath"
+  sed -i 's/background-alt = #373B41/background-alt = #000000/' "$config_polybar_filepath"
+  sed -i 's/[bar\/example]/[bar\/bar]/' "$config_polybar_filepath"
+  sed -i 's/height = 24pt/height = 18pt/' "$config_polybar_filepath"
+  sed -i 's/radius = 6/radius = 0/' "$config_polybar_filepath"
+  sed -i 's/line-size = 3pt/line-size = 1pt/' "$config_polybar_filepath"
+  sed -i 's/modules-right = filesystem pulseaudio xkeyboard memory cpu wlan eth date/modules-right = filesystem pulseaudio xkeyboard memory cpu battery wlan eth date/' "$config_polybar_filepath"
+  sed -i 's/label = %title:0:60:...%/label = %title:0:40:...%\nlabel-maxlen = 40/' "$config_polybar_filepath"
+  sed -i 's/format-volume-prefix = "VOL "/format-volume-prefix = "AV"/' "$config_polybar_filepath"
+  sed -i 's/format-prefix = "RAM "/format-prefix = "R"/' "$config_polybar_filepath"
+  sed -i 's/format-prefix = "CPU "/format-prefix = "C"/' "$config_polybar_filepath"
+  sed -i 's/label-connected = %{F#F0C674}%ifname%%{F-} %essid% %local_ip%/label-connected = %{F#F0C674}%ifname%%{F-} %essid:0:10:...% %local_ip%\nlabel-maxlen = 40/' "$config_polybar_filepath"
+  sed -i 's/label-connected = %{F#F0C674}%ifname%%{F-} %local_ip%/label-connected = %{F#F0C674}%ifname%%{F-} %local_ip%\nlabel-maxlen = 40/' "$config_polybar_filepath"
+  sed -i 's/date = %H:%M/date = %Y-%m-%d %H:%M:%S/' "$config_polybar_filepath"
+
+  if ! grep -q "[module/battery]" "$config_polybar_filepath"; then
+    echo "
+[module/battery]
+type = internal/battery
+;format_prefix = \"B\"
+full-at = 99
+low-at = 5
+battery = BAT0
+adapter = ADP1
+poll-interval = 5
+time-format = \"%H:%M\"
+format-charging-prefix = \"BC\"
+format-charging-prefix-foreground = \${colors.primary}
+format-discharging-prefix = \"BD\"
+format-discharging-prefix-foreground = \${colors.primary}
+format-full = \"B_FULL\"
+format-full-foreground = \${colors.primary}
+format-low-prefix = \"BL\"
+format-low-prefix-foreground = \${colors.primary}
+label-charging = %percentage%%
+label-discharging = %percentage%%
+label-full = %percentage%%
+label-low = %percentage%%
+" >> "$config_polybar_filepath"
+  fi
+
+  create_dir "$config_xfce4_dir"
+  create_dir "$config_xfce4_xfconf_dir"
+  create_dir "$config_xfce4_xfconf_xfce_perchannel_xml_dir"
+
+  if ! is_file_exist "$config_xfce4_filepath"; then
+    create_file "$config_xfce4_filepath"
+  fi
+
+  if ! is_file_exist "$config_xfce4launch_filepath"; then
+    create_file "$config_xfce4launch_filepath"
+    chmod +x "$config_xfce4launch_filepath"
+  fi
+
+  echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+
+<channel name=\"xfce4-terminal\" version=\"1.0\">
+  <property name=\"font-use-system\" type=\"bool\" value=\"false\"/>
+  <property name=\"font-allow-bold\" type=\"bool\" value=\"true\"/>
+  <property name=\"misc-copy-on-select\" type=\"bool\" value=\"false\"/>
+  <property name=\"misc-menubar-default\" type=\"bool\" value=\"false\"/>
+  <property name=\"misc-borders-default\" type=\"bool\" value=\"true\"/>
+  <property name=\"misc-slim-tabs\" type=\"bool\" value=\"false\"/>
+  <property name=\"scrolling-bar\" type=\"string\" value=\"TERMINAL_SCROLLBAR_NONE\"/>
+  <property name=\"cell-width-scale\" type=\"double\" value=\"1\"/>
+  <property name=\"cell-height-scale\" type=\"double\" value=\"1\"/>
+  <property name=\"misc-cursor-blinks\" type=\"bool\" value=\"true\"/>
+  <property name=\"misc-cursor-shape\" type=\"string\" value=\"TERMINAL_CURSOR_SHAPE_IBEAM\"/>
+</channel>
+" > "$config_xfce4_filepath"
+
+  echo "#!/bin/sh
+xfconf-query -c xfce4-terminal -p /misc-show-unsafe-paste-dialog -n -t bool -s false
+xfconf-query -c xfce4-terminal -p /misc-confirm-close -n -t bool -s false
+" > "$config_xfce4launch_filepath"
+
+  if ! grep -q "exec $config_xfce4launch_filepath" "$xinitrc_filepath"; then
+    echo "exec $config_xfce4launch_filepath" >> "$xinitrc_filepath"
+  fi
+}
+
 command_setupdeveloper() {
-  printout_markdown "${color_yellow}**THIS WILL INSTALL SOME DEVELOPER TOOLS. WARNING!!! THIS WILL REPLACE YOUR EXISTING PACKAGES**${color_reset}"
+  printout_markdown "${color_yellow}**THIS WILL INSTALL DEVELOPER TOOLS. ${color_red}WARNING!!! THIS WILL REPLACE YOUR EXISTING PACKAGES!!! DON'T DO THIS IF YOU'RE NOT AWARE!!!**${color_reset}"
 
   printout_blank_line
 
@@ -297,10 +538,12 @@ command_setupdeveloper() {
 
   check_requirements "tar" "wget" "gzip"
 
-  install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh"
+  install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "docker" "docker-compose" "make"
 
   if ! is_file_exist "$ssh_keygen_filepath"; then
     ssh-keygen -t ed25519
+    eval "$(ssh-agent -s)"
+    ssh-add "$ssh_keygen_dir"
   fi
 
   if ! is_dir_exist "$datagrip_extracted_dir"; then

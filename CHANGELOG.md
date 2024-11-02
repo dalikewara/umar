@@ -2,7 +2,11 @@
 
 ## 2024
 
-- **v2.5.10** (2024-09-25)
+- **v2.6.0** (2024-10-02)
+  - Fix some issues
+  - Add `setupfresharch`, `setupfresharchi3wm` command
+
+- **v2.5.10** (2024-10-01)
   - Fix some issues
   - Add some tools on `setupdeveloper` command
 
