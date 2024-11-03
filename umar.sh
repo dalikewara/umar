@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.13"
+version="v2.6.14"
 pid=$$
 distro=""
 de=""
@@ -448,14 +448,21 @@ fi
     echo "
 #!/usr/bin/env bash
 
-killall -q polybar
-echo \"---\" | tee -a /tmp/polybar1.log
-polybar bar 2>&1 | tee -a /tmp/polybar1.log & disown
+killall -q polybar || true
+echo \"---\" | tee -a /tmp/polybar1.log || true
+polybar bar 2>&1 | tee -a /tmp/polybar1.log & disown || true
 " > "$config_polybarlaunch_filepath"
     chmod +x "$config_polybarlaunch_filepath"
   fi
 
-  sed -i '/^bar {$/,/^}/s/^/#/' "$config_i3wm_filepath"
+  if ! grep -qF "set \$mod Mod" "$config_i3wm_filepath"; then
+    # shellcheck disable=SC2016
+    sed -i '1s/^/set \$mod Mod4\n/' "$config_i3wm_filepath"
+  fi
+
+  # shellcheck disable=SC2016
+  sed -i 's/set \$mod Mod1/set \$mod Mod4/g' "$config_i3wm_filepath"
+  sed -i '/^bar {$/,/^}/s/^/#/g' "$config_i3wm_filepath"
 
   if ! grep -qF "bindsym \$mod+Return exec xfce4-terminal" "$config_i3wm_filepath"; then
     echo "bindsym \$mod+Return exec xfce4-terminal" >> "$config_i3wm_filepath"
@@ -477,20 +484,20 @@ polybar bar 2>&1 | tee -a /tmp/polybar1.log & disown
     echo "exec_always --no-startup-id $config_polybarlaunch_filepath" >> "$config_i3wm_filepath"
   fi
 
-  sed -i 's/background = #282A2E/background = #000000/' "$config_polybar_filepath"
-  sed -i 's/background-alt = #373B41/background-alt = #000000/' "$config_polybar_filepath"
-  sed -i 's/[bar\/example]/[bar\/bar]/' "$config_polybar_filepath"
-  sed -i 's/height = 24pt/height = 18pt/' "$config_polybar_filepath"
-  sed -i 's/radius = 6/radius = 0/' "$config_polybar_filepath"
-  sed -i 's/line-size = 3pt/line-size = 1pt/' "$config_polybar_filepath"
-  sed -i 's/modules-right = filesystem pulseaudio xkeyboard memory cpu wlan eth date/modules-right = filesystem pulseaudio xkeyboard memory cpu battery wlan eth date/' "$config_polybar_filepath"
-  sed -i 's/label = %title:0:60:...%/label = %title:0:40:...%\nlabel-maxlen = 40/' "$config_polybar_filepath"
-  sed -i 's/format-volume-prefix = "VOL "/format-volume-prefix = "AV"/' "$config_polybar_filepath"
-  sed -i 's/format-prefix = "RAM "/format-prefix = "R"/' "$config_polybar_filepath"
-  sed -i 's/format-prefix = "CPU "/format-prefix = "C"/' "$config_polybar_filepath"
-  sed -i 's/label-connected = %{F#F0C674}%ifname%%{F-} %essid% %local_ip%/label-connected = %{F#F0C674}%ifname%%{F-} %essid:0:10:...% %local_ip%\nlabel-maxlen = 40/' "$config_polybar_filepath"
-  sed -i 's/label-connected = %{F#F0C674}%ifname%%{F-} %local_ip%/label-connected = %{F#F0C674}%ifname%%{F-} %local_ip%\nlabel-maxlen = 40/' "$config_polybar_filepath"
-  sed -i 's/date = %H:%M/date = %Y-%m-%d %H:%M:%S/' "$config_polybar_filepath"
+  sed -i 's/background \= \#282A2E/background \= \#000000/g' "$config_polybar_filepath"
+  sed -i 's/background\-alt \= \#373B41/background\-alt \= \#000000/g' "$config_polybar_filepath"
+  sed -i 's/\[bar\/example\]/\[bar\/bar\]/g' "$config_polybar_filepath"
+  sed -i 's/height \= 24pt/height \= 18pt/g' "$config_polybar_filepath"
+  sed -i 's/radius \= 6/radius \= 0/g' "$config_polybar_filepath"
+  sed -i 's/line\-size \= 3pt/line\-size \= 1pt/g' "$config_polybar_filepath"
+  sed -i 's/modules\-right \= filesystem pulseaudio xkeyboard memory cpu wlan eth date/modules\-right \= filesystem pulseaudio xkeyboard memory cpu battery wlan eth date/g' "$config_polybar_filepath"
+  sed -i 's/label \= \%title\:0\:60\:\.\.\.\%/label \= \%title\:0\:40\:\.\.\.\%\nlabel\-maxlen \= 40/g' "$config_polybar_filepath"
+  sed -i 's/format\-volume\-prefix \= \"VOL \"/format\-volume\-prefix \= \"AV\"/g' "$config_polybar_filepath"
+  sed -i 's/format\-prefix \= \"RAM \"/format\-prefix \= \"R\"/g' "$config_polybar_filepath"
+  sed -i 's/format\-prefix \= \"CPU \"/format\-prefix \= \"C\"/g' "$config_polybar_filepath"
+  sed -i 's/label\-connected \= \%\{F\#F0C674\}\%ifname\%\%\{F\-\} \%essid\% \%local_ip\%/label\-connected \= \%\{F\#F0C674\}\%ifname\%\%\{F\-\} \%essid\:0\:10\:\.\.\.\% \%local_ip\%\nlabel\-maxlen \= 40/g' "$config_polybar_filepath"
+  sed -i 's/label\-connected \= \%\{F\#F0C674\}\%ifname\%\%\{F\-\} \%local_ip\%/label\-connected \= \%\{F\#F0C674\}\%ifname\%\%\{F\-\} \%local_ip\%\nlabel\-maxlen \= 40/g' "$config_polybar_filepath"
+  sed -i 's/date \= \%H\:\%M/date \= \%Y\-\%m\-\%d \%H\:\%M\:\%S/g' "$config_polybar_filepath"
 
   if ! grep -qF "[module/battery]" "$config_polybar_filepath"; then
     echo "
@@ -550,11 +557,17 @@ label-low = %percentage%%
 " > "$config_xfce4_filepath"
 
   echo "#!/bin/sh
-xfconf-query -c xfce4-terminal -p /misc-show-unsafe-paste-dialog -n -t bool -s false
-xfconf-query -c xfce4-terminal -p /misc-confirm-close -n -t bool -s false
+
+killall xfconfd || true
+xfconf-query -c xfce4-terminal -p /misc-show-unsafe-paste-dialog -n -t bool -s false || true
+xfconf-query -c xfce4-terminal -p /misc-confirm-close -n -t bool -s false || true
 " > "$config_xfce4launch_filepath"
 
   printout "Configuring .xinitrc..."
+  sed -i 's/twm \&/\#twm \&/g' "$xinitrc_filepath"
+  sed -i 's/xclock/\#xclock/g' "$xinitrc_filepath"
+  sed -i 's/exec xterm/\#exec xterm/g' "$xinitrc_filepath"
+  sed -i 's/xterm/\#xterm/g' "$xinitrc_filepath"
 
   if ! grep -qF "$config_xfce4launch_filepath &" "$xinitrc_filepath"; then
     echo "$config_xfce4launch_filepath &" >> "$xinitrc_filepath"
@@ -1842,7 +1855,7 @@ is_empty() {
 }
 
 is_contain() {
-  printout "$1" | grep -q "$2"
+  printout "$1" | grep -qF "$2"
 }
 
 is_start_with() {
