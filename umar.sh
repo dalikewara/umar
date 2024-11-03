@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.7.0"
+version="v2.7.1"
 pid=$$
 distro=""
 de=""
@@ -44,6 +44,7 @@ config_xfce4_xfconf_dir="$config_xfce4_dir/xfconf"
 config_xfce4_xfconf_xfce_perchannel_xml_dir="$config_xfce4_xfconf_dir/xfce-perchannel-xml"
 config_xfce4_filepath="$config_xfce4_xfconf_xfce_perchannel_xml_dir/xfce4-terminal.xml"
 config_xfce4launch_filepath="$config_xfce4_xfconf_xfce_perchannel_xml_dir/xfce4-terminal-launch.sh"
+config_pacman_system_filepath="/etc/pacman.conf"
 bash_profile_filepath="$HOME/.bash_profile"
 bashrc_filepath="$HOME/.bashrc"
 profile_filepath="$HOME/.profile"
@@ -324,8 +325,8 @@ command_setuparchgame() {
   fi
 
   sudo echo "Configuring..."
-  printout "Configuring multilib..."
-  sudo sed -i 's/\#\[multilib\]\n\#Include \= \/etc\/pacman\.d\/mirrorlist/\[multilib\]\nInclude \= \/etc\/pacman\.d\/mirrorlist/g'
+  printout "Configuring pacman multilib..."
+  sudo sed -i 's/\#\[multilib\]\n\#Include \= \/etc\/pacman\.d\/mirrorlist/\[multilib\]\nInclude \= \/etc\/pacman\.d\/mirrorlist/g' "$config_pacman_system_filepath"
   install_package "xdg-desktop-portal" "lib32-systemd" "xf86-video-vesa" "lib32-mesa" "lib32-vulkan-radeon" "lib32-amdvlk" \
   "lib32-vulkan-intel" "lib32-nvidia-utils" "ttf-liberation" "steam"
 }

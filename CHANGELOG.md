@@ -2,7 +2,7 @@
 
 ## 2024
 
-- **v2.6.13 - v2.7.0* (2024-10-03)
+- **v2.6.13 - v2.7.1* (2024-10-03)
   - Fix some issues
   - Add `setuparchgame` command
 
