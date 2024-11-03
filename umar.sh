@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.30"
+version="v2.7.0"
 pid=$$
 distro=""
 de=""
@@ -280,6 +280,7 @@ ${color_blue}**TEXT** ${color_cyan}**-u** ${color_blue}**URL**${color_reset}\`
 setupfresharch:Set up a fresh Arch Linux installation
 setupfresharchi3wm:Install and set up i3-wm on a fresh Arch Linux installation
 setupdeveloper:Install some developer tools
+setuparchgame:Set up gaming tools on Arch Linux
 -------------------:--------------------------
 macbookaudio:Configure audio for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
 macbookcamera:Configure camera for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
@@ -304,6 +305,30 @@ macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Tested on MBP 2017*
 # Provides available Umar's command(s)
 #
 # ---------------------------------------------------------------------------------------------------------------------
+
+command_setuparchgame() {
+  if ! is_arch; then
+    printout_exit "You're not using Arch Linux!"
+  fi
+
+  printout_markdown "${color_yellow}**This will set up gaming tools on Arch Linux. **${color_reset}"
+
+  printout_blank_line
+
+  printout_no_enter "Are you sure to continue this process [N/y] "
+
+  _32_confirmation=$(read_input)
+
+  if ! is_equal "$_32_confirmation" "y"; then
+    printout_exit "Aborted!"
+  fi
+
+  sudo echo "Configuring..."
+  printout "Configuring multilib..."
+  sudo sed -i 's/\#\[multilib\]\n\#Include \= \/etc\/pacman\.d\/mirrorlist/\[multilib\]\nInclude \= \/etc\/pacman\.d\/mirrorlist/g'
+  install_package "xdg-desktop-portal" "lib32-systemd" "xf86-video-vesa" "lib32-mesa" "lib32-vulkan-radeon" "lib32-amdvlk" \
+  "lib32-vulkan-intel" "lib32-nvidia-utils" "ttf-liberation" "steam"
+}
 
 command_setupfresharch() {
   if ! is_arch; then
