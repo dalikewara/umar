@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.17"
+version="v2.6.18"
 pid=$$
 distro=""
 de=""
@@ -41,7 +41,7 @@ config_polybar_system_filepath="/etc/polybar/config.ini"
 config_polybarlaunch_filepath="$config_polybar_dir/launch.sh"
 config_xfce4_dir="$config_config_dir/xfce4"
 config_xfce4_xfconf_dir="$config_xfce4_dir/xfconf"
-config_xfce4_xfconf_xfce_perchannel_xml_dir="$config_xfce4_dir/xfce-perchannel-xml"
+config_xfce4_xfconf_xfce_perchannel_xml_dir="$config_xfce4_xfconf_dir/xfce-perchannel-xml"
 config_xfce4_filepath="$config_xfce4_xfconf_xfce_perchannel_xml_dir/xfce4-terminal.xml"
 config_xfce4launch_filepath="$config_xfce4_xfconf_xfce_perchannel_xml_dir/xfce4-terminal-launch.sh"
 bash_profile_filepath="$HOME/.bash_profile"
@@ -555,14 +555,14 @@ label-low = %percentage%%
   <property name=\"cell-height-scale\" type=\"double\" value=\"1\"/>
   <property name=\"misc-cursor-blinks\" type=\"bool\" value=\"true\"/>
   <property name=\"misc-cursor-shape\" type=\"string\" value=\"TERMINAL_CURSOR_SHAPE_IBEAM\"/>
+  <property name=\"misc-show-unsafe-paste-dialog\" type=\"bool\" value=\"false\"/>
+  <property name=\"misc-confirm-close\" type=\"bool\" value=\"false\"/>
 </channel>
 " > "$config_xfce4_filepath"
 
   echo "#!/bin/sh
 
 killall xfconfd || true
-xfconf-query -c xfce4-terminal -p /misc-show-unsafe-paste-dialog -n -t bool -s false || true
-xfconf-query -c xfce4-terminal -p /misc-confirm-close -n -t bool -s false || true
 " > "$config_xfce4launch_filepath"
 
   printout "Configuring .xinitrc..."
