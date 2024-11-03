@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.14"
+version="v2.6.15"
 pid=$$
 distro=""
 de=""
@@ -495,8 +495,8 @@ polybar bar 2>&1 | tee -a /tmp/polybar1.log & disown || true
   sed -i 's/format\-volume\-prefix \= \"VOL \"/format\-volume\-prefix \= \"AV\"/g' "$config_polybar_filepath"
   sed -i 's/format\-prefix \= \"RAM \"/format\-prefix \= \"R\"/g' "$config_polybar_filepath"
   sed -i 's/format\-prefix \= \"CPU \"/format\-prefix \= \"C\"/g' "$config_polybar_filepath"
-  sed -i 's/label\-connected \= \%\{F\#F0C674\}\%ifname\%\%\{F\-\} \%essid\% \%local_ip\%/label\-connected \= \%\{F\#F0C674\}\%ifname\%\%\{F\-\} \%essid\:0\:10\:\.\.\.\% \%local_ip\%\nlabel\-maxlen \= 40/g' "$config_polybar_filepath"
-  sed -i 's/label\-connected \= \%\{F\#F0C674\}\%ifname\%\%\{F\-\} \%local_ip\%/label\-connected \= \%\{F\#F0C674\}\%ifname\%\%\{F\-\} \%local_ip\%\nlabel\-maxlen \= 40/g' "$config_polybar_filepath"
+  sed -i 's/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%essid\% \%local_ip\%/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%essid\:0\:10\:\.\.\.\% \%local_ip\%\nlabel\-maxlen \= 40/g' "$config_polybar_filepath"
+  sed -i 's/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%local_ip\%/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%local_ip\%\nlabel\-maxlen \= 40/g' "$config_polybar_filepath"
   sed -i 's/date \= \%H\:\%M/date \= \%Y\-\%m\-\%d \%H\:\%M\:\%S/g' "$config_polybar_filepath"
 
   if ! grep -qF "[module/battery]" "$config_polybar_filepath"; then
