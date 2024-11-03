@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.25"
+version="v2.6.26"
 pid=$$
 distro=""
 de=""
@@ -284,7 +284,7 @@ macbookaudio:Configure audio for Intel Macbook. ${color_yellow}**Tested on MBP 2
 macbookcamera:Configure camera for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
 macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}. ${color_blue}**Argument 1**${color_reset} is the fan speed RPM
 " | while IFS=: read -r _1_name _1_description; do
-      printf "${color_green}%-17s ${color_reset}%b\n" "$_1_name" "$(printout "$_1_description" | markdown_parse)"
+      printf "${color_green}%-19s ${color_reset}%b\n" "$_1_name" "$(printout "$_1_description" | markdown_parse)"
     done
 
     printout "$(printout "${color_red}**BE CAREFUL ABOUT WHAT YOU TYPE, MAKE SURE THERE IS NOTHING THAT CAN BREAK YOUR SYSTEM**${color_reset}" | markdown_parse)\n"
