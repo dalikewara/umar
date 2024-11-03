@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.29"
+version="v2.6.30"
 pid=$$
 distro=""
 de=""
@@ -310,7 +310,7 @@ command_setupfresharch() {
     printout_exit "You're not using Arch Linux!"
   fi
 
-  printout_markdown "${color_yellow}**This will set up a fresh arch linux installation. **${color_red}**WARNING!!! This will replace your existing configuration and MAY BREAK YOUR SYSTEM!!! Don't do this if you're not aware!!!**${color_reset}"
+  printout_markdown "${color_yellow}**This will set up a fresh Arch Linux installation. **${color_red}**WARNING!!! This will replace your existing configuration and MAY BREAK YOUR SYSTEM!!! Don't do this if you're not aware!!!**${color_reset}"
 
   printout_blank_line
 
@@ -370,7 +370,7 @@ command_setupfresharchi3wm() {
     printout_exit "You're not using Arch Linux!"
   fi
 
-  printout_markdown "${color_yellow}**This will install & set up i3wm on a fresh arch linux installation. **${color_red}**WARNING!!! This will replace your existing window manager or desktop environment and MAY BREAK YOUR SYSTEM!!! Don't do this if you're not aware!!!**${color_reset}"
+  printout_markdown "${color_yellow}**This will install & set up i3wm on a fresh Arch Linux installation. **${color_red}**WARNING!!! This will replace your existing window manager or desktop environment and MAY BREAK YOUR SYSTEM!!! Don't do this if you're not aware!!!**${color_reset}"
 
   printout_blank_line
 
