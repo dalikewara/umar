@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.7.1"
+version="v2.7.2"
 pid=$$
 distro=""
 de=""
@@ -326,7 +326,7 @@ command_setuparchgame() {
 
   sudo echo "Configuring..."
   printout "Configuring pacman multilib..."
-  sudo sed -i 's/\#\[multilib\]\n\#Include \= \/etc\/pacman\.d\/mirrorlist/\[multilib\]\nInclude \= \/etc\/pacman\.d\/mirrorlist/g' "$config_pacman_system_filepath"
+  sudo sed -i 's/\#\[multilib\]/\[multilib\]\nInclude \= \/etc\/pacman\.d\/mirrorlist/g' "$config_pacman_system_filepath"
   install_package "xdg-desktop-portal" "lib32-systemd" "xf86-video-vesa" "lib32-mesa" "lib32-vulkan-radeon" "lib32-amdvlk" \
   "lib32-vulkan-intel" "lib32-nvidia-utils" "ttf-liberation" "steam"
 }
