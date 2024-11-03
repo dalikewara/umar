@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.28"
+version="v2.6.29"
 pid=$$
 distro=""
 de=""
@@ -235,14 +235,14 @@ getsmarter:Upgrade me to the latest version
 version:Show my current version
 reveal:Reveal my source code
 window:Open my command window. ${color_yellow}**You may create a keyboard shortcut for this command to open my command window directly**${color_reset}
---------------:--------------------------
+-------------------:--------------------------
 run:Run custom command(s)
 listrun:List registered custom command(s)
 setrun:Set new custom command
 removerun:Remove custom command(s)
 changerundesc:Change custom command description
 changeruncommand:Change custom command execution command
---------------:--------------------------
+-------------------:--------------------------
 prompt:Prompt anything to AI
 chat:Start a new chat session with AI
 setai:Set new AI configuration
@@ -250,37 +250,37 @@ showai:Show AI information
 changeaitype:Change AI type
 changeaimodel:Change AI model
 changeaiapikey:Change AI API key
---------------:--------------------------
+-------------------:--------------------------
 open:Open package(s)
 kill:Kill package(s) process
 search:Search for the given keyword(s) using a terminal browser
 install:Install package(s)
 remove:Remove package(s)
 upgrade:Upgrade package(s)
---------------:--------------------------
+-------------------:--------------------------
 audio:Open audio setting
 audiocard:List audio cards
 playaudio:Play audio(s)
---------------:--------------------------
+-------------------:--------------------------
 showimage:Show image(s)
---------------:--------------------------
+-------------------:--------------------------
 playvideo:Play video(s)
---------------:--------------------------
+-------------------:--------------------------
 output:Show available output device(s)
 resolution:Set screen resolution. ${color_blue}**Argument 1**${color_reset} is the output device name and ${color_blue}**Argument 2**${color_reset} is the screen resolution
 brightness:Set screen brightness. ${color_blue}**Argument 1**${color_reset} is the output device name and ${color_blue}**Argument 2**${color_reset} is the brightness value
---------------:--------------------------
+-------------------:--------------------------
 touchpad:Configure touchpad device
---------------:--------------------------
+-------------------:--------------------------
 wifi:Scan or connect to a Wi-Fi using iwd. ${color_blue}**Argument 1**${color_reset} is the device name. The next arguments are the Wi-Fi SSID and any required parameters
 testhttp:Test and benchmark HTTP URL -> \`${color_cyan}**-c** ${color_blue}**NUM** ${color_cyan}**-r** ${color_blue}**NUM** ${color_cyan}**-t** \
 ${color_blue}**SECONDS** ${color_cyan}**-header** ${color_blue}**TEXT** ${color_cyan}**-userAgent** ${color_blue}**TEXT** ${color_cyan}**-contentType** \
 ${color_blue}**TEXT** ${color_cyan}**-u** ${color_blue}**URL**${color_reset}\`
---------------:--------------------------
+-------------------:--------------------------
 setupfresharch:Set up a fresh Arch Linux installation
 setupfresharchi3wm:Install and set up i3-wm on a fresh Arch Linux installation
 setupdeveloper:Install some developer tools
---------------:--------------------------
+-------------------:--------------------------
 macbookaudio:Configure audio for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
 macbookcamera:Configure camera for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
 macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}. ${color_blue}**Argument 1**${color_reset} is the fan speed RPM
