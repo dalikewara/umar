@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.27"
+version="v2.6.28"
 pid=$$
 distro=""
 de=""
@@ -224,9 +224,10 @@ umar() {
 
   if is_no_argument "$@"; then
     printout "
-I am Umar ($version), your Linux assistant. I can help you with the common tasks listed below. \
+I am Umar (${color_yellow}$version${color_reset}), your Linux assistant. I can help you with the common tasks listed below. \
 I will continue to be updated indefinitely, as my creator may need to add new features, update my logic, fix issues, \
-or make other changes. I may get smarter every day. I can also use AI, but you need to manually set up the configuration first.
+or make other changes. I may get smarter every day. I can also use AI, but you need to manually set up the configuration first. \
+All functions have been tested on ${color_yellow}Arch Linux${color_reset}. They might work on other distros, but I'm not sure.
 "
 
     printout "\
@@ -287,7 +288,7 @@ macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Tested on MBP 2017*
       printf "${color_green}%-19s ${color_reset}%b\n" "$_1_name" "$(printout "$_1_description" | markdown_parse)"
     done
 
-    printout "$(printout "${color_red}**BE CAREFUL ABOUT WHAT YOU TYPE, MAKE SURE THERE IS NOTHING THAT CAN BREAK YOUR SYSTEM**${color_reset}" | markdown_parse)\n"
+    printout "$(printout "All functions have been tested on ${color_yellow}**Arch Linux**${color_reset}. They might work on other distros, but I'm not sure.\n${color_red}**BE CAREFUL ABOUT WHAT YOU TYPE, MAKE SURE THERE IS NOTHING THAT CAN BREAK YOUR SYSTEM**${color_reset}" | markdown_parse)\n"
     return 0
   fi
 
