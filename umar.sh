@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.22"
+version="v2.6.23"
 pid=$$
 distro=""
 de=""
@@ -468,14 +468,11 @@ polybar bar 2>&1 | tee -a /tmp/polybar1.log & disown || true
   sed -i 's/Mod1/\$mod/g' "$config_i3wm_filepath"
   sed -i '/^bar {$/,/^}/s/^/#/g' "$config_i3wm_filepath"
   # shellcheck disable=SC2016
-  sed -i 's/bindsym \$mod+Return/\#bindsym \$mod+Return/g' "$config_i3wm_filepath"
+  sed -i 's/bindsym \$mod+Return exec i3\-sensible\-terminal/\#bindsym \$mod+Return exec i3\-sensible\-terminal/g' "$config_i3wm_filepath"
 
   if ! grep -qF "bindsym \$mod+Return exec xfce4-terminal" "$config_i3wm_filepath"; then
     echo "bindsym \$mod+Return exec xfce4-terminal" >> "$config_i3wm_filepath"
   fi
-
-  # shellcheck disable=SC2016
-  sed -i 's/\#bindsym \$mod+Return exec xfce4\-terminal/bindsym \$mod+Return exec xfce4\-terminal/g' "$config_i3wm_filepath"
 
   if ! grep -qF "default_border pixel 0px" "$config_i3wm_filepath"; then
     echo "default_border pixel 0px" >> "$config_i3wm_filepath"
