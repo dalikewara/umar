@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.26"
+version="v2.6.27"
 pid=$$
 distro=""
 de=""
@@ -309,7 +309,7 @@ command_setupfresharch() {
     printout_exit "You're not using Arch Linux!"
   fi
 
-  printout_markdown "${color_yellow}**THIS WILL SET UP A FRESH ARCH LINUX INSTALLATION. ${color_red}WARNING!!! THIS WILL REPLACE YOUR EXISTING CONFIGURATION AND MAY BREAK YOUR SYSTEM!!! DON'T DO THIS IF YOU'RE NOT AWARE!!!**${color_reset}"
+  printout_markdown "${color_yellow}**This will set up a fresh arch linux installation. **${color_red}**WARNING!!! This will replace your existing configuration and MAY BREAK YOUR SYSTEM!!! Don't do this if you're not aware!!!**${color_reset}"
 
   printout_blank_line
 
@@ -369,7 +369,7 @@ command_setupfresharchi3wm() {
     printout_exit "You're not using Arch Linux!"
   fi
 
-  printout_markdown "${color_yellow}**THIS WILL INSTALL & SET UP I3WM ON A FRESH ARCH LINUX INSTALLATION. ${color_red}WARNING!!! THIS WILL REPLACE YOUR EXISTING WINDOW MANAGER OR DESKTOP ENVIRONMENT AND MAY BREAK YOUR SYSTEM!!! DON'T DO THIS IF YOU'RE NOT AWARE!!!**${color_reset}"
+  printout_markdown "${color_yellow}**This will install & set up i3wm on a fresh arch linux installation. **${color_red}**WARNING!!! This will replace your existing window manager or desktop environment and MAY BREAK YOUR SYSTEM!!! Don't do this if you're not aware!!!**${color_reset}"
 
   printout_blank_line
 
@@ -587,7 +587,7 @@ killall xfconfd || true
 }
 
 command_setupdeveloper() {
-  printout_markdown "${color_yellow}**THIS WILL INSTALL DEVELOPER TOOLS. ${color_red}WARNING!!! THIS WILL REPLACE YOUR EXISTING PACKAGES!!! DON'T DO THIS IF YOU'RE NOT AWARE!!!**${color_reset}"
+  printout_markdown "${color_yellow}**This will install developer tools. **${color_red}**WARNING!!! This will replace your existing packages!!! Don't do this if you're not aware!!!**${color_reset}"
 
   printout_blank_line
 
@@ -943,7 +943,7 @@ command_macbookfan() {
     printout_exit "Value above maximum!"
   fi
 
-  printout_markdown "${color_yellow}**This will configure Macbook Fan Speed. If you're not using Macbook device, you SHOULD NOT execute this command**${color_reset}"
+  printout_markdown "${color_yellow}**This will configure Macbook Fan Speed. **${color_red}**If you're not using Macbook device, DON'T execute this command (MAY BREAK YOUR SYSTEM)**${color_reset}"
 
   printout_blank_line
 
@@ -959,7 +959,7 @@ command_macbookfan() {
 }
 
 command_macbookcamera() {
-  printout_markdown "${color_yellow}**This will configure Macbook Camera. If you're not using Macbook device, you SHOULD NOT execute this command**${color_reset}"
+  printout_markdown "${color_yellow}**This will configure Macbook Camera. **${color_red}**If you're not using Macbook device, DON'T execute this command (MAY BREAK YOUR SYSTEM)**${color_reset}"
 
   printout_blank_line
 
@@ -1003,7 +1003,7 @@ command_macbookcamera() {
 }
 
 command_macbookaudio() {
-  printout_markdown "${color_yellow}**This will configure Macbook Audio. If you're not using Macbook device, you SHOULD NOT execute this command**${color_reset}"
+  printout_markdown "${color_yellow}**This will configure Macbook Audio. **${color_red}**If you're not using Macbook device, DON'T execute this command (MAY BREAK YOUR SYSTEM)**${color_reset}"
 
   printout_blank_line
 
@@ -1818,7 +1818,7 @@ check_requirements() {
   fi
 
   if is_equal "$_17_iwd" "yes"; then
-    printout_markdown "${color_yellow}**It seems you want to install **${color_red}**iwd**${color_yellow}**. If you have any other network or wireless daemon installed, it might cause a conflict between them**${color_reset}"
+    printout_markdown "${color_yellow}**It seems you want to install **${color_red}**iwd**${color_yellow}**. If you have any other network or wireless daemon installed, **${color_red}**it might cause a conflict between them (MAY BREAK YOUR SYSTEM)**${color_reset}"
   fi
 
   printout_markdown_no_enter "${color_red}**$_17_not_exist** ${color_reset}package(s) are not installed. Do you want to install them? [N/y] "
