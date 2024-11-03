@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.15"
+version="v2.6.16"
 pid=$$
 distro=""
 de=""
@@ -462,6 +462,8 @@ polybar bar 2>&1 | tee -a /tmp/polybar1.log & disown || true
 
   # shellcheck disable=SC2016
   sed -i 's/set \$mod Mod1/set \$mod Mod4/g' "$config_i3wm_filepath"
+  # shellcheck disable=SC2016
+  sed -i 's/Mod1/\$mod/g' "$config_i3wm_filepath"
   sed -i '/^bar {$/,/^}/s/^/#/g' "$config_i3wm_filepath"
 
   if ! grep -qF "bindsym \$mod+Return exec xfce4-terminal" "$config_i3wm_filepath"; then
