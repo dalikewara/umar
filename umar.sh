@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.19"
+version="v2.6.20"
 pid=$$
 distro=""
 de=""
@@ -382,9 +382,7 @@ command_setupfresharchi3wm() {
   fi
 
   sudo echo "Configuring..."
-  install_package "i3" "xorg" "xorg-xinit" "xfce4-terminal" "polybar" "pavucontrol" "xorg-server" "xorg-xrandr" "xorg-xinput" \
-  "intel-media-driver" "mesa" "xf86-video-amdgpu" "xf86-video-vmware" "libva-intel-driver" "vulkan-intel" "xf86-video-ati" \
-  "libva-mesa-driver" "vulkan-radeon" "xf86-video-nouveau"
+  install_package "i3" "xorg" "xorg-xinit" "xfce4-terminal" "polybar" "pavucontrol" "xorg-server" "xorg-xrandr" "xorg-xinput"
   printout "Copying .xinitrc..."
 
   if ! is_file_exist "$xinitrc_filepath"; then
