@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.16"
+version="v2.6.17"
 pid=$$
 distro=""
 de=""
@@ -309,7 +309,7 @@ command_setupfresharch() {
     printout_exit "You're not using Arch Linux!"
   fi
 
-  printout_markdown "${color_yellow}**THIS WILL SET UP A FRESH ARCH LINUX INSTALLATION. ${color_red}WARNING!!! THIS WILL REPLACE YOUR EXISTING CONFIGURATION!!! DON'T DO THIS IF YOU'RE NOT AWARE!!!**${color_reset}"
+  printout_markdown "${color_yellow}**THIS WILL SET UP A FRESH ARCH LINUX INSTALLATION. ${color_red}WARNING!!! THIS WILL REPLACE YOUR EXISTING CONFIGURATION AND MAY BREAK YOUR SYSTEM!!! DON'T DO THIS IF YOU'RE NOT AWARE!!!**${color_reset}"
 
   printout_blank_line
 
@@ -367,7 +367,7 @@ command_setupfresharchi3wm() {
     printout_exit "You're not using Arch Linux!"
   fi
 
-  printout_markdown "${color_yellow}**THIS WILL INSTALL & SET UP I3WM ON A FRESH ARCH LINUX INSTALLATION. ${color_red}WARNING!!! THIS WILL REPLACE YOUR EXISTING WINDOW MANAGER OR DESKTOP ENVIRONMENT!!! DON'T DO THIS IF YOU'RE NOT AWARE!!!**${color_reset}"
+  printout_markdown "${color_yellow}**THIS WILL INSTALL & SET UP I3WM ON A FRESH ARCH LINUX INSTALLATION. ${color_red}WARNING!!! THIS WILL REPLACE YOUR EXISTING WINDOW MANAGER OR DESKTOP ENVIRONMENT AND MAY BREAK YOUR SYSTEM!!! DON'T DO THIS IF YOU'RE NOT AWARE!!!**${color_reset}"
 
   printout_blank_line
 
