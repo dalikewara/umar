@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.6.12"
+version="v2.6.13"
 pid=$$
 distro=""
 de=""
@@ -324,7 +324,7 @@ command_setupfresharch() {
   sudo echo "Configuring..."
 
   if is_file_exist "$bashrc_filepath"; then
-    if ! grep -q "[[ \$- != *i* ]] && return" "$bashrc_filepath"; then
+    if ! grep -qF "[[ \$- != *i* ]] && return" "$bashrc_filepath"; then
       echo "[[ \$- != *i* ]] && return" >> "$bashrc_filepath"
     fi
   fi
@@ -390,7 +390,7 @@ command_setupfresharchi3wm() {
   printout "Configuring profiles..."
 
   if is_file_exist "$bash_profile_filepath"; then
-    if ! grep -q "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$bash_profile_filepath"; then
+    if ! grep -qF "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$bash_profile_filepath"; then
       echo "
 if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then
   exec startx
@@ -400,7 +400,7 @@ fi
   fi
 
   if is_file_exist "$profile_filepath"; then
-    if ! grep -q "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$profile_filepath"; then
+    if ! grep -qF "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$profile_filepath"; then
       echo "
 if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then
   exec startx
@@ -410,7 +410,7 @@ fi
   fi
 
   if is_file_exist "$zprofile_filepath"; then
-    if ! grep -q "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$zprofile_filepath"; then
+    if ! grep -qF "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$zprofile_filepath"; then
       echo "
 if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then
   exec startx
@@ -420,7 +420,7 @@ fi
   fi
 
   if is_file_exist "$bashrc_filepath"; then
-    if ! grep -q "[[ \$- != *i* ]] && return" "$bashrc_filepath"; then
+    if ! grep -qF "[[ \$- != *i* ]] && return" "$bashrc_filepath"; then
       echo "[[ \$- != *i* ]] && return" >> "$bashrc_filepath"
     fi
   fi
@@ -457,23 +457,23 @@ polybar bar 2>&1 | tee -a /tmp/polybar1.log & disown
 
   sed -i '/^bar {$/,/^}/s/^/#/' "$config_i3wm_filepath"
 
-  if ! grep -q "bindsym \$mod+Return exec xfce4-terminal" "$config_i3wm_filepath"; then
+  if ! grep -qF "bindsym \$mod+Return exec xfce4-terminal" "$config_i3wm_filepath"; then
     echo "bindsym \$mod+Return exec xfce4-terminal" >> "$config_i3wm_filepath"
   fi
 
-  if ! grep -q "default_border pixel 0px" "$config_i3wm_filepath"; then
+  if ! grep -qF "default_border pixel 0px" "$config_i3wm_filepath"; then
     echo "default_border pixel 0px" >> "$config_i3wm_filepath"
   fi
 
-  if ! grep -q "gaps inner 0px" "$config_i3wm_filepath"; then
+  if ! grep -qF "gaps inner 0px" "$config_i3wm_filepath"; then
     echo "gaps inner 0px" >> "$config_i3wm_filepath"
   fi
 
-  if ! grep -q "gaps outer 0px" "$config_i3wm_filepath"; then
+  if ! grep -qF "gaps outer 0px" "$config_i3wm_filepath"; then
     echo "gaps outer 0px" >> "$config_i3wm_filepath"
   fi
 
-  if ! grep -q "exec_always --no-startup-id $config_polybarlaunch_filepath" "$config_i3wm_filepath"; then
+  if ! grep -qF "exec_always --no-startup-id $config_polybarlaunch_filepath" "$config_i3wm_filepath"; then
     echo "exec_always --no-startup-id $config_polybarlaunch_filepath" >> "$config_i3wm_filepath"
   fi
 
@@ -492,7 +492,7 @@ polybar bar 2>&1 | tee -a /tmp/polybar1.log & disown
   sed -i 's/label-connected = %{F#F0C674}%ifname%%{F-} %local_ip%/label-connected = %{F#F0C674}%ifname%%{F-} %local_ip%\nlabel-maxlen = 40/' "$config_polybar_filepath"
   sed -i 's/date = %H:%M/date = %Y-%m-%d %H:%M:%S/' "$config_polybar_filepath"
 
-  if ! grep -q "[module/battery]" "$config_polybar_filepath"; then
+  if ! grep -qF "[module/battery]" "$config_polybar_filepath"; then
     echo "
 [module/battery]
 type = internal/battery
@@ -556,11 +556,11 @@ xfconf-query -c xfce4-terminal -p /misc-confirm-close -n -t bool -s false
 
   printout "Configuring .xinitrc..."
 
-  if ! grep -q "$config_xfce4launch_filepath &" "$xinitrc_filepath"; then
+  if ! grep -qF "$config_xfce4launch_filepath &" "$xinitrc_filepath"; then
     echo "$config_xfce4launch_filepath &" >> "$xinitrc_filepath"
   fi
 
-  if ! grep -q "exec i3" "$xinitrc_filepath"; then
+  if ! grep -qF "exec i3" "$xinitrc_filepath"; then
     echo "exec i3" >> "$xinitrc_filepath"
   fi
 
@@ -730,175 +730,175 @@ command_setupdeveloper() {
   printout "Configuring profiles..."
 
   if is_file_exist "$bash_profile_filepath"; then
-    if ! grep -q "export PATH=\$PATH:$go_installed_bin_dir" "$bash_profile_filepath"; then
+    if ! grep -qF "export PATH=\$PATH:$go_installed_bin_dir" "$bash_profile_filepath"; then
       echo "export PATH=\$PATH:$go_installed_bin_dir" >> "$bash_profile_filepath"
     fi
 
-    if ! grep -q "export GOPATH=$go_dir" "$bash_profile_filepath"; then
+    if ! grep -qF "export GOPATH=$go_dir" "$bash_profile_filepath"; then
       echo "export GOPATH=$go_dir" >> "$bash_profile_filepath"
     fi
 
-    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$bash_profile_filepath"; then
+    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$bash_profile_filepath"; then
       echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$bash_profile_filepath"
     fi
 
-    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$bash_profile_filepath"; then
+    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$bash_profile_filepath"; then
       echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$bash_profile_filepath"
     fi
 
-    if ! grep -q "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$bash_profile_filepath"; then
+    if ! grep -qF "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$bash_profile_filepath"; then
       echo "export PATH=$nodejs_installed_version_bin_dir:\$PATH" >> "$bash_profile_filepath"
     fi
 
-    if ! grep -q "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$bash_profile_filepath"; then
+    if ! grep -qF "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$bash_profile_filepath"; then
       echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$bash_profile_filepath"
     fi
 
-    if ! grep -q "export PYENV_ROOT=$config_pyenv_dir" "$bash_profile_filepath"; then
+    if ! grep -qF "export PYENV_ROOT=$config_pyenv_dir" "$bash_profile_filepath"; then
       echo "export PYENV_ROOT=$config_pyenv_dir" >> "$bash_profile_filepath"
     fi
 
-    if ! grep -q "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" "$bash_profile_filepath"; then
+    if ! grep -qF "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" "$bash_profile_filepath"; then
       echo "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$bash_profile_filepath"
     fi
   fi
 
   if is_file_exist "$bashrc_filepath"; then
-    if ! grep -q "[[ \$- != *i* ]] && return" "$bashrc_filepath"; then
+    if ! grep -qF "[[ \$- != *i* ]] && return" "$bashrc_filepath"; then
       echo "[[ \$- != *i* ]] && return" >> "$bashrc_filepath"
     fi
 
-    if ! grep -q "export PATH=\$PATH:$go_installed_bin_dir" "$bashrc_filepath"; then
+    if ! grep -qF "export PATH=\$PATH:$go_installed_bin_dir" "$bashrc_filepath"; then
       echo "export PATH=\$PATH:$go_installed_bin_dir" >> "$bashrc_filepath"
     fi
 
-    if ! grep -q "export GOPATH=$go_dir" "$bashrc_filepath"; then
+    if ! grep -qF "export GOPATH=$go_dir" "$bashrc_filepath"; then
       echo "export GOPATH=$go_dir" >> "$bashrc_filepath"
     fi
 
-    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$bashrc_filepath"; then
+    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$bashrc_filepath"; then
       echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$bashrc_filepath"
     fi
 
-    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$bashrc_filepath"; then
+    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$bashrc_filepath"; then
       echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$bashrc_filepath"
     fi
 
-    if ! grep -q "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$bashrc_filepath"; then
+    if ! grep -qF "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$bashrc_filepath"; then
       echo "export PATH=$nodejs_installed_version_bin_dir:\$PATH" >> "$bashrc_filepath"
     fi
 
-    if ! grep -q "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$bashrc_filepath"; then
+    if ! grep -qF "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$bashrc_filepath"; then
       echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$bashrc_filepath"
     fi
 
-    if ! grep -q "export PYENV_ROOT=$config_pyenv_dir" "$bashrc_filepath"; then
+    if ! grep -qF "export PYENV_ROOT=$config_pyenv_dir" "$bashrc_filepath"; then
       echo "export PYENV_ROOT=$config_pyenv_dir" >> "$bashrc_filepath"
     fi
 
-    if ! grep -q "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" "$bashrc_filepath"; then
+    if ! grep -qF "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" "$bashrc_filepath"; then
       echo "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$bashrc_filepath"
     fi
   fi
 
   if is_file_exist "$profile_filepath"; then
-    if ! grep -q "export PATH=\$PATH:$go_installed_bin_dir" "$profile_filepath"; then
+    if ! grep -qF "export PATH=\$PATH:$go_installed_bin_dir" "$profile_filepath"; then
       echo "export PATH=\$PATH:$go_installed_bin_dir" >> "$profile_filepath"
     fi
 
-    if ! grep -q "export GOPATH=$go_dir" "$profile_filepath"; then
+    if ! grep -qF "export GOPATH=$go_dir" "$profile_filepath"; then
       echo "export GOPATH=$go_dir" >> "$profile_filepath"
     fi
 
-    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$profile_filepath"; then
+    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$profile_filepath"; then
       echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$profile_filepath"
     fi
 
-    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$profile_filepath"; then
+    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$profile_filepath"; then
       echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$profile_filepath"
     fi
 
-    if ! grep -q "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$profile_filepath"; then
+    if ! grep -qF "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$profile_filepath"; then
       echo "export PATH=$nodejs_installed_version_bin_dir:\$PATH" >> "$profile_filepath"
     fi
 
-    if ! grep -q "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$profile_filepath"; then
+    if ! grep -qF "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$profile_filepath"; then
       echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$profile_filepath"
     fi
 
-    if ! grep -q "export PYENV_ROOT=$config_pyenv_dir" "$profile_filepath"; then
+    if ! grep -qF "export PYENV_ROOT=$config_pyenv_dir" "$profile_filepath"; then
       echo "export PYENV_ROOT=$config_pyenv_dir" >> "$profile_filepath"
     fi
 
-    if ! grep -q "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" "$profile_filepath"; then
+    if ! grep -qF "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" "$profile_filepath"; then
       echo "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$profile_filepath"
     fi
   fi
 
   if is_file_exist "$zshrc_filepath"; then
-    if ! grep -q "export PATH=\$PATH:$go_installed_bin_dir" "$zshrc_filepath"; then
+    if ! grep -qF "export PATH=\$PATH:$go_installed_bin_dir" "$zshrc_filepath"; then
       echo "export PATH=\$PATH:$go_installed_bin_dir" >> "$zshrc_filepath"
     fi
 
-    if ! grep -q "export GOPATH=$go_dir" "$zshrc_filepath"; then
+    if ! grep -qF "export GOPATH=$go_dir" "$zshrc_filepath"; then
       echo "export GOPATH=$go_dir" >> "$zshrc_filepath"
     fi
 
-    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$zshrc_filepath"; then
+    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$zshrc_filepath"; then
       echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$zshrc_filepath"
     fi
 
-    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$zshrc_filepath"; then
+    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$zshrc_filepath"; then
       echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$zshrc_filepath"
     fi
 
-    if ! grep -q "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$zshrc_filepath"; then
+    if ! grep -qF "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$zshrc_filepath"; then
       echo "export PATH=$nodejs_installed_version_bin_dir:\$PATH" >> "$zshrc_filepath"
     fi
 
-    if ! grep -q "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$zshrc_filepath"; then
+    if ! grep -qF "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$zshrc_filepath"; then
       echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$zshrc_filepath"
     fi
 
-    if ! grep -q "export PYENV_ROOT=$config_pyenv_dir" "$zshrc_filepath"; then
+    if ! grep -qF "export PYENV_ROOT=$config_pyenv_dir" "$zshrc_filepath"; then
       echo "export PYENV_ROOT=$config_pyenv_dir" >> "$zshrc_filepath"
     fi
 
-    if ! grep -q "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" "$zshrc_filepath"; then
+    if ! grep -qF "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" "$zshrc_filepath"; then
       echo "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$zshrc_filepath"
     fi
   fi
 
   if is_file_exist "$zprofile_filepath"; then
-    if ! grep -q "export PATH=\$PATH:$go_installed_bin_dir" "$zprofile_filepath"; then
+    if ! grep -qF "export PATH=\$PATH:$go_installed_bin_dir" "$zprofile_filepath"; then
       echo "export PATH=\$PATH:$go_installed_bin_dir" >> "$zprofile_filepath"
     fi
 
-    if ! grep -q "export GOPATH=$go_dir" "$zprofile_filepath"; then
+    if ! grep -qF "export GOPATH=$go_dir" "$zprofile_filepath"; then
       echo "export GOPATH=$go_dir" >> "$zprofile_filepath"
     fi
 
-    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$zprofile_filepath"; then
+    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$zprofile_filepath"; then
       echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$zprofile_filepath"
     fi
 
-    if ! grep -q "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$zprofile_filepath"; then
+    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$zprofile_filepath"; then
       echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$zprofile_filepath"
     fi
 
-    if ! grep -q "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$zprofile_filepath"; then
+    if ! grep -qF "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$zprofile_filepath"; then
       echo "export PATH=$nodejs_installed_version_bin_dir:\$PATH" >> "$zprofile_filepath"
     fi
 
-    if ! grep -q "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$zprofile_filepath"; then
+    if ! grep -qF "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$zprofile_filepath"; then
       echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$zprofile_filepath"
     fi
 
-    if ! grep -q "export PYENV_ROOT=$config_pyenv_dir" "$zprofile_filepath"; then
+    if ! grep -qF "export PYENV_ROOT=$config_pyenv_dir" "$zprofile_filepath"; then
       echo "export PYENV_ROOT=$config_pyenv_dir" >> "$zprofile_filepath"
     fi
 
-    if ! grep -q "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" "$zprofile_filepath"; then
+    if ! grep -qF "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" "$zprofile_filepath"; then
       echo "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$zprofile_filepath"
     fi
   fi

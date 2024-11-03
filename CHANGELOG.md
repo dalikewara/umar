@@ -2,6 +2,9 @@
 
 ## 2024
 
+- **v2.6.13** (2024-10-03)
+  - Fix some issues
+
 - **v2.6.0 - v2.6.12** (2024-10-02)
   - Fix some issues
   - Add `setupfresharch`, `setupfresharchi3wm` command
