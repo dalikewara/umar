@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.7.4"
+version="v2.7.5"
 pid=$$
 distro=""
 de=""
@@ -362,7 +362,8 @@ command_setupfresharch() {
   "linux-lts-headers" "pipewire" "pipewire-audio" "pipewire-pulse" "wget" "xsensors" "unzip" "sof-firmware" "alsa-firmware" "pipewire-alsa" \
   "pipewire-jack" "wireplumber" "pavucontrol" "alsa-card-profiles" "openssh" "sudo" "xorg" "xorg-xinit" "intel-media-driver" "mesa" \
   "xf86-video-amdgpu" "xf86-video-vmware" "libva-intel-driver" "vulkan-intel" "xf86-video-ati" "libva-mesa-driver" "vulkan-radeon" \
-  "xf86-video-nouveau" "freetype2" "libglvnd" "deepin-reader" "cpio" "imagemagick"
+  "xf86-video-nouveau" "freetype2" "libglvnd" "deepin-reader" "cpio" "imagemagick" "bluez" "bluez-utils" "linux-firmware-qlogic" \
+  "linux-firmware-bnx2x" "linux-firmware-liquidio" "linux-firmware-mellanox" "linux-firmware-nfp"
   printout "Configuring ssh..."
 
   if ! is_file_exist "$ssh_keygen_filepath"; then
@@ -372,23 +373,34 @@ command_setupfresharch() {
   fi
 
   printout "Configuring git..."
-  printout_no_enter "Enter your git user.email...  "
 
-  _32_git_email=$(read_input)
+  if is_empty "$(git config user.name)"; then
+    printout_no_enter "Enter your git user.name...  "
 
-  printout_no_enter "Enter your git user.name...  "
+    _32_git_name=$(read_input)
 
-  _32_git_name=$(read_input)
+    git config --global user.name "$_32_git_name"
+  fi
 
-  git config --global user.email "$_32_git_email"
-  git config --global user.name "$_32_git_name"
-  printout "Configuring others..."
+  if is_empty "$(git config user.email)"; then
+    printout_no_enter "Enter your git user.email...  "
+
+    _32_git_email=$(read_input)
+
+    git config --global user.email "$_32_git_email"
+  fi
+
+  printout "Configuring host..."
   sudo ln -sf /dev/null /etc/udev/rules.d/80-net-setup-link.rules
-  sudo sed -i -E 's/GRUB_TIMEOUT=([0-9]+)/GRUB_TIMEOUT=0/g' /etc/default/grub
+  printout "Configuring bluetooth..."
+  sudo modprobe btusb
+  printout "Configuring sensors..."
   sudo grub-mkconfig -o /boot/grub/grub.cfg
   sudo sensors-detect
   sudo sensors
   sudo pwmconfig
+  printout "Configuring grub..."
+  sudo sed -i -E 's/GRUB_TIMEOUT=([0-9]+)/GRUB_TIMEOUT=0/g' /etc/default/grub
   printout "Done"
 }
 
@@ -629,7 +641,24 @@ command_setupdeveloper() {
 
   sudo echo "Configuring..."
   check_requirements "tar" "wget" "gzip"
-  install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "docker" "docker-compose" "make" "openssh"
+
+  if is_arch; then
+    install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "make" "openssh" "docker" "docker-compose"
+  elif is_debian; then
+    install_package "ca-certificates" "curl"
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "make" "openssh" \
+    "docker-ce" "docker-ce-cli" "containerd.io" "docker-buildx-plugin" "docker-compose-plugin"
+  else
+    install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "make" "openssh"
+  fi
+
   printout "Configuring ssh..."
 
   if ! is_file_exist "$ssh_keygen_filepath"; then
@@ -685,6 +714,8 @@ command_setupdeveloper() {
 
   wait
 
+  curl --proto '=https' --tlsv1.2 -sSf "$rust_download_url" | sh || true
+  curl "$pyenv_download_url" | bash || true
   printout "Extracting tools..."
 
   if is_file_exist "$datagrip_downloaded_filepath"; then
@@ -726,8 +757,6 @@ command_setupdeveloper() {
   wait
 
   printout "Configuring tools..."
-  curl --proto '=https' --tlsv1.2 -sSf "$rust_download_url" | sh || true
-  curl "$pyenv_download_url" | bash || true
 
   if is_file_exist "$go_downloaded_filepath"; then
     mv "$go_extracted_dir_path" "$go_extracted_dir"
