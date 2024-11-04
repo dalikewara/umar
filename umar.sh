@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 32
 
-version="v2.7.3"
+version="v2.7.4"
 pid=$$
 distro=""
 de=""
@@ -745,6 +745,7 @@ command_setupdeveloper() {
   mkdir "$go_src_dir" > /dev/null 2>&1 || true
   mkdir "$go_pkg_dir" > /dev/null 2>&1 || true
   mkdir "$go_bin_dir" > /dev/null 2>&1 || true
+  sudo rm -rf "$go_installed_filepath"
   sudo cp -rf "$go_extracted_dir" "$go_installed_filepath"
   rm -rf "$go_downloaded_filepath"
   sudo chmod 4755 "$goland_chrome_sandbox_filepath"
