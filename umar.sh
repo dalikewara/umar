@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 34
 
-version="v2.8.1"
+version="v2.8.2"
 pid=$$
 distro=""
 de=""
@@ -550,13 +550,13 @@ polybar bar 2>&1 | tee -a /tmp/polybar1.log & disown || true
 
 if [ \$(bluetoothctl show | grep \"Powered: yes\" | wc -c) -eq 0 ]
 then
-  echo \"BTON\"
+  echo \"BTOFF\"
 else
   if [ \$(echo info | bluetoothctl | grep 'Device' | wc -c) -eq 0 ]
   then
     echo \"BTCON\"
   fi
-  echo \"BTOFF\"
+  echo \"BTON\"
 fi
 " > "$config_polybarlaunch_bluetooth_filepath"
     chmod +x "$config_polybarlaunch_bluetooth_filepath"
@@ -569,9 +569,11 @@ fi
 
 if [ \$(bluetoothctl show | grep \"Powered: yes\" | wc -c) -eq 0 ]
 then
-  bluetoothctl power on
+  bluetoothctl power on > /dev/null 2>&1 || true
+  bluetoothctl scan on > /dev/null 2>&1 || true
 else
-  bluetoothctl power off
+  bluetoothctl scan off > /dev/null 2>&1 || true
+  bluetoothctl power off > /dev/null 2>&1 || true
 fi
 " > "$config_polybarlaunch_bluetooth_toggle_filepath"
     chmod +x "$config_polybarlaunch_bluetooth_toggle_filepath"
@@ -659,9 +661,7 @@ exec = $config_polybarlaunch_bluetooth_filepath
 interval = 2
 click-left = exec $config_polybarlaunch_bluetooth_toggle_filepath
 click-right = exec $config_polybarlaunch_bluetooth_toggle_filepath
-format-padding = 1
-format-background = #000000
-format-foreground = #ffffff
+format-foreground = \${colors.primary}
 " >> "$config_polybar_filepath"
   fi
 
