@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 34
 
-version="v2.8.0"
+version="v2.8.1"
 pid=$$
 distro=""
 de=""
@@ -41,6 +41,8 @@ config_polybar_dir="$config_config_dir/polybar"
 config_polybar_filepath="$config_polybar_dir/config.ini"
 config_polybar_system_filepath="/etc/polybar/config.ini"
 config_polybarlaunch_filepath="$config_polybar_dir/launch.sh"
+config_polybarlaunch_bluetooth_filepath="$config_polybar_dir/launch-bluetooth.sh"
+config_polybarlaunch_bluetooth_toggle_filepath="$config_polybar_dir/launch-bluetooth-toggle.sh"
 config_xfce4_dir="$config_config_dir/xfce4"
 config_xfce4_xfconf_dir="$config_xfce4_dir/xfconf"
 config_xfce4_xfconf_xfce_perchannel_xml_dir="$config_xfce4_xfconf_dir/xfce-perchannel-xml"
@@ -466,7 +468,7 @@ command_setupfresharchi3wm() {
   fi
 
   sudo echo "Configuring..."
-  install_package "i3" "xorg" "xorg-xinit" "xfce4-terminal" "polybar" "pavucontrol" "xorg-server" "xorg-xrandr" "xorg-xinput"
+  install_package "i3" "xorg" "xorg-xinit" "xfce4-terminal" "polybar" "pavucontrol" "xorg-server" "xorg-xrandr" "xorg-xinput" "bluez-utils"
   printout "Copying .xinitrc..."
 
   if ! is_file_exist "$xinitrc_filepath"; then
@@ -541,6 +543,40 @@ polybar bar 2>&1 | tee -a /tmp/polybar1.log & disown || true
     chmod +x "$config_polybarlaunch_filepath"
   fi
 
+  if ! is_file_exist "$config_polybarlaunch_bluetooth_filepath"; then
+    create_file "$config_polybarlaunch_bluetooth_filepath"
+    echo "
+#!/bin/sh
+
+if [ \$(bluetoothctl show | grep \"Powered: yes\" | wc -c) -eq 0 ]
+then
+  echo \"BTON\"
+else
+  if [ \$(echo info | bluetoothctl | grep 'Device' | wc -c) -eq 0 ]
+  then
+    echo \"BTCON\"
+  fi
+  echo \"BTOFF\"
+fi
+" > "$config_polybarlaunch_bluetooth_filepath"
+    chmod +x "$config_polybarlaunch_bluetooth_filepath"
+  fi
+
+  if ! is_file_exist "$config_polybarlaunch_bluetooth_toggle_filepath"; then
+    create_file "$config_polybarlaunch_bluetooth_toggle_filepath"
+    echo "
+#!/bin/sh
+
+if [ \$(bluetoothctl show | grep \"Powered: yes\" | wc -c) -eq 0 ]
+then
+  bluetoothctl power on
+else
+  bluetoothctl power off
+fi
+" > "$config_polybarlaunch_bluetooth_toggle_filepath"
+    chmod +x "$config_polybarlaunch_bluetooth_toggle_filepath"
+  fi
+
   if ! grep -qF "set \$mod Mod" "$config_i3wm_filepath"; then
     # shellcheck disable=SC2016
     sed -i '1s/^/set \$mod Mod4\n/' "$config_i3wm_filepath"
@@ -580,7 +616,7 @@ polybar bar 2>&1 | tee -a /tmp/polybar1.log & disown || true
   sed -i 's/height \= 24pt/height \= 18pt/g' "$config_polybar_filepath"
   sed -i 's/radius \= 6/radius \= 0/g' "$config_polybar_filepath"
   sed -i 's/line\-size \= 3pt/line\-size \= 1pt/g' "$config_polybar_filepath"
-  sed -i 's/modules\-right \= filesystem pulseaudio xkeyboard memory cpu wlan eth date/modules\-right \= filesystem pulseaudio xkeyboard memory cpu battery wlan eth date/g' "$config_polybar_filepath"
+  sed -i 's/modules\-right \= filesystem pulseaudio xkeyboard memory cpu wlan eth date/modules\-right \= filesystem pulseaudio xkeyboard memory cpu battery wlan eth bluetooth date/g' "$config_polybar_filepath"
   sed -i 's/label \= \%title\:0\:60\:\.\.\.\%/label \= \%title\:0\:40\:\.\.\.\%\nlabel\-maxlen \= 40/g' "$config_polybar_filepath"
   sed -i 's/format\-volume\-prefix \= \"VOL \"/format\-volume\-prefix \= \"AV\"/g' "$config_polybar_filepath"
   sed -i 's/format\-prefix \= \"RAM \"/format\-prefix \= \"R\"/g' "$config_polybar_filepath"
@@ -604,7 +640,7 @@ format-charging-prefix = \"BC\"
 format-charging-prefix-foreground = \${colors.primary}
 format-discharging-prefix = \"BD\"
 format-discharging-prefix-foreground = \${colors.primary}
-format-full = \"B_FULL\"
+format-full = \"BF\"
 format-full-foreground = \${colors.primary}
 format-low-prefix = \"BL\"
 format-low-prefix-foreground = \${colors.primary}
@@ -612,6 +648,20 @@ label-charging = %percentage%%
 label-discharging = %percentage%%
 label-full = %percentage%%
 label-low = %percentage%%
+" >> "$config_polybar_filepath"
+  fi
+
+  if ! grep -qF "[module/bluetooth]" "$config_polybar_filepath"; then
+    echo "
+[module/bluetooth]
+type = custom/script
+exec = $config_polybarlaunch_bluetooth_filepath
+interval = 2
+click-left = exec $config_polybarlaunch_bluetooth_toggle_filepath
+click-right = exec $config_polybarlaunch_bluetooth_toggle_filepath
+format-padding = 1
+format-background = #000000
+format-foreground = #ffffff
 " >> "$config_polybar_filepath"
   fi
 
