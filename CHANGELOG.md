@@ -2,18 +2,22 @@
 
 ## 2024
 
-- **v2.7.4 - v2.7.5* (2024-10-04)
+- **v2.8.0* (2024-11-06)
+  - Fix some issues
+  - Add `bluetooth` & `macbookbluetooth` command
+
+- **v2.7.4 - v2.7.5* (2024-11-04)
   - Fix some issues
 
-- **v2.6.13 - v2.7.3* (2024-10-03)
+- **v2.6.13 - v2.7.3* (2024-11-03)
   - Fix some issues
   - Add `setuparchgame` command
 
-- **v2.6.0 - v2.6.12** (2024-10-02)
+- **v2.6.0 - v2.6.12** (2024-11-02)
   - Fix some issues
   - Add `setupfresharch`, `setupfresharchi3wm` command
 
-- **v2.5.10** (2024-10-01)
+- **v2.5.10** (2024-11-01)
   - Fix some issues
   - Add some tools on `setupdeveloper` command
 

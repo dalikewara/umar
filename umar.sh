@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# LAST COUNTER FOR FUNCTION VARIABLE = 32
+# LAST COUNTER FOR FUNCTION VARIABLE = 34
 
-version="v2.7.5"
+version="v2.8.0"
 pid=$$
 distro=""
 de=""
@@ -18,6 +18,8 @@ config_macbook_audio_driver1_dir="$config_dir/macbook/audio"
 config_macbook_audio_driver1_installation_script_name="install.cirrus.driver.sh"
 config_macbook_camera_driver1_dir="$config_dir/macbook/camera1"
 config_macbook_camera_driver2_dir="$config_dir/macbook/camera2"
+config_macbook_bluetooth_driver1_dir="$config_dir/macbook/bluetooth"
+config_macbook_bluetooth_driver1_installation_script_name="install.bluetooth.sh"
 config_datagrip_dir="$config_dir/datagrip"
 config_go_dir="$config_dir/go"
 config_goland_dir="$config_dir/goland"
@@ -145,6 +147,7 @@ generative_ai_url="https://generativelanguage.googleapis.com/v1beta/models"
 macbook_audio_driver1_url="https://github.com/davidjo/snd_hda_macbookpro.git"
 macbook_camera_driver1_url="https://github.com/patjak/facetimehd-firmware.git"
 macbook_camera_driver2_url="https://github.com/patjak/facetimehd.git"
+macbook_bluetooth_driver1_url="https://github.com/leifliddy/macbook12-bluetooth-driver.git"
 datagrip_download_url="https://download.jetbrains.com/datagrip/$datagrip_version_tar_filename"
 go_download_url="https://go.dev/dl/$go_version_tar_filename"
 goland_download_url="https://download.jetbrains.com/go/$goland_version_tar_filename"
@@ -267,6 +270,8 @@ showimage:Show image(s)
 -------------------:--------------------------
 playvideo:Play video(s)
 -------------------:--------------------------
+bluetooth:Open bluetooth manager
+-------------------:--------------------------
 output:Show available output device(s)
 resolution:Set screen resolution. ${color_blue}**Argument 1**${color_reset} is the output device name and ${color_blue}**Argument 2**${color_reset} is the screen resolution
 brightness:Set screen brightness. ${color_blue}**Argument 1**${color_reset} is the output device name and ${color_blue}**Argument 2**${color_reset} is the brightness value
@@ -285,6 +290,7 @@ setuparchgame:Set up gaming tools on Arch Linux
 -------------------:--------------------------
 macbookaudio:Configure audio for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
 macbookcamera:Configure camera for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
+macbookbluetooth:Configure bluetooth for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
 macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}. ${color_blue}**Argument 1**${color_reset} is the fan speed RPM
 " | while IFS=: read -r _1_name _1_description; do
       printf "${color_green}%-19s ${color_reset}%b\n" "$_1_name" "$(printout "$_1_description" | markdown_parse)"
@@ -307,6 +313,38 @@ macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Tested on MBP 2017*
 #
 # ---------------------------------------------------------------------------------------------------------------------
 
+command_bluetooth() {
+  check_requirements "bluetoothctl"
+  bluetoothctl
+}
+
+command_macbookbluetooth() {
+  printout_markdown "${color_yellow}**This will configure Macbook Bluetooth. **${color_red}**If you're not using Macbook device, DON'T execute this command (MAY BREAK YOUR SYSTEM)**${color_reset}"
+
+  printout_blank_line
+
+  printout_no_enter "Are you sure to continue this process [N/y] "
+
+  _34_confirmation=$(read_input)
+
+  if ! is_equal "$_34_confirmation" "y"; then
+    printout_exit "Aborted!"
+  fi
+
+  check_requirements "git" "sudo"
+
+  if ! is_dir_exist "$config_macbook_bluetooth_driver1_dir"; then
+    git clone "$macbook_bluetooth_driver1_url" "$config_macbook_bluetooth_driver1_dir"
+  fi
+
+  cd "$config_macbook_bluetooth_driver1_dir" || printout_exit "Bluetooth driver1 not found!"
+  sudo "./$config_macbook_bluetooth_driver1_installation_script_name"
+
+  printout_blank_line
+
+  printout_markdown "${color_yellow}**Bluetooth successfully configured. You may need to reboot your system or restart your bluetooth service(s)**${color_reset}"
+}
+
 command_setuparchgame() {
   if ! is_arch; then
     printout_exit "You're not using Arch Linux!"
@@ -318,9 +356,9 @@ command_setuparchgame() {
 
   printout_no_enter "Are you sure to continue this process [N/y] "
 
-  _32_confirmation=$(read_input)
+  _33_confirmation=$(read_input)
 
-  if ! is_equal "$_32_confirmation" "y"; then
+  if ! is_equal "$_33_confirmation" "y"; then
     printout_exit "Aborted!"
   fi
 
@@ -363,7 +401,7 @@ command_setupfresharch() {
   "pipewire-jack" "wireplumber" "pavucontrol" "alsa-card-profiles" "openssh" "sudo" "xorg" "xorg-xinit" "intel-media-driver" "mesa" \
   "xf86-video-amdgpu" "xf86-video-vmware" "libva-intel-driver" "vulkan-intel" "xf86-video-ati" "libva-mesa-driver" "vulkan-radeon" \
   "xf86-video-nouveau" "freetype2" "libglvnd" "deepin-reader" "cpio" "imagemagick" "bluez" "bluez-utils" "linux-firmware-qlogic" \
-  "linux-firmware-bnx2x" "linux-firmware-liquidio" "linux-firmware-mellanox" "linux-firmware-nfp"
+  "linux-firmware-bnx2x" "linux-firmware-liquidio" "linux-firmware-mellanox" "linux-firmware-nfp" "gcc" "linux-lts-headers" "dkms"
   printout "Configuring ssh..."
 
   if ! is_file_exist "$ssh_keygen_filepath"; then
@@ -394,6 +432,12 @@ command_setupfresharch() {
   sudo ln -sf /dev/null /etc/udev/rules.d/80-net-setup-link.rules
   printout "Configuring bluetooth..."
   sudo modprobe btusb
+  sudo usermod -G lp -a "$(whoami)" || true
+  sudo usermod -G bluetooth -a "$(whoami)" || true
+  sudo usermod -G lp -a root || true
+  sudo usermod -G bluetooth -a root || true
+  sudo systemctl start bluetooth.service || true
+  sudo systemctl enable bluetooth.service || true
   printout "Configuring sensors..."
   sudo grub-mkconfig -o /boot/grub/grub.cfg
   sudo sensors-detect
@@ -981,6 +1025,8 @@ command_setupdeveloper() {
   fi
 
   npm config set prefix "$nodejs_npm_global_dir" > /dev/null 2>&1 || true
+  sudo systemctl start docker.socket || true
+  sudo systemctl enable docker.socket || true
   printout "Done"
 }
 
@@ -1709,7 +1755,8 @@ command_window() {
     execute_eval "$_14_command"
   elif is_start_with "$_14_command" "umar open"; then
     $_14_command
-  elif is_start_with "$_14_command" "umar search" || is_start_with "$_14_command" "umar play audio"; then
+  elif is_start_with "$_14_command" "umar search" || is_start_with "$_14_command" "umar play audio" \
+  || is_start_with "$_14_command" "umar audio" || is_start_with "$_14_command" "umar bluetooth"; then
     open_terminal_and_execute "$_14_command"
   else
     open_terminal_and_execute_wait "$_14_command"
@@ -1862,6 +1909,14 @@ check_requirements() {
 
     if is_equal "$_17_arg" "xrandr"; then
       _17_arg="xorg-xrandr"
+    fi
+
+    if is_equal "$_17_arg" "bluetoothctl"; then
+      _17_arg="bluez"
+
+      if is_arch; then
+        _17_arg="bluez-utils"
+      fi
     fi
 
     if is_empty "$_17_not_exist"; then
