@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 34
 
-version="v2.8.2"
+version="v2.8.3"
 pid=$$
 distro=""
 de=""
@@ -369,7 +369,8 @@ command_setuparchgame() {
   sudo sed -i 's/\#\[multilib\]/\[multilib\]\nInclude \= \/etc\/pacman\.d\/mirrorlist/g' "$config_pacman_system_filepath"
   upgrade_package ""
   install_package "xdg-desktop-portal" "lib32-systemd" "xf86-video-vesa" "lib32-mesa" "lib32-vulkan-radeon" "lib32-amdvlk" \
-  "lib32-vulkan-intel" "lib32-nvidia-utils" "ttf-liberation" "steam"
+  "lib32-vulkan-intel" "lib32-nvidia-utils" "ttf-liberation" "steam" "nvidia-utils" "vulkan-nouveau" "lib32-vulkan-nouveau" \
+  "vulkan-radeon" "amdvlk" "vulkan-swrast" "lib32-vulkan-swrast" "vulkan-tools" "vulkan-icd-loader" "lib32-vulkan-icd-loader"
 }
 
 command_setupfresharch() {
@@ -403,7 +404,9 @@ command_setupfresharch() {
   "pipewire-jack" "wireplumber" "pavucontrol" "alsa-card-profiles" "openssh" "sudo" "xorg" "xorg-xinit" "intel-media-driver" "mesa" \
   "xf86-video-amdgpu" "xf86-video-vmware" "libva-intel-driver" "vulkan-intel" "xf86-video-ati" "libva-mesa-driver" "vulkan-radeon" \
   "xf86-video-nouveau" "freetype2" "libglvnd" "deepin-reader" "cpio" "imagemagick" "bluez" "bluez-utils" "linux-firmware-qlogic" \
-  "linux-firmware-bnx2x" "linux-firmware-liquidio" "linux-firmware-mellanox" "linux-firmware-nfp" "gcc" "linux-lts-headers" "dkms"
+  "linux-firmware-bnx2x" "linux-firmware-liquidio" "linux-firmware-mellanox" "linux-firmware-nfp" "gcc" "linux-lts-headers" "dkms" \
+  "vulkan-tools" "vulkan-icd-loader" "lib32-vulkan-icd-loader" "lib32-vulkan-intel" "nvidia-utils" "lib32-nvidia-utils" "vulkan-nouveau" \
+  "lib32-vulkan-nouveau" "lib32-vulkan-radeon" "amdvlk" "lib32-amdvlk" "vulkan-swrast" "lib32-vulkan-swrast"
   printout "Configuring ssh..."
 
   if ! is_file_exist "$ssh_keygen_filepath"; then

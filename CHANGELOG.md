@@ -2,6 +2,9 @@
 
 ## 2024
 
+- **v2.8.3* (2024-11-07)
+  - Fix some issues
+
 - **v2.8.0 - v2.8.2* (2024-11-06)
   - Fix some issues
   - Add `bluetooth` & `macbookbluetooth` command
