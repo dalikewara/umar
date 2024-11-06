@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 34
 
-version="v2.8.4"
+version="v2.8.5"
 pid=$$
 distro=""
 de=""
@@ -375,6 +375,7 @@ command_setuparchgame() {
   printout "Configuring cpupower..."
   sudo systemctl start cpupower.service || true
   sudo systemctl enable cpupower.service || true
+  sudo cpupower frequency-set -g powersave || true
 }
 
 command_setupfresharch() {
@@ -457,6 +458,7 @@ command_setupfresharch() {
   printout "Configuring cpupower..."
   sudo systemctl start cpupower.service || true
   sudo systemctl enable cpupower.service || true
+  sudo cpupower frequency-set -g powersave || true
   printout "Done"
 }
 
