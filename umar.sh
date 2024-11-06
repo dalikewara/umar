@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 34
 
-version="v2.8.3"
+version="v2.8.4"
 pid=$$
 distro=""
 de=""
@@ -370,7 +370,11 @@ command_setuparchgame() {
   upgrade_package ""
   install_package "xdg-desktop-portal" "lib32-systemd" "xf86-video-vesa" "lib32-mesa" "lib32-vulkan-radeon" "lib32-amdvlk" \
   "lib32-vulkan-intel" "lib32-nvidia-utils" "ttf-liberation" "steam" "nvidia-utils" "vulkan-nouveau" "lib32-vulkan-nouveau" \
-  "vulkan-radeon" "amdvlk" "vulkan-swrast" "lib32-vulkan-swrast" "vulkan-tools" "vulkan-icd-loader" "lib32-vulkan-icd-loader"
+  "vulkan-radeon" "amdvlk" "vulkan-swrast" "lib32-vulkan-swrast" "vulkan-tools" "vulkan-icd-loader" "lib32-vulkan-icd-loader" \
+  "cpupower"
+  printout "Configuring cpupower..."
+  sudo systemctl start cpupower.service || true
+  sudo systemctl enable cpupower.service || true
 }
 
 command_setupfresharch() {
@@ -406,7 +410,7 @@ command_setupfresharch() {
   "xf86-video-nouveau" "freetype2" "libglvnd" "deepin-reader" "cpio" "imagemagick" "bluez" "bluez-utils" "linux-firmware-qlogic" \
   "linux-firmware-bnx2x" "linux-firmware-liquidio" "linux-firmware-mellanox" "linux-firmware-nfp" "gcc" "linux-lts-headers" "dkms" \
   "vulkan-tools" "vulkan-icd-loader" "lib32-vulkan-icd-loader" "lib32-vulkan-intel" "nvidia-utils" "lib32-nvidia-utils" "vulkan-nouveau" \
-  "lib32-vulkan-nouveau" "lib32-vulkan-radeon" "amdvlk" "lib32-amdvlk" "vulkan-swrast" "lib32-vulkan-swrast"
+  "lib32-vulkan-nouveau" "lib32-vulkan-radeon" "amdvlk" "lib32-amdvlk" "vulkan-swrast" "lib32-vulkan-swrast" "cpupower"
   printout "Configuring ssh..."
 
   if ! is_file_exist "$ssh_keygen_filepath"; then
@@ -450,6 +454,9 @@ command_setupfresharch() {
   sudo pwmconfig
   printout "Configuring grub..."
   sudo sed -i -E 's/GRUB_TIMEOUT=([0-9]+)/GRUB_TIMEOUT=0/g' /etc/default/grub
+  printout "Configuring cpupower..."
+  sudo systemctl start cpupower.service || true
+  sudo systemctl enable cpupower.service || true
   printout "Done"
 }
 
