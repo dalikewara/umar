@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 34
 
-version="v2.8.6"
+version="v2.8.7"
 pid=$$
 distro=""
 de=""
@@ -405,8 +405,7 @@ command_setupfresharch() {
   "xf86-video-amdgpu" "xf86-video-vmware" "libva-intel-driver" "vulkan-intel" "xf86-video-ati" "libva-mesa-driver" "vulkan-radeon" \
   "xf86-video-nouveau" "freetype2" "libglvnd" "deepin-reader" "cpio" "imagemagick" "bluez" "bluez-utils" "linux-firmware-qlogic" \
   "linux-firmware-bnx2x" "linux-firmware-liquidio" "linux-firmware-mellanox" "linux-firmware-nfp" "gcc" "linux-lts-headers" "dkms" \
-  "vulkan-tools" "vulkan-icd-loader" "lib32-vulkan-icd-loader" "lib32-vulkan-intel" "nvidia-utils" "lib32-nvidia-utils" "vulkan-nouveau" \
-  "lib32-vulkan-nouveau" "lib32-vulkan-radeon" "amdvlk" "lib32-amdvlk" "vulkan-swrast" "lib32-vulkan-swrast"
+  "vulkan-tools" "vulkan-icd-loader" "nvidia-utils" "vulkan-nouveau" "amdvlk" "vulkan-swrast" "yad"
   printout "Configuring ssh..."
 
   if ! is_file_exist "$ssh_keygen_filepath"; then
@@ -444,12 +443,12 @@ command_setupfresharch() {
   sudo systemctl start bluetooth.service || true
   sudo systemctl enable bluetooth.service || true
   printout "Configuring sensors..."
-  sudo grub-mkconfig -o /boot/grub/grub.cfg
   sudo sensors-detect
   sudo sensors
   sudo pwmconfig
   printout "Configuring grub..."
   sudo sed -i -E 's/GRUB_TIMEOUT=([0-9]+)/GRUB_TIMEOUT=0/g' /etc/default/grub
+  sudo grub-mkconfig -o /boot/grub/grub.cfg
   printout "Done"
 }
 
@@ -471,7 +470,7 @@ command_setupfresharchi3wm() {
   fi
 
   sudo echo "Configuring..."
-  install_package "i3" "xorg" "xorg-xinit" "xfce4-terminal" "polybar" "pavucontrol" "xorg-server" "xorg-xrandr" "xorg-xinput" "bluez-utils"
+  install_package "i3" "xorg" "xorg-xinit" "xfce4-terminal" "polybar" "pavucontrol" "xorg-server" "xorg-xrandr" "xorg-xinput" "bluez-utils" "yad"
   printout "Copying .xinitrc..."
 
   if ! is_file_exist "$xinitrc_filepath"; then
@@ -594,9 +593,15 @@ fi
   sed -i '/^bar {$/,/^}/s/^/#/g' "$config_i3wm_filepath"
   # shellcheck disable=SC2016
   sed -i 's/bindsym \$mod+Return exec i3\-sensible\-terminal/\#bindsym \$mod+Return exec i3\-sensible\-terminal/g' "$config_i3wm_filepath"
+  # shellcheck disable=SC2016
+  sed -i 's/bindsym \$mod+space focus mode\_toggle/\#bindsym \$mod+space focus mode\_toggle/g' "$config_i3wm_filepath"
 
   if ! grep -qF "bindsym \$mod+Return exec xfce4-terminal" "$config_i3wm_filepath"; then
     echo "bindsym \$mod+Return exec xfce4-terminal" >> "$config_i3wm_filepath"
+  fi
+
+  if ! grep -qF "bindsym \$mod+space exec umar window" "$config_i3wm_filepath"; then
+    echo "bindsym \$mod+space exec umar window" >> "$config_i3wm_filepath"
   fi
 
   if ! grep -qF "default_border pixel 0px" "$config_i3wm_filepath"; then
