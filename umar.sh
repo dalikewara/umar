@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 34
 
-version="v2.8.7"
+version="v2.8.8"
 pid=$$
 distro=""
 de=""
@@ -1588,7 +1588,10 @@ command_setai() {
 }
 
 command_chat() {
+  check_requirements "jq"
+
   check_ai_config
+
   printout "${color_yellow}$ai_type ($ai_model)${color_reset}\n"
 
   _7_prompt=""
@@ -1781,6 +1784,8 @@ command_prompt() {
   if is_no_argument "$@"; then
     printout_exit "You didn't provide any prompt text!"
   fi
+
+  check_requirements "jq"
 
   check_ai_config
   printout "${color_yellow}$ai_type ($ai_model)${color_reset}\n"
