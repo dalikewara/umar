@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 34
 
-version="v2.8.8"
+version="v2.8.9"
 pid=$$
 distro=""
 de=""
@@ -1618,7 +1618,7 @@ command_chat() {
 
     _7_prompt="$_7_prompt {\"role\": \"model\", \"parts\":[{\"text\": \"$(printout "$_7_response" | escape_json_string)\"}]},"
 
-    printout_typing "$(printout "$_7_response" | markdown_parse)"
+    printout_typing "$(printout "$_7_response\n" | markdown_parse)"
   done
 }
 
@@ -1796,7 +1796,7 @@ command_prompt() {
     _13_response=$(http_request_google_ai "$(printout "{\"role\": \"user\", \"parts\":[{\"text\": \"$(printout "$*" | escape_json_string)\"}]}," | remove_trailing_comma)")
   fi
 
-  printout_typing "$(printout "$_13_response" | markdown_parse)"
+  printout_typing "$(printout "$_13_response\n" | markdown_parse)"
 }
 
 command_window() {
