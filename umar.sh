@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 34
 
-version="v2.8.11"
+version="v2.8.12"
 pid=$$
 distro=""
 de=""
@@ -595,6 +595,7 @@ fi
   sed -i 's/bindsym \$mod+Return exec i3\-sensible\-terminal/\#bindsym \$mod+Return exec i3\-sensible\-terminal/g' "$config_i3wm_filepath"
   # shellcheck disable=SC2016
   sed -i 's/bindsym \$mod+space focus mode\_toggle/\#bindsym \$mod+space focus mode\_toggle/g' "$config_i3wm_filepath"
+  # shellcheck disable=SC2016
   sed -i 's/bindsym \$mod+Shift+space floating toggle/\#bindsym \$mod+Shift+space floating toggle/g' "$config_i3wm_filepath"
 
   if ! grep -qF "bindsym \$mod+Return exec --no-startup-id xfce4-terminal" "$config_i3wm_filepath"; then
