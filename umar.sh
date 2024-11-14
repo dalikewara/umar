@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 34
 
-version="v2.8.12"
+version="v2.8.13"
 pid=$$
 distro=""
 de=""
@@ -280,7 +280,7 @@ brightness:Set screen brightness. ${color_blue}**Argument 1**${color_reset} is t
 -------------------:--------------------------
 touchpad:Configure touchpad device
 -------------------:--------------------------
-wifi:Scan or connect to a Wi-Fi using iwd. ${color_blue}**Argument 1**${color_reset} is the device name. The next arguments are the Wi-Fi SSID and any required parameters
+wifi:Scan or connect to a Wi-Fi using nmcli. ${color_blue}**Argument 1**${color_reset} is the Wi-Fi SSID
 testhttp:Test and benchmark HTTP URL -> \`${color_cyan}**-c** ${color_blue}**NUM** ${color_cyan}**-r** ${color_blue}**NUM** ${color_cyan}**-t** \
 ${color_blue}**SECONDS** ${color_cyan}**-header** ${color_blue}**TEXT** ${color_cyan}**-userAgent** ${color_blue}**TEXT** ${color_cyan}**-contentType** \
 ${color_blue}**TEXT** ${color_cyan}**-u** ${color_blue}**URL**${color_reset}\`
@@ -1833,36 +1833,22 @@ command_window() {
 }
 
 command_wifi() {
-  check_requirements "iwctl"
+  check_requirements "nmcli"
 
-  _15_device="wlan0"
-
-  if ! [ "$1" = "" ]; then
-    _15_device="$1"
-  fi
-
-  if [ "$2" = "" ]; then
+  if [ "$1" = "" ]; then
     printout "Scanning..."
-    iwctl station "$_15_device" scan || return 0
-    sleep 1
-    iwctl station "$_15_device" get-networks || return 0
+    nmcli radio wifi on
+    nmcli device wifi rescan
+    nmcli device wifi list
     return 0
   fi
 
-  shift
-  printout "Refreshing device..."
-  iwctl device "$_15_device" set-property Powered off || return 0
-  sleep 1
-  iwctl device "$_15_device" set-property Powered on || return 0
-  sleep 1
-  printout "OK"
   printout "Scanning..."
-  iwctl station "$_15_device" scan || return 0
+  nmcli radio wifi on
+  nmcli device wifi rescan
   printout "OK"
   printout "Connecting..."
-  sleep 1
-  # shellcheck disable=SC2048
-  iwctl station "$_15_device" connect $* || return 0
+  nmcli device wifi connect --ask "$1"
   printout "OK"
 }
 
@@ -1957,6 +1943,7 @@ check_ai_config() {
 check_requirements() {
   _17_not_exist=""
   _17_iwd=""
+  _17_networkmanager=""
 
   for _17_arg in "$@"; do
     if is_package_exist "$_17_arg" || is_user_package_exist "$_17_arg"; then
@@ -1966,6 +1953,11 @@ check_requirements() {
     if is_equal "$_17_arg" "iwctl"; then
       _17_arg="iwd"
       _17_iwd="yes"
+    fi
+
+    if is_equal "$_17_arg" "nmcli"; then
+      _17_arg="networkmanager"
+      _17_networkmanager="yes"
     fi
 
     if is_equal "$_17_arg" "pactl"; then
@@ -2003,6 +1995,10 @@ check_requirements() {
     printout_markdown "${color_yellow}**It seems you want to install **${color_red}**iwd**${color_yellow}**. If you have any other network or wireless daemon installed, **${color_red}**it might cause a conflict between them (MAY BREAK YOUR SYSTEM)**${color_reset}"
   fi
 
+  if is_equal "$_17_networkmanager" "yes"; then
+    printout_markdown "${color_yellow}**It seems you want to install **${color_red}**networkmanager**${color_yellow}**. If you have any other network or wireless daemon installed, **${color_red}**it might cause a conflict between them (MAY BREAK YOUR SYSTEM)**${color_reset}"
+  fi
+
   printout_markdown_no_enter "${color_red}**$_17_not_exist** ${color_reset}package(s) are not installed. Do you want to install them? [N/y] "
 
   _17_confirmation=$(read_input)
@@ -2021,6 +2017,13 @@ check_requirements() {
   if is_equal "$_17_iwd" "yes"; then
     sudo systemctl stop iwd.service > /dev/null 2>&1
     sudo systemctl start iwd.service > /dev/null 2>&1
+    sleep 2
+  fi
+
+  if is_equal "$_17_networkmanager" "yes"; then
+    sudo systemctl stop NetworkManager > /dev/null 2>&1
+    sudo systemctl start NetworkManager > /dev/null 2>&1
+    sudo systemctl enable --now NetworkManager > /dev/null 2>&1
     sleep 2
   fi
 
