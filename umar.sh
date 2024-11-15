@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 34
 
-version="v2.8.13"
+version="v2.8.14"
 pid=$$
 distro=""
 de=""
@@ -400,12 +400,12 @@ command_setupfresharch() {
 
   install_package "git" "vim" "curl" "htop" "neofetch" "bash" "zsh" "chromium" "make" "xorg-xrandr" "libinput" "xf86-input-libinput" \
   "xorg-server" "xorg-xinput" "polkit" "pulsemixer" "xfce4-terminal" "iwd" "amd-ucode" "intel-ucode" "lm_sensors" "bc" "base-devel" \
-  "linux-lts-headers" "pipewire" "pipewire-audio" "pipewire-pulse" "wget" "xsensors" "unzip" "sof-firmware" "alsa-firmware" "pipewire-alsa" \
+  "linux-lts" "pipewire" "pipewire-audio" "pipewire-pulse" "wget" "xsensors" "unzip" "sof-firmware" "alsa-firmware" "pipewire-alsa" \
   "pipewire-jack" "wireplumber" "pavucontrol" "alsa-card-profiles" "openssh" "sudo" "xorg" "xorg-xinit" "intel-media-driver" "mesa" \
   "xf86-video-amdgpu" "xf86-video-vmware" "libva-intel-driver" "vulkan-intel" "xf86-video-ati" "libva-mesa-driver" "vulkan-radeon" \
   "xf86-video-nouveau" "freetype2" "libglvnd" "deepin-reader" "cpio" "imagemagick" "bluez" "bluez-utils" "linux-firmware-qlogic" \
   "linux-firmware-bnx2x" "linux-firmware-liquidio" "linux-firmware-mellanox" "linux-firmware-nfp" "gcc" "linux-lts-headers" "dkms" \
-  "vulkan-tools" "vulkan-icd-loader" "nvidia-utils" "vulkan-nouveau" "amdvlk" "vulkan-swrast" "yad"
+  "vulkan-tools" "vulkan-icd-loader" "nvidia-utils" "vulkan-nouveau" "amdvlk" "vulkan-swrast" "yad" "linux" "linux-headers"
   printout "Configuring ssh..."
 
   if ! is_file_exist "$ssh_keygen_filepath"; then
@@ -446,9 +446,15 @@ command_setupfresharch() {
   sudo sensors-detect
   sudo sensors
   sudo pwmconfig
-  printout "Configuring grub..."
-  sudo sed -i -E 's/GRUB_TIMEOUT=([0-9]+)/GRUB_TIMEOUT=0/g' /etc/default/grub
-  sudo grub-mkconfig -o /boot/grub/grub.cfg
+  if is_file_exist "/etc/default/grub"; then
+    printout "Configuring grub..."
+    sudo sed -i -E 's/GRUB_TIMEOUT=([0-9]+)/GRUB_TIMEOUT=0/g' /etc/default/grub
+    sudo grub-mkconfig -o /boot/grub/grub.cfg
+  elif is_file_exist "/boot/loader/loader.conf"; then
+    printout "Configuring systemd-boot..."
+    sudo sed -i -E 's/timeout ([0-9]+)/timeout 1/g' /boot/loader/loader.conf
+    sudo sed -i -E 's/\#console\-mode keep/console\-mode keep/g' /boot/loader/loader.conf
+  fi
   printout "Done"
 }
 
