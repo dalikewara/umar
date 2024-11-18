@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 34
 
-version="v2.9.1"
+version="v2.9.2"
 pid=$$
 distro=""
 de=""
@@ -1848,7 +1848,7 @@ command_window() {
     open_terminal_and_execute_wait "umar"
   elif is_start_with "$_14_command" "umar show image" || is_start_with "$_14_command" "umar play video"; then
     execute_eval "$_14_command"
-  elif is_start_with "$_14_command" "umar open"; then
+  elif is_start_with "$_14_command" "umar open" || is_start_with "$_14_command" "umar ss"; then
     $_14_command
   elif is_start_with "$_14_command" "umar search" || is_start_with "$_14_command" "umar play audio" \
   || is_start_with "$_14_command" "umar audio" || is_start_with "$_14_command" "umar bluetooth"; then
