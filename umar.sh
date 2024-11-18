@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 34
 
-version="v2.9.0"
+version="v2.9.1"
 pid=$$
 distro=""
 de=""
@@ -285,7 +285,7 @@ testhttp:Test and benchmark HTTP URL -> \`${color_cyan}**-c** ${color_blue}**NUM
 ${color_blue}**SECONDS** ${color_cyan}**-header** ${color_blue}**TEXT** ${color_cyan}**-userAgent** ${color_blue}**TEXT** ${color_cyan}**-contentType** \
 ${color_blue}**TEXT** ${color_cyan}**-u** ${color_blue}**URL**${color_reset}\`
 -------------------:--------------------------
-ss:Take a screenshot. ${color_blue}**Argument 1**${color_reset}: ${color_cyan}a${color_reset} for area, ${color_cyan}f${color_reset} for fullscreen
+ss:Take a screenshot. ${color_blue}**Argument 1**${color_reset}: ${color_cyan}**a**${color_reset} for area, ${color_cyan}**f**${color_reset} for fullscreen
 -------------------:--------------------------
 setupfresharch:Set up a fresh Arch Linux installation
 setupfresharchi3wm:Install and set up i3-wm on a fresh Arch Linux installation
