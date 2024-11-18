@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 34
 
-version="v2.8.16"
+version="v2.9.0"
 pid=$$
 distro=""
 de=""
@@ -285,6 +285,8 @@ testhttp:Test and benchmark HTTP URL -> \`${color_cyan}**-c** ${color_blue}**NUM
 ${color_blue}**SECONDS** ${color_cyan}**-header** ${color_blue}**TEXT** ${color_cyan}**-userAgent** ${color_blue}**TEXT** ${color_cyan}**-contentType** \
 ${color_blue}**TEXT** ${color_cyan}**-u** ${color_blue}**URL**${color_reset}\`
 -------------------:--------------------------
+ss:Take a screenshot. ${color_blue}**Argument 1**${color_reset}: ${color_cyan}a${color_reset} for area, ${color_cyan}f${color_reset} for fullscreen
+-------------------:--------------------------
 setupfresharch:Set up a fresh Arch Linux installation
 setupfresharchi3wm:Install and set up i3-wm on a fresh Arch Linux installation
 setupdeveloper:Install some developer tools
@@ -314,6 +316,20 @@ macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Tested on MBP 2017*
 # Provides available Umar's command(s)
 #
 # ---------------------------------------------------------------------------------------------------------------------
+
+command_ss() {
+  check_requirements "xfce4-screenshooter"
+
+  if is_equal "$1" "a"; then
+    xfce4-screenshooter -r
+    return 0
+  elif is_equal "$1" "f"; then
+    xfce4-screenshooter -f
+    return 0
+  fi
+
+  xfce4-screenshooter
+}
 
 command_bluetooth() {
   check_requirements "bluetoothctl"
