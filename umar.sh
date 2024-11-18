@@ -2,7 +2,7 @@
 
 # LAST COUNTER FOR FUNCTION VARIABLE = 34
 
-version="v2.8.15"
+version="v2.8.16"
 pid=$$
 distro=""
 de=""
@@ -447,6 +447,9 @@ command_setupfresharch() {
   sudo sensors-detect
   sudo sensors
   sudo pwmconfig
+  printout "Configuring systemd-oomd..."
+  sudo systemctl start systemd-oomd.service || true
+  sudo systemctl enable systemd-oomd.service || true
   if is_file_exist "/etc/default/grub"; then
     printout "Configuring grub..."
     sudo sed -i -E 's/GRUB_TIMEOUT=([0-9]+)/GRUB_TIMEOUT=0/g' /etc/default/grub
