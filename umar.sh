@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.0.0"
+version="v3.0.1"
 pid=$$
 distro=""
 de=""
@@ -1435,8 +1435,8 @@ fi
             echo "bindsym \$mod+Return exec --no-startup-id xfce4-terminal" >> "$_config_i3_filepath"
         fi
 
-        if ! grep -qF "bindsym \$mod+space exec umar window" "$_config_i3_filepath"; then
-            echo "bindsym \$mod+space exec umar window" >> "$_config_i3_filepath"
+        if ! grep -qF "bindsym \$mod+space exec umar w" "$_config_i3_filepath"; then
+            echo "bindsym \$mod+space exec umar w" >> "$_config_i3_filepath"
         fi
 
         if ! grep -qF "default_border pixel 0px" "$_config_i3_filepath"; then
