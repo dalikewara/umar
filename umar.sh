@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.0.1"
+version="v3.0.2"
 pid=$$
 distro=""
 de=""
@@ -2802,19 +2802,19 @@ markdown_parse() {
 BEGIN {
     bold_start = "\033[1m"
     bold_end = "\033[0m"
-    italic_start = "\033[3m"
-    italic_end = "\033[0m"
-    header_start = "\033[1;37m"
-    header_end = "\033[0m"
-    strikethrough_start = "\033[9m"
-    strikethrough_end = "\033[0m"
-    code_start = "\033[0;36m"
-    code_end = "\033[0m"
-    link_start = "\033[4m"
-    link_end = "\033[0m"
+    italic_start = "\033[3m\033[1m"
+    italic_end = "\033[0m\033[0m"
+    header_start = "\033[1;37m\033[1m"
+    header_end = "\033[0m\033[0m"
+    strikethrough_start = "\033[9m\033[1m"
+    strikethrough_end = "\033[0m\033[0m"
+    code_start = "\033[0;36m\033[1m"
+    code_end = "\033[0m\033[0m"
+    link_start = "\033[4m\033[1m"
+    link_end = "\033[0m\033[0m"
     horizontal_rule = "\033[2m────────────────────────────────────────────────────────────\033[0m"
-    code_block_start = "\033[0;32m"
-    code_block_end = "\033[0m"
+    code_block_start = "\033[0;32m\033[1m"
+    code_block_end = "\033[0m\033[0m"
 }
 
 {
