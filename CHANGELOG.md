@@ -2,6 +2,9 @@
 
 ## 2024
 
+- **v3.0.0* (2024-12-08)
+  - Refactor v3
+
 - **v2.8.16 - v2.9.2* (2024-11-19)
   - Fix some issues
   - Add `ss` command

@@ -1,313 +1,148 @@
 #!/bin/sh
 
-# LAST COUNTER FOR FUNCTION VARIABLE = 34
-
-version="v2.9.2"
+version="v3.0.0"
 pid=$$
 distro=""
 de=""
-target_name="umar"
-typing_speed=0.005
-http_header="X-HELLO:X-WORLD"
-
-config_dir="$HOME/.umar"
-config_run_list_filepath="$config_dir/run-list.cfg"
-config_ai_filepath="$config_dir/ai.cfg"
-config_tmp_value_filepath="$config_dir/tmp_value.cfg"
-config_macbook_audio_driver1_dir="$config_dir/macbook/audio"
-config_macbook_audio_driver1_installation_script_name="install.cirrus.driver.sh"
-config_macbook_camera_driver1_dir="$config_dir/macbook/camera1"
-config_macbook_camera_driver2_dir="$config_dir/macbook/camera2"
-config_macbook_bluetooth_driver1_dir="$config_dir/macbook/bluetooth"
-config_macbook_bluetooth_driver1_installation_script_name="install.bluetooth.sh"
-config_datagrip_dir="$config_dir/datagrip"
-config_go_dir="$config_dir/go"
-config_goland_dir="$config_dir/goland"
-config_idea_dir="$config_dir/idea"
-config_postman_dir="$config_dir/postman"
-config_pycharm_dir="$config_dir/pycharm"
-config_rustrover_dir="$config_dir/rustrover"
-config_webstorm_dir="$config_dir/webstorm"
-config_nodejs_dir="$config_dir/nodejs"
-config_pyenv_dir="$HOME/.pyenv"
-config_config_dir="$HOME/.config"
-config_i3wm_dir="$config_config_dir/i3"
-config_i3wm_filepath="$config_i3wm_dir/config"
-config_i3wm_system_filepath="/etc/i3/config"
-config_i3status_dir="$config_config_dir/i3status"
-config_i3status_filepath="$config_i3status_dir/config"
-config_i3status_system_filepath="/etc/i3status.conf"
-config_polybar_dir="$config_config_dir/polybar"
-config_polybar_filepath="$config_polybar_dir/config.ini"
-config_polybar_system_filepath="/etc/polybar/config.ini"
-config_polybarlaunch_filepath="$config_polybar_dir/launch.sh"
-config_polybarlaunch_bluetooth_filepath="$config_polybar_dir/launch-bluetooth.sh"
-config_polybarlaunch_bluetooth_toggle_filepath="$config_polybar_dir/launch-bluetooth-toggle.sh"
-config_xfce4_dir="$config_config_dir/xfce4"
-config_xfce4_xfconf_dir="$config_xfce4_dir/xfconf"
-config_xfce4_xfconf_xfce_perchannel_xml_dir="$config_xfce4_xfconf_dir/xfce-perchannel-xml"
-config_xfce4_filepath="$config_xfce4_xfconf_xfce_perchannel_xml_dir/xfce4-terminal.xml"
-config_xfce4launch_filepath="$config_xfce4_xfconf_xfce_perchannel_xml_dir/xfce4-terminal-launch.sh"
-config_pacman_system_filepath="/etc/pacman.conf"
-bash_profile_filepath="$HOME/.bash_profile"
-bashrc_filepath="$HOME/.bashrc"
-profile_filepath="$HOME/.profile"
-zshrc_filepath="$HOME/.zshrc"
-zprofile_filepath="$HOME/.zprofile"
-xinitrc_filepath="$HOME/.xinitrc"
-xinitrc_system_filepath="/etc/X11/xinit/xinitrc"
-user_package_dir="/usr/local/bin"
-install_dir="/usr/local/bin"
-script_name="umar.sh"
-macbook_platform_smc_dir="/sys/devices/platform/applesmc.768"
-macbook_platform_fan_min_filepath="$macbook_platform_smc_dir/fan1_min"
-macbook_platform_fan_max_filepath="$macbook_platform_smc_dir/fan1_max"
-macbook_platform_fan_manual_filepath="$macbook_platform_smc_dir/fan1_manual"
-macbook_platform_fan_output_filepath="$macbook_platform_smc_dir/fan1_output"
-datagrip_version_tar_filename="datagrip-2023.3.3.tar.gz"
-datagrip_version_dir_name="DataGrip-2023.3.3"
-datagrip_downloaded_filepath="$config_datagrip_dir/$datagrip_version_tar_filename"
-datagrip_extracted_dir="$config_datagrip_dir/$datagrip_version_dir_name"
-datagrip_script_filepath="$datagrip_extracted_dir/bin/datagrip.sh"
-datagrip_chrome_sandbox_filepath="$datagrip_extracted_dir/jbr/lib/chrome-sandbox"
-datagrip_installed_filepath="/usr/local/bin/datagrip"
-go_version_tar_filename="go1.23.2.linux-amd64.tar.gz"
-go_dir="$HOME/go"
-go_src_dir="$go_dir/src"
-go_pkg_dir="$go_dir/pkg"
-go_bin_dir="$go_dir/bin"
-go_version_dir_name="go1.23.2"
-go_downloaded_filepath="$config_go_dir/$go_version_tar_filename"
-go_extracted_dir="$config_go_dir/$go_version_dir_name"
-go_extracted_dir_path="$config_go_dir/go"
-go_installed_filepath="/usr/local/go"
-go_installed_bin_dir="/usr/local/go/bin"
-goland_version_tar_filename="goland-2023.3.2.tar.gz"
-goland_version_dir_name="GoLand-2023.3.2"
-goland_downloaded_filepath="$config_goland_dir/$goland_version_tar_filename"
-goland_extracted_dir="$config_goland_dir/$goland_version_dir_name"
-goland_script_filepath="$goland_extracted_dir/bin/goland.sh"
-goland_chrome_sandbox_filepath="$goland_extracted_dir/jbr/lib/chrome-sandbox"
-goland_installed_filepath="/usr/local/bin/goland"
-idea_version_tar_filename="ideaIU-2023.3.2.tar.gz"
-idea_version_dir_name="idea-IU-233.13135.103"
-idea_downloaded_filepath="$config_idea_dir/$idea_version_tar_filename"
-idea_extracted_dir="$config_idea_dir/$idea_version_dir_name"
-idea_script_filepath="$idea_extracted_dir/bin/idea.sh"
-idea_chrome_sandbox_filepath="$idea_extracted_dir/jbr/lib/chrome-sandbox"
-idea_installed_filepath="/usr/local/bin/idea"
-postman_version_tar_filename="postman.tar.gz"
-postman_version_dir_name="Postman"
-postman_downloaded_filepath="$config_postman_dir/$postman_version_tar_filename"
-postman_script_filepath="$config_postman_dir/$postman_version_dir_name/app/Postman"
-postman_installed_filepath="/usr/local/bin/postman"
-pycharm_version_tar_filename="pycharm-professional-2023.3.2.tar.gz"
-pycharm_version_dir_name="pycharm-2023.3.2"
-pycharm_downloaded_filepath="$config_pycharm_dir/$pycharm_version_tar_filename"
-pycharm_extracted_dir="$config_pycharm_dir/$pycharm_version_dir_name"
-pycharm_script_filepath="$pycharm_extracted_dir/bin/pycharm.sh"
-pycharm_chrome_sandbox_filepath="$pycharm_extracted_dir/jbr/lib/chrome-sandbox"
-pycharm_installed_filepath="/usr/local/bin/pycharm"
-rustrover_version_tar_filename="RustRover-2024.1.tar.gz"
-rustrover_version_dir_name="RustRover-2024.1"
-rustrover_downloaded_filepath="$config_rustrover_dir/$rustrover_version_tar_filename"
-rustrover_extracted_dir="$config_rustrover_dir/$rustrover_version_dir_name"
-rustrover_script_filepath="$rustrover_extracted_dir/bin/rustrover.sh"
-rustrover_chrome_sandbox_filepath="$rustrover_extracted_dir/jbr/lib/chrome-sandbox"
-rustrover_installed_filepath="/usr/local/bin/rustrover"
-webstorm_version_tar_filename="WebStorm-2024.1.3.tar.gz"
-webstorm_version_dir_name="WebStorm-241.17011.90"
-webstorm_downloaded_filepath="$config_webstorm_dir/$webstorm_version_tar_filename"
-webstorm_extracted_dir="$config_webstorm_dir/$webstorm_version_dir_name"
-webstorm_script_filepath="$webstorm_extracted_dir/bin/webstorm.sh"
-webstorm_chrome_sandbox_filepath="$webstorm_extracted_dir/jbr/lib/chrome-sandbox"
-webstorm_installed_filepath="/usr/local/bin/webstorm"
-nodejs_version_tar_filename="node-v21.6.1-linux-x64.tar.xz"
-nodejs_dir="$HOME/nodejs"
-nodejs_npm_global_dir="$HOME/.npm-global"
-nodejs_npm_global_bin_dir="$nodejs_npm_global_dir/bin"
-nodejs_version_dir_name="v21.6.1"
-nodejs_downloaded_filepath="$config_nodejs_dir/$nodejs_version_tar_filename"
-nodejs_extracted_dir="$config_nodejs_dir/$nodejs_version_dir_name"
-nodejs_extracted_dir_path="$config_nodejs_dir/node-v21.6.1-linux-x64"
-nodejs_installed_filepath="/usr/local/lib/nodejs"
-nodejs_installed_version_filepath="$nodejs_installed_filepath/node-v21.6.1-linux-x64"
-nodejs_installed_version_bin_dir="$nodejs_installed_version_filepath/bin"
-ssh_keygen_dir="$HOME/.ssh/id_ed25519"
-ssh_keygen_filepath="$HOME/.ssh/id_ed25519.pub"
-
 color_green='\033[0;32m'
 color_cyan='\033[0;36m'
 color_blue='\033[0;34m'
 color_red='\033[0;31m'
 color_yellow='\033[1;33m'
 color_reset='\033[0m'
-
-repo_url="https://raw.githubusercontent.com/dalikewara/umar/master"
-search_url="https://www.google.com/search?q="
-generative_ai_url="https://generativelanguage.googleapis.com/v1beta/models"
-macbook_audio_driver1_url="https://github.com/davidjo/snd_hda_macbookpro.git"
-macbook_camera_driver1_url="https://github.com/patjak/facetimehd-firmware.git"
-macbook_camera_driver2_url="https://github.com/patjak/facetimehd.git"
-macbook_bluetooth_driver1_url="https://github.com/leifliddy/macbook12-bluetooth-driver.git"
-datagrip_download_url="https://download.jetbrains.com/datagrip/$datagrip_version_tar_filename"
-go_download_url="https://go.dev/dl/$go_version_tar_filename"
-goland_download_url="https://download.jetbrains.com/go/$goland_version_tar_filename"
-idea_download_url="https://download-cdn.jetbrains.com/idea/$idea_version_tar_filename"
-postman_download_url="https://dl.pstmn.io/download/latest/linux_64"
-pycharm_download_url="https://download.jetbrains.com/python/$pycharm_version_tar_filename"
-rustrover_download_url="https://download.jetbrains.com/rustrover/$rustrover_version_tar_filename"
-webstorm_download_url="https://download.jetbrains.com/webstorm/$webstorm_version_tar_filename"
-nodejs_download_url="https://nodejs.org/dist/$nodejs_version_dir_name/$nodejs_version_tar_filename"
-rust_download_url="https://sh.rustup.rs"
-pyenv_download_url="https://pyenv.run"
-
-# shellcheck disable=SC2034
-gemini_model_1="gemini-1.0-pro"
-# shellcheck disable=SC2034
-gemini_model_2="gemini-1.5-pro"
-# shellcheck disable=SC2034
-gemini_model_3="gemini-1.5-flash"
-
-ai_type=""
-ai_model=""
-ai_api_key=""
-ai_url=""
+bold_start='\033[1m'
+bold_end='\033[0m'
 
 umar() {
-  if is_file_exist "/etc/os-release"; then
-    distro=$(awk -F= '/^ID=/ { print $2 }' /etc/os-release | tr -d '"')
-  fi
-
-  case "$distro" in
-    arch*) distro="arch" ;;
-    debian*) distro="debian" ;;
-    ubuntu*) distro="ubuntu" ;;
-    fedora*) distro="fedora" ;;
-    centos*) distro="centos" ;;
-    manjaro*) distro="manjaro" ;;
-    *) distro="unknown" ;;
-  esac
-
-  if [ -n "$XDG_CURRENT_DESKTOP" ]; then
-    de="$XDG_CURRENT_DESKTOP"
-  elif is_file_exist "/etc/X11/xinit/xinitrc.d/50-gnome-session.sh"; then
-    de="gnome"
-  elif is_file_exist "/etc/X11/xinit/xinitrc.d/50-kde.sh"; then
-    de="kde"
-  elif is_file_exist "/etc/X11/xinit/xinitrc.d/50-xfce.sh"; then
-    de="xfce"
-  elif is_file_exist "/etc/X11/xinit/xinitrc.d/50-lxde.sh"; then
-    de="lxde"
-  elif is_file_exist "/etc/X11/xinit/xinitrc.d/50-i3.sh"; then
-    de="i3wm"
-  elif is_file_exist "/usr/share/xsessions/gnome.desktop"; then
-    de="gnome"
-  elif is_file_exist "/usr/share/xsessions/kde.plasma.desktop"; then
-    de="kdeplasma"
-  elif is_file_exist "/usr/share/xsessions/xfce.desktop"; then
-    de="xfce"
-  elif is_file_exist "/usr/share/xsessions/lxde.desktop"; then
-    de="lxde"
-  elif is_file_exist "/usr/share/xsessions/i3.desktop"; then
-    de="i3wm"
-  fi
-
-  if is_file_exist "$config_ai_filepath"; then
-    ai_type=$(read_file_content_line "1" "$config_ai_filepath")
-    ai_model=$(read_file_content_line "2" "$config_ai_filepath")
-    ai_api_key=$(read_file_content_line "3" "$config_ai_filepath")
-
-    if is_ai_google; then
-      ai_url="$generative_ai_url"
+    if is_file_exist "/etc/os-release"; then
+        distro=$(awk -F= '/^ID=/ { print $2 }' "/etc/os-release" | tr -d '"')
     fi
-  fi
 
-  create_dir "$config_dir"
-  create_file "$config_run_list_filepath"
-  create_file "$config_ai_filepath"
-  check_requirements "sh"
+    case "$distro" in
+        arch*) distro="arch" ;;
+        debian*) distro="debian" ;;
+        ubuntu*) distro="ubuntu" ;;
+        fedora*) distro="fedora" ;;
+        centos*) distro="centos" ;;
+        manjaro*) distro="manjaro" ;;
+        *) distro="unknown" ;;
+    esac
 
-  if is_no_argument "$@"; then
-    printout "
-I am Umar (${color_yellow}$version${color_reset}), your Linux assistant. I can help you with the common tasks listed below. \
-I will continue to be updated indefinitely, as my creator may need to add new features, update my logic, fix issues, \
-or make other changes. I may get smarter every day. I can also use AI, but you need to manually set up the configuration first. \
-All functions have been tested on ${color_yellow}Arch Linux${color_reset}. They might work on other distros, but I'm not sure.
+    if [ -n "$XDG_CURRENT_DESKTOP" ]; then
+        de="$XDG_CURRENT_DESKTOP"
+    elif is_file_exist "/etc/X11/xinit/xinitrc.d/50-gnome-session.sh"; then
+        de="gnome"
+    elif is_file_exist "/etc/X11/xinit/xinitrc.d/50-kde.sh"; then
+        de="kde"
+    elif is_file_exist "/etc/X11/xinit/xinitrc.d/50-xfce.sh"; then
+        de="xfce"
+    elif is_file_exist "/etc/X11/xinit/xinitrc.d/50-lxde.sh"; then
+        de="lxde"
+    elif is_file_exist "/etc/X11/xinit/xinitrc.d/50-i3.sh"; then
+        de="i3wm"
+    elif is_file_exist "/usr/share/xsessions/gnome.desktop"; then
+        de="gnome"
+    elif is_file_exist "/usr/share/xsessions/kde.plasma.desktop"; then
+        de="kdeplasma"
+    elif is_file_exist "/usr/share/xsessions/xfce.desktop"; then
+        de="xfce"
+    elif is_file_exist "/usr/share/xsessions/lxde.desktop"; then
+        de="lxde"
+    elif is_file_exist "/usr/share/xsessions/i3.desktop"; then
+        de="i3wm"
+    fi
+
+    create_dir "$HOME/.umar"
+
+    check_requirements "sh"
+
+    if is_no_argument "$@"; then
+        printout "
+I am Umar (${color_yellow}$version${color_reset}), your Linux assistant. I can help \
+you with the common tasks listed below. I will continue to be updated indefinitely, as \
+my creator may need to add new features, update my logic, fix issues, or make other changes. \
+I may get smarter every day. I can also use AI, but you need to manually set up the configuration first.
 "
+        printout "\
+${color_green}${bold_start}u                         ${bold_end}${color_reset}:Make me smarter by updating me to the latest version
+${color_green}${bold_start}v                         ${bold_end}${color_reset}:Show my current version
+${color_green}${bold_start}r                         ${bold_end}${color_reset}:Reveal my source code
+${color_green}${bold_start}w                         ${bold_end}${color_reset}:Open my command window. You may create a keyboard shortcut for this command to open my command window directly
+${color_green}${bold_start}run ${bold_end}${color_reset}OPTION | COMMANDS...  :Run custom command(s)
+${color_cyan}${bold_start}    -l                    ${bold_end}${color_reset}:get list custom command(s)
+${color_cyan}${bold_start}    -s                    ${bold_end}${color_reset}:set new custom command
+${color_cyan}${bold_start}    -r ${bold_end}${color_reset}COMMANDS...        :remove custom command(s)
+${color_cyan}${bold_start}    -cd                   ${bold_end}${color_reset}:change custom command description
+${color_cyan}${bold_start}    -cc                   ${bold_end}${color_reset}:change custom command
+${color_green}${bold_start}ai ${bold_end}${color_reset}[OPTION]               :Use AI function(s)
+${color_cyan}${bold_start}    -p ${bold_end}${color_reset}PROMPT_TEXT        :prompt to AI
+${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                   :start AI chat session
+${color_cyan}${bold_start}    -i ${bold_end}${color_reset}                   :show AI information
+${color_cyan}${bold_start}    -s ${bold_end}${color_reset}                   :set AI config
+${color_cyan}${bold_start}    -ct ${bold_end}${color_reset}                  :change AI type
+${color_cyan}${bold_start}    -cm ${bold_end}${color_reset}                  :change AI model
+${color_cyan}${bold_start}    -ca ${bold_end}${color_reset}                  :change AI api key
+${color_green}${bold_start}open ${bold_end}${color_reset}PACKAGES...          :Open package(s)
+${color_green}${bold_start}kill ${bold_end}${color_reset}NAMES...             :Kill package(s) process
+${color_green}${bold_start}ins ${bold_end}${color_reset}PACKAGES...           :Install package(s)
+${color_green}${bold_start}rm ${bold_end}${color_reset}PACKAGES...            :Remove package(s)
+${color_green}${bold_start}upg ${bold_end}${color_reset}[PACKAGES...]         :Upgrade package(s)
+${color_green}${bold_start}srch ${bold_end}${color_reset}TEXT...              :Search for the given keyword(s) using a terminal browser
+${color_green}${bold_start}au ${bold_end}${color_reset}[OPTION]               :Use audio function(s)
+${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                   :show audio cards
+${color_cyan}${bold_start}    -p ${bold_end}${color_reset}AUDIO_FILEPATHS... :play audio
+${color_green}${bold_start}img ${bold_end}${color_reset}OPTION                :Use image function(s)
+${color_cyan}${bold_start}    -s ${bold_end}${color_reset}IMAGE_FILEPATHS... :show image
+${color_green}${bold_start}vid ${bold_end}${color_reset}OPTION                :Use video function(s)
+${color_cyan}${bold_start}    -p ${bold_end}${color_reset}VIDEO_FILEPATH     :play video
+${color_green}${bold_start}bth ${bold_end}${color_reset}                      :Open bluetooth manager
+${color_green}${bold_start}batt ${bold_end}${color_reset}OPTION               :Use battery function(s)
+${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                   :show battery capacity
+${color_green}${bold_start}dev ${bold_end}${color_reset}                      :Show available device(s)
+${color_green}${bold_start}reso ${bold_end}${color_reset}[DEVICE RESOLUTION]  :Set screen resolution
+${color_green}${bold_start}bri ${bold_end}${color_reset}[DEVICE BRIGTNESS]    :Set screen brightness
+${color_green}${bold_start}tcpd ${bold_end}${color_reset}                     :Configure touchpad device
+${color_green}${bold_start}wifi ${bold_end}${color_reset}[SSID]               :Scan or connect to a Wi-Fi using nmcli
+${color_green}${bold_start}thttp ${bold_end}${color_reset}OPTIONS...          :Test and benchmark HTTP URL
+${color_cyan}${bold_start}    -c ${bold_end}${color_reset}NUM                :concurrent
+${color_cyan}${bold_start}    -r ${bold_end}${color_reset}NUM                :retry
+${color_cyan}${bold_start}    -t ${bold_end}${color_reset}SECONDS            :time duration
+${color_cyan}${bold_start}    -header ${bold_end}${color_reset}TEXT          :header
+${color_cyan}${bold_start}    -userAgent ${bold_end}${color_reset}TEXT       :user agent
+${color_cyan}${bold_start}    -contentType ${bold_end}${color_reset}TEXT     :content type
+${color_cyan}${bold_start}    -u ${bold_end}${color_reset}URL                :url
+${color_green}${bold_start}ss ${bold_end}${color_reset}[OPTION]               :Take a screenshot
+${color_cyan}${bold_start}    -a ${bold_end}${color_reset}                   :area
+${color_cyan}${bold_start}    -f ${bold_end}${color_reset}                   :fullscreen
+${color_green}${bold_start}stp ${bold_end}${color_reset}OPTION                :Use setup function(s)
+${color_cyan}${bold_start}    -fa ${bold_end}${color_reset}                  :setup fresh Arch Linux installation
+${color_cyan}${bold_start}    -fai3 ${bold_end}${color_reset}                :setup i3wm on a fresh Arch Linux installation
+${color_cyan}${bold_start}    -d ${bold_end}${color_reset}                   :install developer tools
+${color_cyan}${bold_start}    -ag ${bold_end}${color_reset}                  :install gaming tools on Arch Linux
+${color_green}${bold_start}intmb ${bold_end}${color_reset}OPTION              :Use Intel MacBook function(s)
+${color_cyan}${bold_start}    -a ${bold_end}${color_reset}                   :configure audio
+${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                   :configure camera
+${color_cyan}${bold_start}    -b ${bold_end}${color_reset}                   :configure bluetooth
+${color_cyan}${bold_start}    -f ${bold_end}${color_reset}[SPEED]            :set fan speed
+        " | while IFS=: read -r name description; do
+            # printf "%-26s" "$name"
+            printout_no_enter "$name"
+            printout "$description" | fold -s -w $(($(tput cols) - 26)) | sed '2,$s/^/                          /'
+        done
 
-    printout "\
-getsmarter:Upgrade me to the latest version
-version:Show my current version
-reveal:Reveal my source code
-window:Open my command window. ${color_yellow}**You may create a keyboard shortcut for this command to open my command window directly**${color_reset}
--------------------:--------------------------
-run:Run custom command(s)
-listrun:List registered custom command(s)
-setrun:Set new custom command
-removerun:Remove custom command(s)
-changerundesc:Change custom command description
-changeruncommand:Change custom command execution command
--------------------:--------------------------
-prompt:Prompt anything to AI
-chat:Start a new chat session with AI
-setai:Set new AI configuration
-showai:Show AI information
-changeaitype:Change AI type
-changeaimodel:Change AI model
-changeaiapikey:Change AI API key
--------------------:--------------------------
-open:Open package(s)
-kill:Kill package(s) process
-search:Search for the given keyword(s) using a terminal browser
-install:Install package(s)
-remove:Remove package(s)
-upgrade:Upgrade package(s)
--------------------:--------------------------
-audio:Open audio setting
-audiocard:List audio cards
-playaudio:Play audio(s)
--------------------:--------------------------
-showimage:Show image(s)
--------------------:--------------------------
-playvideo:Play video(s)
--------------------:--------------------------
-bluetooth:Open bluetooth manager
--------------------:--------------------------
-output:Show available output device(s)
-resolution:Set screen resolution. ${color_blue}**Argument 1**${color_reset} is the output device name and ${color_blue}**Argument 2**${color_reset} is the screen resolution
-brightness:Set screen brightness. ${color_blue}**Argument 1**${color_reset} is the output device name and ${color_blue}**Argument 2**${color_reset} is the brightness value
--------------------:--------------------------
-touchpad:Configure touchpad device
--------------------:--------------------------
-wifi:Scan or connect to a Wi-Fi using nmcli. ${color_blue}**Argument 1**${color_reset} is the Wi-Fi SSID
-testhttp:Test and benchmark HTTP URL -> \`${color_cyan}**-c** ${color_blue}**NUM** ${color_cyan}**-r** ${color_blue}**NUM** ${color_cyan}**-t** \
-${color_blue}**SECONDS** ${color_cyan}**-header** ${color_blue}**TEXT** ${color_cyan}**-userAgent** ${color_blue}**TEXT** ${color_cyan}**-contentType** \
-${color_blue}**TEXT** ${color_cyan}**-u** ${color_blue}**URL**${color_reset}\`
--------------------:--------------------------
-ss:Take a screenshot. ${color_blue}**Argument 1**${color_reset}: ${color_cyan}**a**${color_reset} for area, ${color_cyan}**f**${color_reset} for fullscreen
--------------------:--------------------------
-setupfresharch:Set up a fresh Arch Linux installation
-setupfresharchi3wm:Install and set up i3-wm on a fresh Arch Linux installation
-setupdeveloper:Install some developer tools
-setuparchgame:Set up gaming tools on Arch Linux
--------------------:--------------------------
-macbookaudio:Configure audio for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
-macbookcamera:Configure camera for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
-macbookbluetooth:Configure bluetooth for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}
-macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Tested on MBP 2017**${color_reset}. ${color_blue}**Argument 1**${color_reset} is the fan speed RPM
-" | while IFS=: read -r _1_name _1_description; do
-      printf "${color_green}%-19s ${color_reset}%b\n" "$_1_name" "$(printout "$_1_description" | markdown_parse)"
-    done
+        printout "$(printout "\
+All functions have been tested on ${color_yellow}**Arch Linux**${color_reset}. They might work on other distros, \
+but I'm not sure. ${color_red}**DON'T EXECUTE ANYTHING IF YOU'RE NOT SURE, IT MAY BREAK YOUR SYSTEM**${color_reset}\
+        " | markdown_parse)"
 
-    printout "$(printout "All functions have been tested on ${color_yellow}**Arch Linux**${color_reset}. They might work on other distros, but I'm not sure.\n${color_red}**BE CAREFUL ABOUT WHAT YOU TYPE, MAKE SURE THERE IS NOTHING THAT CAN BREAK YOUR SYSTEM**${color_reset}" | markdown_parse)\n"
-    return 0
-  fi
+        return 0
+    fi
 
-  _1_command="command_$1"
+    _command="command_$1"
 
-  shift
-  $_1_command "$@" || printout "Sorry, I can't understand your command"
+    shift
+
+    $_command "$@" || printout "Invalid command"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -317,354 +152,1326 @@ macbookfan:Set fan speed for Intel Macbook. ${color_yellow}**Tested on MBP 2017*
 #
 # ---------------------------------------------------------------------------------------------------------------------
 
+command_u() {
+    check_requirements "curl" "sudo"
+
+    _url="https://raw.githubusercontent.com/dalikewara/umar/master/umar.sh"
+    _tmp_filepath="/tmp/umar.sh"
+    _installation_filepath="/usr/local/bin/umar"
+
+    curl -L "$_url" -o "$_tmp_filepath"
+
+    sudo mv "$_tmp_filepath" "$_installation_filepath"
+    sudo chmod +x "$_installation_filepath"
+
+    if [ -x "$_installation_filepath" ]; then
+        printout_exit "Ok"
+    fi
+
+    printout_exit "Aborted!"
+}
+
+command_v() {
+    printout_exit "$version"
+}
+
+command_r() {
+    check_requirements "vim"
+
+    execute vim -R "/usr/local/bin/umar"
+}
+
+command_w() {
+    check_requirements "yad"
+
+    _command=$(yad --entry --sticky --no-buttons --width=400 --title "" --text "DON'T EXECUTE ANYTHING IF YOU'RE NOT SURE, IT MAY BREAK YOUR SYSTEM" --text-align "fill" --undecorated)
+
+    if is_empty "$_command"; then
+        return 0
+    fi
+
+    if ! is_start_with "$_command" "umar"; then
+        _command="umar $_command"
+    fi
+
+    if is_start_with "$_command" "umar help"; then
+        open_terminal_and_execute_wait "umar"
+    elif is_start_with "$_command" "umar img" || is_start_with "$_command" "umar vid"; then
+        execute_eval "$_command"
+    elif is_start_with "$_command" "umar open" || is_start_with "$_command" "umar ss"; then
+        $_command
+    elif is_start_with "$_command" "umar srch" || is_start_with "$_command" "umar au" || is_start_with "$_command" "umar bth"; then
+        open_terminal_and_execute "$_command"
+    else
+        open_terminal_and_execute_wait "$_command"
+    fi
+}
+
+command_run() {
+    if is_no_argument "$@"; then
+        printout_exit "An option or command(s) is required!"
+    fi
+
+    _cfg_filepath="$HOME/.umar/run-list.cfg"
+
+    create_file "$_cfg_filepath"
+
+    if is_equal "$1" "-l"; then
+        _cfg="$(read_file_content "$_cfg_filepath")"
+
+        if is_empty "$_cfg"; then
+            printout_exit "No custom commands have been set"
+        fi
+
+        printout "$_cfg" | while IFS=: read -r _name _description _command; do
+            if is_empty "$_name" && is_empty "$_description" && is_empty "$_command"; then
+                continue
+            fi
+
+            printf "${color_green}%-20s ${color_reset}%-30s ${color_cyan}%b${color_reset}\n" "$_name" "$_description" "$_command"
+        done
+
+        return 0
+    fi
+
+    if is_equal "$1" "-s"; then
+        printout_no_enter "Enter a name... "
+
+        _name=$(read_input)
+
+        if is_empty "$_name"; then
+            printout_exit "The name can't be empty!"
+        fi
+
+        if is_contain "$_name" ":"; then
+            printout_exit "The name can't contain a colon!"
+        fi
+
+        if is_equal "$_name" "-l"; then
+            printout_exit "The name can't be: -l"
+        fi
+
+        if is_equal "$_name" "-s"; then
+            printout_exit "The name can't be: -s"
+        fi
+
+        if is_equal "$_name" "-r"; then
+            printout_exit "The name can't be: -r"
+        fi
+
+        if is_equal "$_name" "-cd"; then
+            printout_exit "The name can't be: -cd"
+        fi
+
+        if is_equal "$_name" "-cc"; then
+            printout_exit "The name can't be: -cc"
+        fi
+
+        _name_exist=$(read_file_content "$_cfg_filepath" | while IFS=: read -r _name_config _ _; do
+            if is_equal "$_name" "$_name_config"; then
+                printout_exit "exist"
+            fi
+        done)
+
+        if is_equal "$_name_exist" "exist"; then
+            printout_exit "The name already exists!"
+        fi
+
+        printout_no_enter "Enter a description... "
+
+        _description=$(read_input)
+
+        if is_contain "$_description" ":"; then
+            printout_exit "The description can't contain a colon!"
+        fi
+
+        printout_no_enter "Enter the execution command... "
+
+        _command=$(read_input)
+
+        if is_empty "$_command"; then
+            printout_exit "The execution command can't be empty!"
+        fi
+
+        _cfg=$(append_content_to_file "$_name:$_description:$_command" "$_cfg_filepath")
+
+        write_to_file "$_cfg" "$_cfg_filepath"
+
+        printout "Ok"
+        
+        return 0
+    fi
+
+    if is_equal "$1" "-r"; then
+        shift
+
+        if is_no_argument "$@"; then
+            printout_exit "You didn't provide any custom command(s) to remove!"
+        fi
+
+        for _arg in "$@"; do
+            read_file_content "$_cfg_filepath" | while IFS=: read -r _name_config _ _; do
+                if is_equal "$_arg" "$_name_config" && ! is_empty "$_name_config"; then
+                    delete_line_from_file_by_keyword "$_name_config:" "$_cfg_filepath"
+
+                    break
+                fi
+            done
+        done
+
+        printout "Ok"
+
+        return 0
+    fi
+
+    if is_equal "$1" "-cd"; then
+        printout_no_enter "Enter a name... "
+
+        _name=$(read_input)
+
+        if is_empty "$_name"; then
+            printout_exit "The name can't be empty!"
+        fi
+
+        if is_contain "$_name" ":"; then
+            printout_exit "The name can't contain a colon!"
+        fi
+
+        _name_exist=$(read_file_content "$_cfg_filepath" | while IFS=: read -r _name_config _ _; do
+            if is_equal "$_name" "$_name_config" && ! is_empty "$_name_config"; then
+                printout_exit "exist"
+            fi
+        done)
+
+        if ! is_equal "$_name_exist" "exist"; then
+            printout_exit "${color_green}$_name${color_reset} command not found!"
+        fi
+
+        printout_no_enter "Enter a description... "
+
+        _description=$(read_input)
+
+        if is_contain "$_description" ":"; then
+            printout_exit "The description can't contain a colon!"
+        fi
+
+        read_file_content "$_cfg_filepath" | while IFS=: read -r _name_config _ _command_config; do
+            if is_equal "$_name" "$_name_config" && ! is_empty "$_name_config"; then
+                change_file_content_line_by_keyword "$_name_config:" "$_name_config:$_description:$_command_config" "$_cfg_filepath"
+                
+                break
+            fi
+        done
+
+        return 0
+    fi
+
+    if is_equal "$1" "-cc"; then
+        printout_no_enter "Enter a name... "
+
+        _name=$(read_input)
+
+        if is_empty "$_name"; then
+            printout_exit "The name can't be empty!"
+        fi
+
+        if is_contain "$_name" ":"; then
+            printout_exit "The name can't contain a colon!"
+        fi
+
+        _name_exist=$(read_file_content "$_cfg_filepath" | while IFS=: read -r _name_config _ _; do
+            if is_equal "$_name" "$_name_config" && ! is_empty "$_name_config"; then
+                printout_exit "exist"
+            fi
+        done)
+
+        if ! is_equal "$_name_exist" "exist"; then
+            printout_exit "${color_green}$_name${color_reset} command not found!"
+        fi
+
+        printout_no_enter "Enter the execution command... "
+
+        _command=$(read_input)
+
+        if is_empty "$_command"; then
+            printout_exit "The execution command can't be empty!"
+        fi
+
+        read_file_content "$_cfg_filepath" | while IFS=: read -r _name_config _description_config _; do
+            if is_equal "$_name" "$_name_config" && ! is_empty "$_name_config"; then
+                change_file_content_line_by_keyword "$_name_config:" "$_name_config:$_description_config:$_command" "$_cfg_filepath"
+                
+                break
+            fi
+        done
+
+        return 0
+    fi
+
+    write_to_tmp_value_file "not exist"
+
+    for _arg in "$@"; do
+        read_file_content "$_cfg_filepath" | while IFS=: read -r _name _description _command; do
+            if is_empty "$_name" && is_empty "$_description" && is_empty "$_command"; then
+                continue
+            fi
+
+            if is_equal "$_arg" "$_name"; then
+                if is_equal "$_name" "-l"; then
+                    printout_exit "The name can't be: -l"
+                fi
+
+                if is_equal "$_name" "-s"; then
+                    printout_exit "The name can't be: -s"
+                fi
+
+                if is_equal "$_name" "-r"; then
+                    printout_exit "The name can't be: -r"
+                fi
+
+                if is_equal "$_name" "-cd"; then
+                    printout_exit "The name can't be: -cd"
+                fi
+
+                if is_equal "$_name" "-cc"; then
+                    printout_exit "The name can't be: -cc"
+                fi
+
+                write_to_tmp_value_file "exist"
+
+                printout "\n${color_green}$_name${color_reset} >_ ${color_cyan}$_command${color_reset}\n"
+
+                execute_eval "$_command"
+
+                printout_blank_line
+
+                break
+            fi
+        done
+
+        if ! is_equal "$(get_tmp_value)" "exist"; then
+            printout "${color_green}$_arg${color_reset} command not found!"
+        fi
+    done
+}
+
+command_ai() {
+    check_requirements "jq"
+
+    _cfg_filepath="$HOME/.umar/ai.cfg"
+    _type=""
+    _model=""
+    _api_key=""
+
+    create_file "$_cfg_filepath"
+
+    if ! is_equal "$1" "-s"; then
+        if is_file_exist "$_cfg_filepath"; then
+            _type=$(read_file_content_line "1" "$_cfg_filepath")
+            _model=$(read_file_content_line "2" "$_cfg_filepath")
+            _api_key=$(read_file_content_line "3" "$_cfg_filepath")
+        fi
+
+        if is_empty "$_type"; then
+            printout_exit "You didn't provide any AI type to process!\nYou can use this command to set up a new one: ${color_cyan}umar ai -s${color_reset}"
+        fi
+
+        if is_empty "$_model"; then
+            printout_exit "You didn't provide any AI model to process!\nYou can use this command to set up a new one: ${color_cyan}umar ai -s${color_reset}"
+        fi
+    fi
+
+    if is_equal "$1" "-p"; then
+        shift
+
+        printout "${color_yellow}$_type ($_model)${color_reset}\n"
+
+        _response=""
+
+        if is_equal "$_type" "google"; then
+            _response=$(http_request_google_ai "$_model" "$_api_key" "$(printout "{\"role\": \"user\", \"parts\":[{\"text\": \"$(printout "$*" | escape_json_string)\"}]}," | remove_trailing_comma)")
+        fi
+
+        printout_typing "$(printout "$_response" | markdown_parse)"
+        printout_blank_line
+
+        return 0
+    fi
+
+    if is_equal "$1" "-c"; then
+        printout "${color_yellow}$_type ($_model)${color_reset}\n"
+
+        _prompt=""
+
+        while true; do
+            printout_no_enter "${color_yellow}>_${color_reset} "
+
+            _chat_prompt="$(read_input)"
+            _chat_prompt="{\"role\": \"user\", \"parts\":[{\"text\": \"$(printout "$_chat_prompt" | escape_json_string)\"}]},"
+
+            if is_empty "$_prompt"; then
+                _prompt="$_chat_prompt"
+            else
+                _prompt="$_prompt $_chat_prompt"
+            fi
+
+            _response=""
+
+            printout_blank_line
+
+            if is_equal "$_type" "google"; then
+                _response=$(http_request_google_ai "$_model" "$_api_key" "$(printout "$_prompt" | remove_trailing_comma)")
+            fi
+
+            _prompt="$_prompt {\"role\": \"model\", \"parts\":[{\"text\": \"$(printout "$_response" | escape_json_string)\"}]},"
+
+            printout_typing "$(printout "$_response" | markdown_parse)"
+
+            printout_blank_line
+        done
+
+        return 0
+    fi
+
+    if is_equal "$1" "" || is_equal "$1" "-i"; then
+        if ! is_empty "$_api_key"; then
+            _api_key="* * * * *"
+        fi
+
+        printout "Type: ${color_yellow}$_type\n${color_reset}Model: ${color_yellow}$_model\n${color_reset}API key: ${color_blue}$_api_key${color_reset}"
+        
+        return 0
+    fi
+
+    if is_equal "$1" "-s" || is_equal "$1" "-ct"; then
+        printout_no_enter "\
+AI type:
+
+1. Google
+
+Choose the AI type number... "
+        
+        _type=$(read_input)
+
+        if is_empty "$_type"; then
+            printout_exit "AI type can't be empty!"
+        fi
+
+        if ! is_equal "$_type" "1"; then
+            printout_exit "Wrong AI type!"
+        fi
+
+        if is_equal "$_type" "1"; then
+            _type="google"
+        fi
+    fi
+
+    if is_equal "$1" "-s" || is_equal "$1" "-cm"; then
+        if is_empty "$_type"; then
+            _type=$(read_file_content_line "1" "$_cfg_filepath")
+        fi
+
+        if is_equal "$_type" "google"; then
+            printout_no_enter "
+AI model:
+
+1. Gemini 1.0 Pro
+2. Gemini 1.5 Pro
+3. Gemini 1.5 Flash
+
+Choose the AI model number... "
+        else
+            printout_exit "Wrong AI type!"
+        fi
+
+        _model=$(read_input)
+
+        if is_empty "$_model"; then
+            printout_exit "AI model can't be empty!"
+        fi
+
+        if is_equal "$_type" "google"; then
+            if ! is_equal "$_model" "1" && ! is_equal "$_model" "2" && ! is_equal "$_model" "3"; then
+                printout_exit "Wrong AI model!"
+            fi
+
+            if is_equal "$_model" "1"; then
+                _model="gemini-1.0-pro"
+            fi
+
+            if is_equal "$_model" "2"; then
+                _model="gemini-1.5-pro"
+            fi
+
+            if is_equal "$_model" "3"; then
+                _model="gemini-1.5-flash"
+            fi
+        fi
+    fi
+
+    if is_equal "$1" "-s" || is_equal "$1" "-ca"; then
+        if is_empty "$_type"; then
+            _type=$(read_file_content_line "1" "$_cfg_filepath")
+        fi
+
+        if is_equal "$_type" "google"; then
+            printout_no_enter "
+You'll need an API key to use the AI. You can follow this documentation -> https://ai.google.dev/gemini-api/docs/api-key
+
+Enter the API key... "
+        else
+            printout_exit "Wrong AI type!"
+        fi
+
+        _api_key=$(read_input)
+
+        if is_equal "$_type" "google" && is_empty "$_api_key"; then
+            printout_exit "API Key can't be empty!"
+        fi
+    fi
+
+    if is_equal "$1" "-s"; then
+        write_to_file "$(printout "$_type\n$_model\n$_api_key")" "$_cfg_filepath"
+
+        printout "AI configuration registered"
+
+        return 0
+    fi
+
+    if is_equal "$1" "-ct"; then
+        change_file_content_line "1" "$_type" "$_cfg_filepath"
+
+        printout "Ok"
+
+        return 0
+    fi
+
+    if is_equal "$1" "-cm"; then
+        change_file_content_line "2" "$_model" "$_cfg_filepath"
+
+        printout "Ok"
+
+        return 0
+    fi
+
+    if is_equal "$1" "-ca"; then
+        change_file_content_line "3" "$_api_key" "$_cfg_filepath"
+
+        printout "Ok"
+
+        return 0
+    fi
+
+    printout "Aborted!"
+}
+
+command_open() {
+    if is_no_argument "$@"; then
+        printout_exit "You didn't provide any package(s) to open!"
+    fi
+
+    _not_exist=""
+
+    for _arg in "$@"; do
+        if is_package_exist "$_arg" || is_user_package_exist "$_arg"; then
+            execute_async_no_std_out "$_arg"
+
+            continue
+        fi
+
+        _not_exist="yes"
+
+        printout "${color_red}**$_arg** ${color_reset}package not found!" | markdown_parse
+    done
+
+    if ! is_equal "$_not_exist" "yes"; then
+        clear_shell
+    fi
+}
+
+command_kill() {
+    if is_no_argument "$@"; then
+        printout_exit "You didn't provide any name(s) to kill!"
+    fi
+
+    check_requirements "sudo"
+
+    _process_list=""
+
+    printout_blank_line
+
+    for _arg in "$@"; do
+        _process_list="$_process_list\n$(ps -ef | grep "$_arg" | grep -v "$pid" | awk '{print $2}')"
+
+        ps aux | grep "$_arg" | grep -v "$pid"
+    done
+
+    _process_list=$(printout "${color_yellow}$_process_list${color_reset}")
+
+    printout_no_enter "\nAll processes listed above will be terminated. Are you sure? [N/y] "
+
+    _confirmation=$(read_input)
+
+    if ! is_equal "$_confirmation" "y"; then
+        printout "\nAborted!"
+
+        return 0
+    fi
+
+    printout "$_process_list" | while IFS= read -r _line; do
+        if ! is_empty "$_line"; then
+            sudo kill -9 "$_line" > /dev/null 2>&1
+        fi
+    done
+
+    printout "\nAll processes have been terminated!"
+}
+
+command_ins() {
+    if is_no_argument "$@"; then
+        printout_exit "You didn't provide any packages(s) to install!"
+    fi
+
+    install_package "$@"
+}
+
+command_rm() {
+    if is_no_argument "$@"; then
+        printout_exit "You didn't provide any package(s) to remove!"
+    fi
+
+    remove_package "$@"
+}
+
+command_upg() {
+    upgrade_package "$@"
+}
+
+command_srch() {
+    if is_no_argument "$@"; then
+        printout_exit "You didn't provide any text to search!"
+    fi
+
+    check_requirements "w3m"
+
+    execute w3m "https://www.google.com/search?q=$(printout "$*" | sed 's/ /+/g')"
+
+    clear_shell
+}
+
+command_au() {
+    if is_equal "$1" "-c"; then
+        check_requirements "pactl"
+
+        pactl list cards
+
+        return 0
+    fi
+
+    if is_equal "$1" "-p"; then
+        check_requirements "mpg123"
+
+        shift
+
+        if is_no_argument "$@"; then
+            printout_exit "You didn't provide any audio(s) to play!"
+        fi
+
+        mpg123 -v "$@"
+
+        return 0
+    fi
+
+    check_requirements "pulsemixer"
+
+    pulsemixer
+}
+
+command_img() {
+    if is_no_argument "$@"; then
+        printout_exit "An option is required!"
+    fi
+
+    check_requirements "feh"
+
+    if is_equal "$1" "-s"; then
+        shift
+
+        if is_no_argument "$@"; then
+            printout_exit "You didn't provide any image(s) to show!"
+        fi
+
+        feh "$@" &
+
+        return 0
+    fi
+
+    printout_exit "Aborted!"
+}
+
+command_vid() {
+    if is_no_argument "$@"; then
+        printout_exit "An option is required!"
+    fi
+
+    check_requirements "mpv"
+
+    if is_equal "$1" "-p"; then
+        shift
+
+        mpv "$@" > /dev/null 2>&1 &
+
+        return 0
+    fi
+
+    printout_exit "Aborted!"
+}
+
+command_bth() {
+    check_requirements "bluetoothctl"
+
+    bluetoothctl
+}
+
+command_batt() {
+    if is_no_argument "$@"; then
+        printout_exit "An option is required!"
+    fi
+
+    if is_equal "$1" "-c"; then
+        if is_file_exist "/sys/class/power_supply/BAT0/capacity"; then
+            cat "/sys/class/power_supply/BAT0/capacity"
+        fi
+
+        return 0
+    fi
+
+    printout "Aborted!"
+}
+
+command_dev() {
+    check_requirements "xrandr"
+
+    xrandr --current
+}
+
+command_reso() {
+    check_requirements "xrandr"
+
+    if is_no_argument "$@"; then
+        printout_exit "Current screen resolution is $(xrandr | grep '\*' | awk '{print $1}')"
+    fi
+
+    if is_empty "$1" || is_empty "$2"; then
+        printout_exit "Current screen resolution is $(xrandr | grep '\*' | awk '{print $1}')"
+    fi
+
+    xrandr --output "$1" --mode "$2"
+}
+
+command_bri() {
+    check_requirements "xrandr" "bc"
+
+    if is_no_argument "$@"; then
+        printout_exit "Current brightness value is $(xrandr --verbose | awk '/Brightness/ { print $2 * 100; exit}')"
+    fi
+
+    if is_empty "$1" || is_empty "$2"; then
+        printout_exit "Current brightness value is $(xrandr --verbose | awk '/Brightness/ { print $2 * 100; exit}')"
+    fi
+
+    _brightness=$(printout "scale=2; ${2} / 100" | bc)
+
+    printout "${_brightness} < 0.10" | bc | grep -q 1
+
+    if is_equal "$?" "0"; then
+        printout_exit "Value under minimum!"
+    fi
+
+    printout "${_brightness} > 1.00" | bc | grep -q 1
+
+    if is_equal "$?" "0"; then
+        printout_exit "Value above maximum!"
+    fi
+
+    xrandr --output "$1" --brightness "$_brightness"
+}
+
+command_tcpd() {
+    check_requirements "xinput"
+
+    printout_markdown "${color_yellow}**Configuring touchpad device**${color_reset}"
+    printout_blank_line
+
+    xinput list
+
+    printout_blank_line
+    printout_no_enter "Enter your Touchpad Device ID..."
+
+    _device_id=$(read_input)
+
+    if is_empty "$_device_id"; then
+        printout_exit "Device ID can't be empty!"
+    fi
+
+    printout_no_enter "
+You're about to configure this Touchpad Device:
+
+$(xinput list | grep "id=${_device_id}")
+
+Are you sure? [N/y] "
+
+    _confirmation=$(read_input)
+
+    if ! is_equal "$_confirmation" "y"; then
+        printout_exit "Aborted!"
+    fi
+
+    xinput set-prop $_device_id "libinput Tapping Enabled" 1
+    xinput set-prop $_device_id "libinput Natural Scrolling Enabled" 0
+}
+
+command_wifi() {
+    check_requirements "nmcli"
+
+    if [ "$1" = "" ]; then
+        printout "Scanning..."
+
+        nmcli radio wifi on
+        nmcli device wifi rescan
+        nmcli device wifi list
+
+        return 0
+    fi
+
+    printout "Scanning..."
+
+    nmcli radio wifi on
+    nmcli device wifi rescan
+
+    printout "Ok"
+    printout "Connecting..."
+
+    nmcli device wifi connect --ask "$1"
+
+    printout "Ok"
+}
+
+command_thttp() {
+    check_requirements "siege"
+
+    _concurrent="10"
+    _time=""
+    _retry=""
+    _url=""
+    _url_header="X-TOOL:siege"
+    _url_user_agent=""
+    _url_content_type=""
+
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            -c)
+                _concurrent="${1#-c}"
+
+                if [ -z "$_concurrent" ]; then
+                    shift
+
+                    _concurrent="$1"
+                fi
+                ;;
+            -t)
+                _time="${1#-t}"
+
+                if [ -z "$_time" ]; then
+                    shift
+
+                    _time="$1"
+                fi
+                ;;
+            -r)
+                _retry="${1#-r}"
+
+                if [ -z "$_retry" ]; then
+                    shift
+
+                    _retry="$1"
+                fi
+                ;;
+            -u)
+                _url="${1#-u}"
+
+                if [ -z "$_url" ]; then
+                    shift
+
+                    _url="$1"
+                fi
+                ;;
+            -userAgent)
+                _url_user_agent="${1#-userAgent}"
+
+                if [ -z "$_url_user_agent" ]; then
+                    shift
+
+                    _url_user_agent="$1"
+                fi
+                ;;
+            -header)
+                _url_header="${1#-header}"
+
+                if [ -z "$_url_header" ]; then
+                    shift
+
+                    _url_header="$1"
+                fi
+                ;;
+            -contentType)
+                _url_content_type="${1#-contentType}"
+
+                if [ -z "$_url_content_type" ]; then
+                    shift
+
+                    _url_content_type="$1"
+                fi
+                ;;
+        esac
+
+        shift
+    done
+
+    if is_empty "$_url"; then
+        printout_exit "Please provide a URL to test!\nUse this option: ${color_cyan}-u ${color_blue}URL${color_reset}"
+    fi
+
+    printout "url=$_url | concurrent=$_concurrent | time=${_time}S | retry=$_retry | header=$_url_header | userAgent=$_url_user_agent | contentType=$_url_content_type\n"
+
+    if ! is_empty "$_time"; then
+        execute siege -vbp "-c$_concurrent" "-t${_time}S" --header="$_url_header" --user-agent="$_url_user_agent" --content-type="$_url_content_type" "$_url"
+    elif ! is_empty "$_retry"; then
+        execute siege -vbp "-c$_concurrent" "-r$_retry" --header="$_url_header" --user-agent="$_url_user_agent" --content-type="$_url_content_type" "$_url"
+    else
+        execute siege -vbp "-c$_concurrent" "-t10S" --header="$_url_header" --user-agent="$_url_user_agent" --content-type="$_url_content_type" "$_url"
+    fi
+}
+
 command_ss() {
-  check_requirements "xfce4-screenshooter"
+    check_requirements "xfce4-screenshooter"
 
-  if is_equal "$1" "a"; then
-    xfce4-screenshooter -r
-    return 0
-  elif is_equal "$1" "f"; then
-    xfce4-screenshooter -f
-    return 0
-  fi
+    if is_equal "$1" "-a"; then
+        xfce4-screenshooter -r
 
-  xfce4-screenshooter
-}
+        return 0
+    elif is_equal "$1" "-f"; then
+        xfce4-screenshooter -f
 
-command_bluetooth() {
-  check_requirements "bluetoothctl"
-  bluetoothctl
-}
-
-command_macbookbluetooth() {
-  printout_markdown "${color_yellow}**This will configure Macbook Bluetooth. **${color_red}**If you're not using Macbook device, DON'T execute this command (MAY BREAK YOUR SYSTEM)**${color_reset}"
-
-  printout_blank_line
-
-  printout_no_enter "Are you sure to continue this process [N/y] "
-
-  _34_confirmation=$(read_input)
-
-  if ! is_equal "$_34_confirmation" "y"; then
-    printout_exit "Aborted!"
-  fi
-
-  check_requirements "git" "sudo"
-
-  if ! is_dir_exist "$config_macbook_bluetooth_driver1_dir"; then
-    git clone "$macbook_bluetooth_driver1_url" "$config_macbook_bluetooth_driver1_dir"
-  fi
-
-  cd "$config_macbook_bluetooth_driver1_dir" || printout_exit "Bluetooth driver1 not found!"
-  sudo "./$config_macbook_bluetooth_driver1_installation_script_name"
-
-  printout_blank_line
-
-  printout_markdown "${color_yellow}**Bluetooth successfully configured. You may need to reboot your system or restart your bluetooth service(s)**${color_reset}"
-}
-
-command_setuparchgame() {
-  if ! is_arch; then
-    printout_exit "You're not using Arch Linux!"
-  fi
-
-  printout_markdown "${color_yellow}**This will set up gaming tools on Arch Linux. **${color_reset}"
-
-  printout_blank_line
-
-  printout_no_enter "Are you sure to continue this process [N/y] "
-
-  _33_confirmation=$(read_input)
-
-  if ! is_equal "$_33_confirmation" "y"; then
-    printout_exit "Aborted!"
-  fi
-
-  sudo echo "Configuring..."
-  printout "Configuring pacman multilib..."
-  sudo sed -i 's/\#\[multilib\]/\[multilib\]\nInclude \= \/etc\/pacman\.d\/mirrorlist/g' "$config_pacman_system_filepath"
-  upgrade_package ""
-  install_package "xdg-desktop-portal" "lib32-systemd" "xf86-video-vesa" "lib32-mesa" "lib32-vulkan-radeon" "lib32-amdvlk" \
-  "lib32-vulkan-intel" "lib32-nvidia-utils" "ttf-liberation" "steam" "nvidia-utils" "vulkan-nouveau" "lib32-vulkan-nouveau" \
-  "vulkan-radeon" "amdvlk" "vulkan-swrast" "lib32-vulkan-swrast" "vulkan-tools" "vulkan-icd-loader" "lib32-vulkan-icd-loader"
-}
-
-command_setupfresharch() {
-  if ! is_arch; then
-    printout_exit "You're not using Arch Linux!"
-  fi
-
-  printout_markdown "${color_yellow}**This will set up a fresh Arch Linux installation. **${color_red}**WARNING!!! This will replace your existing configuration and MAY BREAK YOUR SYSTEM!!! Don't do this if you're not aware!!!**${color_reset}"
-
-  printout_blank_line
-
-  printout_no_enter "Are you sure to continue this process [N/y] "
-
-  _32_confirmation=$(read_input)
-
-  if ! is_equal "$_32_confirmation" "y"; then
-    printout_exit "Aborted!"
-  fi
-
-  sudo echo "Configuring..."
-
-  if is_file_exist "$bashrc_filepath"; then
-    if ! grep -qF "[[ \$- != *i* ]] && return" "$bashrc_filepath"; then
-      echo "[[ \$- != *i* ]] && return" >> "$bashrc_filepath"
+        return 0
     fi
-  fi
 
-  install_package "git" "vim" "curl" "htop" "neofetch" "bash" "zsh" "chromium" "make" "xorg-xrandr" "libinput" "xf86-input-libinput" \
-  "xorg-server" "xorg-xinput" "polkit" "pulsemixer" "xfce4-terminal" "iwd" "amd-ucode" "intel-ucode" "lm_sensors" "bc" "base-devel" \
-  "linux-lts" "pipewire" "pipewire-audio" "pipewire-pulse" "wget" "xsensors" "unzip" "sof-firmware" "alsa-firmware" "pipewire-alsa" \
-  "pipewire-jack" "wireplumber" "pavucontrol" "alsa-card-profiles" "openssh" "sudo" "xorg" "xorg-xinit" "intel-media-driver" "mesa" \
-  "xf86-video-amdgpu" "xf86-video-vmware" "libva-intel-driver" "vulkan-intel" "xf86-video-ati" "libva-mesa-driver" "vulkan-radeon" \
-  "xf86-video-nouveau" "freetype2" "libglvnd" "deepin-reader" "cpio" "imagemagick" "bluez" "bluez-utils" "linux-firmware-qlogic" \
-  "linux-firmware-bnx2x" "linux-firmware-liquidio" "linux-firmware-mellanox" "linux-firmware-nfp" "gcc" "linux-lts-headers" "dkms" \
-  "vulkan-tools" "vulkan-icd-loader" "nvidia-utils" "vulkan-nouveau" "amdvlk" "vulkan-swrast" "yad" "linux" "linux-headers" \
-  "xfce4-screenshooter"
-  printout "Configuring ssh..."
-
-  if ! is_file_exist "$ssh_keygen_filepath"; then
-    ssh-keygen -t ed25519
-    eval "$(ssh-agent -s)"
-    ssh-add "$ssh_keygen_dir"
-  fi
-
-  printout "Configuring git..."
-
-  if is_empty "$(git config user.name)"; then
-    printout_no_enter "Enter your git user.name...  "
-
-    _32_git_name=$(read_input)
-
-    git config --global user.name "$_32_git_name"
-  fi
-
-  if is_empty "$(git config user.email)"; then
-    printout_no_enter "Enter your git user.email...  "
-
-    _32_git_email=$(read_input)
-
-    git config --global user.email "$_32_git_email"
-  fi
-
-  printout "Configuring host..."
-  sudo ln -sf /dev/null /etc/udev/rules.d/80-net-setup-link.rules
-  printout "Configuring bluetooth..."
-  sudo modprobe btusb
-  sudo usermod -G lp -a "$(whoami)" || true
-  sudo usermod -G bluetooth -a "$(whoami)" || true
-  sudo usermod -G lp -a root || true
-  sudo usermod -G bluetooth -a root || true
-  sudo systemctl start bluetooth.service || true
-  sudo systemctl enable bluetooth.service || true
-  printout "Configuring sensors..."
-  sudo sensors-detect
-  sudo sensors
-  sudo pwmconfig
-  printout "Configuring systemd-oomd..."
-  sudo systemctl start systemd-oomd.service || true
-  sudo systemctl enable systemd-oomd.service || true
-  if is_file_exist "/etc/default/grub"; then
-    printout "Configuring grub..."
-    sudo sed -i -E 's/GRUB_TIMEOUT=([0-9]+)/GRUB_TIMEOUT=0/g' /etc/default/grub
-    sudo grub-mkconfig -o /boot/grub/grub.cfg
-  elif is_file_exist "/boot/loader/loader.conf"; then
-    printout "Configuring systemd-boot..."
-    sudo sed -i -E 's/timeout ([0-9]+)/timeout 1/g' /boot/loader/loader.conf
-    sudo sed -i -E 's/\#console\-mode keep/console\-mode keep/g' /boot/loader/loader.conf
-  fi
-  printout "Done"
+    xfce4-screenshooter
 }
 
-command_setupfresharchi3wm() {
-  if ! is_arch; then
-    printout_exit "You're not using Arch Linux!"
-  fi
+command_stp() {
+    if is_no_argument "$@"; then
+        printout_exit "An option is required!"
+    fi
 
-  printout_markdown "${color_yellow}**This will install & set up i3wm on a fresh Arch Linux installation. **${color_red}**WARNING!!! This will replace your existing window manager or desktop environment and MAY BREAK YOUR SYSTEM!!! Don't do this if you're not aware!!!**${color_reset}"
+    _ssh_name="ed25519"
+    _ssh_dir="$HOME/.ssh/id_ed25519"
+    _ssh_filepath="$HOME/.ssh/id_ed25519.pub"
+    _grub_filepath="/etc/default/grub"
+    _grub_boot_filepath="/boot/grub/grub.cfg"
+    _systemd_boot_filepath="/boot/loader/loader.conf"
+    _net_rule_filepath="/etc/udev/rules.d/80-net-setup-link.rules"
+    _xinitrc_filepath="$HOME/.xinitrc"
+    _xinitrc_sys_filepath="/etc/X11/xinit/xinitrc"
+    _bashrc_filepath="$HOME/.bashrc"
+    _bash_profile_filepath="$HOME/.bash_profile"
+    _profile_filepath="$HOME/.profile"
+    _zprofile_filepath="$HOME/.zprofile"
+    _zshrc_filepath="$HOME/.zshrc"
+    _config_dir="$HOME/.config"
+    _config_i3_dir="$HOME/.config/i3"
+    _config_i3_filepath="$HOME/.config/i3/config"
+    _config_i3_sys_filepath="/etc/i3/config"
+    _config_i3status_dir="$HOME/.config/i3status"
+    _config_i3status_filepath="$HOME/.config/i3status/config"
+    _config_i3status_sys_filepath="/etc/i3status.conf"
+    _config_polybar_dir="$HOME/.config/polybar"
+    _config_polybar_filepath="$HOME/.config/polybar/config.ini"
+    _config_polybar_sys_filepath="/etc/polybar/config.ini"
+    _config_polybar_launch_filepath="$HOME/.config/polybar/launch.sh"
+    _config_polybar_launch_bluetooth_filepath="$HOME/.config/polybar/launch-bluetooth.sh"
+    _config_polybar_launch_bluetooth_toggle_filepath="$HOME/.config/polybar/launch-bluetooth-toggle.sh"
+    _config_xfce4_dir="$HOME/.config/xfce4"
+    _config_xfce4_xfconf_dir="$HOME/.config/xfce4/xfconf"
+    _config_xfce4_xfconf_xfce_perchannel_xml_dir="$HOME/.config/xfce4/xfconf/xfce-perchannel-xml"
+    _config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_filepath="$HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-terminal.xml"
+    _config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_launch_filepath="$HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-terminal-launch.sh"
+    _datagrip_dir="$HOME/.umar/datagrip"
+    _datagrip_version_dir="$HOME/.umar/datagrip/DataGrip-2023.3.3"
+    _datagrip_filepath="$HOME/.umar/datagrip/DataGrip-2023.3.3/bin/datagrip"
+    _datagrip_chrome_sandbox_filepath="$HOME/.umar/datagrip/DataGrip-2023.3.3/jbr/lib/chrome-sandbox"
+    _datagrip_downloaded_filepath="$HOME/.umar/datagrip/datagrip-2023.3.3.tar.gz"
+    _datagrip_sys_filepath="/usr/local/bin/datagrip"
+    _datagrip_download_url="https://download.jetbrains.com/datagrip/datagrip-2023.3.3.tar.gz"
+    _goland_dir="$HOME/.umar/goland"
+    _goland_version_dir="$HOME/.umar/goland/GoLand-2023.3.2"
+    _goland_filepath="$HOME/.umar/goland/GoLand-2023.3.2/bin/goland"
+    _goland_chrome_sandbox_filepath="$HOME/.umar/goland/GoLand-2023.3.2/jbr/lib/chrome-sandbox"
+    _goland_downloaded_filepath="$HOME/.umar/goland/goland-2023.3.2.tar.gz"
+    _goland_sys_filepath="/usr/local/bin/goland"
+    _goland_download_url="https://download.jetbrains.com/go/goland-2023.3.2.tar.gz"
+    _pycharm_dir="$HOME/.umar/pycharm"
+    _pycharm_version_dir="$HOME/.umar/pycharm/pycharm-2023.3.2"
+    _pycharm_filepath="$HOME/.umar/pycharm/pycharm-2023.3.2/bin/pycharm"
+    _pycharm_chrome_sandbox_filepath="$HOME/.umar/pycharm/pycharm-2023.3.2/jbr/lib/chrome-sandbox"
+    _pycharm_downloaded_filepath="$HOME/.umar/pycharm/pycharm-professional-2023.3.2.tar.gz"
+    _pycharm_sys_filepath="/usr/local/bin/pycharm"
+    _pycharm_download_url="https://download.jetbrains.com/python/pycharm-professional-2023.3.2.tar.gz"
+    _idea_dir="$HOME/.umar/idea"
+    _idea_version_dir="$HOME/.umar/idea/idea-IU-233.13135.103"
+    _idea_filepath="$HOME/.umar/idea/idea-IU-233.13135.103/bin/idea"
+    _idea_chrome_sandbox_filepath="$HOME/.umar/idea/idea-IU-233.13135.103/jbr/lib/chrome-sandbox"
+    _idea_downloaded_filepath="$HOME/.umar/idea/ideaIU-2023.3.2.tar.gz"
+    _idea_sys_filepath="/usr/local/bin/idea"
+    _idea_download_url="https://download-cdn.jetbrains.com/idea/ideaIU-2023.3.2.tar.gz"
+    _webstorm_dir="$HOME/.umar/webstorm"
+    _webstorm_version_dir="$HOME/.umar/webstorm/WebStorm-241.17011.90"
+    _webstorm_filepath="$HOME/.umar/webstorm/WebStorm-241.17011.90/bin/webstorm"
+    _webstorm_chrome_sandbox_filepath="$HOME/.umar/webstorm/WebStorm-241.17011.90/jbr/lib/chrome-sandbox"
+    _webstorm_downloaded_filepath="$HOME/.umar/webstorm/WebStorm-2024.1.3.tar.gz"
+    _webstorm_sys_filepath="/usr/local/bin/webstorm"
+    _webstorm_download_url="https://download.jetbrains.com/webstorm/WebStorm-2024.1.3.tar.gz"
+    _rustrover_dir="$HOME/.umar/rustrover"
+    _rustrover_version_dir="$HOME/.umar/rustrover/RustRover-2024.1"
+    _rustrover_filepath="$HOME/.umar/rustrover/RustRover-2024.1/bin/rustrover"
+    _rustrover_chrome_sandbox_filepath="$HOME/.umar/rustrover/RustRover-2024.1/jbr/lib/chrome-sandbox"
+    _rustrover_downloaded_filepath="$HOME/.umar/rustrover/RustRover-2024.1.tar.gz"
+    _rustrover_sys_filepath="/usr/local/bin/rustrover"
+    _rustrover_download_url="https://download.jetbrains.com/rustrover/RustRover-2024.1.tar.gz"
+    _go_dir="$HOME/.umar/go"
+    _go_home_dir="$HOME/go"
+    _go_home_bin_dir="$HOME/go/bin"
+    _go_home_pkg_dir="$HOME/go/pkg"
+    _go_home_src_dir="$HOME/go/src"
+    _go_version_dir="$HOME/.umar/go/go1.23.2"
+    _go_extracted_dir="$HOME/.umar/go/go"
+    _go_downloaded_filepath="$HOME/.umar/go/go1.23.2.linux-amd64.tar.gz"
+    _go_sys_dir="/usr/local/go"
+    _go_bin_sys_dir="/usr/local/go/bin"
+    _go_download_url="https://go.dev/dl/go1.23.2.linux-amd64.tar.gz"
+    _nodejs_dir="$HOME/.umar/nodejs"
+    _nodejs_home_dir="$HOME/nodejs"
+    _nodejs_version_dir="$HOME/.umar/nodejs/v21.6.1"
+    _nodejs_extracted_dir="$HOME/.umar/nodejs/node-v21.6.1-linux-x64"
+    _nodejs_lib_dir="/usr/local/lib/nodejs"
+    _nodejs_version_lib_dir="/usr/local/lib/nodejs/node-v21.6.1-linux-x64"
+    _nodejs_version_bin_lib_dir="/usr/local/lib/nodejs/node-v21.6.1-linux-x64/bin"
+    _nodejs_downloaded_filepath="$HOME/.umar/nodejs/node-v21.6.1-linux-x64.tar.xz"
+    _nodejs_download_url="https://nodejs.org/dist/v21.6.1/node-v21.6.1-linux-x64.tar.xz"
+    _npm_global_dir="$HOME/.npm-global"
+    _npm_bin_global_dir="$HOME/.npm-global/bin"
+    _rust_download_url="https://sh.rustup.rs"
+    _pyenv_home_dir="$HOME/.pyenv"
+    _pyenv_download_url="https://pyenv.run"
+    _postman_dir="$HOME/.umar/postman"
+    _postman_filepath="$HOME/.umar/postman/Postman/app/Postman"
+    _postman_downloaded_filepath="$HOME/.umar/postman/postman.tar.gz"
+    _postman_sys_filepath="/usr/local/bin/postman"
+    _postman_download_url="https://dl.pstmn.io/download/latest/linux_64"
 
-  printout_blank_line
+    if is_equal "$1" "-fa"; then
+        if ! is_arch; then
+            printout_exit "You're not using Arch Linux!"
+        fi
 
-  printout_no_enter "Are you sure to continue this process [N/y] "
+        printout_markdown "${color_yellow}**This will set up a fresh Arch Linux installation. **${color_red}**WARNING!!! This will replace your existing configuration and MAY BREAK YOUR SYSTEM!!! Don't do this if you're not aware!!!**${color_reset}"
+        printout_blank_line
+        printout_no_enter "Are you sure to continue this process [N/y] "
 
-  _31_confirmation=$(read_input)
+        _confirmation=$(read_input)
 
-  if ! is_equal "$_31_confirmation" "y"; then
-    printout_exit "Aborted!"
-  fi
+        if ! is_equal "$_confirmation" "y"; then
+            printout_exit "Aborted!"
+        fi
 
-  sudo echo "Configuring..."
-  install_package "i3" "xorg" "xorg-xinit" "xfce4-terminal" "polybar" "pavucontrol" "xorg-server" "xorg-xrandr" "xorg-xinput" "bluez-utils" "yad"
-  printout "Copying .xinitrc..."
+        sudo echo "Configuring..."
 
-  if ! is_file_exist "$xinitrc_filepath"; then
-    cp "$xinitrc_system_filepath" "$xinitrc_filepath"
-  fi
+        if is_file_exist "$_bashrc_filepath"; then
+            if ! grep -qF "[[ \$- != *i* ]] && return" "$_bashrc_filepath"; then
+                echo "[[ \$- != *i* ]] && return" >> "$_bashrc_filepath"
+            fi
+        fi
 
-  printout "Configuring profiles..."
+        install_package "git" "vim" "curl" "htop" "neofetch" "bash" "zsh" "chromium" "make" "xorg-xrandr" "libinput" "xf86-input-libinput" \
+            "xorg-server" "xorg-xinput" "polkit" "pulsemixer" "xfce4-terminal" "iwd" "amd-ucode" "intel-ucode" "lm_sensors" "bc" "base-devel" \
+            "linux-lts" "pipewire" "pipewire-audio" "pipewire-pulse" "wget" "xsensors" "unzip" "sof-firmware" "alsa-firmware" "pipewire-alsa" \
+            "pipewire-jack" "wireplumber" "pavucontrol" "alsa-card-profiles" "openssh" "sudo" "xorg" "xorg-xinit" "intel-media-driver" "mesa" \
+            "xf86-video-amdgpu" "xf86-video-vmware" "libva-intel-driver" "vulkan-intel" "xf86-video-ati" "libva-mesa-driver" "vulkan-radeon" \
+            "xf86-video-nouveau" "freetype2" "libglvnd" "deepin-reader" "cpio" "imagemagick" "bluez" "bluez-utils" "linux-firmware-qlogic" \
+            "linux-firmware-bnx2x" "linux-firmware-liquidio" "linux-firmware-mellanox" "linux-firmware-nfp" "gcc" "linux-lts-headers" "dkms" \
+            "vulkan-tools" "vulkan-icd-loader" "nvidia-utils" "vulkan-nouveau" "amdvlk" "vulkan-swrast" "yad" "linux" "linux-headers" \
+            "xfce4-screenshooter"
 
-  if is_file_exist "$bash_profile_filepath"; then
-    if ! grep -qF "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$bash_profile_filepath"; then
-      echo "
+        printout "Configuring ssh..."
+
+        if ! is_file_exist "$_ssh_filepath"; then
+            ssh-keygen -t $_ssh_name
+
+            eval "$(ssh-agent -s)"
+
+            ssh-add "$_ssh_dir"
+        fi
+
+        printout "Configuring git..."
+
+        if is_empty "$(git config user.name)"; then
+            printout_no_enter "Enter your git user.name...  "
+
+            _git_name=$(read_input)
+
+            git config --global user.name "$_git_name"
+        fi
+
+        if is_empty "$(git config user.email)"; then
+            printout_no_enter "Enter your git user.email...  "
+
+            _git_email=$(read_input)
+
+            git config --global user.email "$_git_email"
+        fi
+
+        printout "Configuring host..."
+
+        sudo ln -sf /dev/null "$_net_rule_filepath"
+
+        printout "Configuring bluetooth..."
+
+        sudo modprobe btusb
+        sudo usermod -G lp -a "$(whoami)" || true
+        sudo usermod -G bluetooth -a "$(whoami)" || true
+        sudo usermod -G lp -a root || true
+        sudo usermod -G bluetooth -a root || true
+        sudo systemctl start bluetooth.service || true
+        sudo systemctl enable bluetooth.service || true
+
+        printout "Configuring sensors..."
+
+        sudo sensors-detect
+        sudo sensors
+        sudo pwmconfig
+
+        printout "Configuring systemd-oomd..."
+
+        sudo systemctl start systemd-oomd.service || true
+        sudo systemctl enable systemd-oomd.service || true
+
+        if is_file_exist "$_grub_filepath"; then
+            printout "Configuring grub..."
+
+            sudo sed -i -E 's/GRUB_TIMEOUT=([0-9]+)/GRUB_TIMEOUT=0/g' "$_grub_filepath"
+            sudo grub-mkconfig -o "$_grub_boot_filepath"
+        elif is_file_exist "$_systemd_boot_filepath"; then
+            printout "Configuring systemd-boot..."
+
+            sudo sed -i -E 's/timeout ([0-9]+)/timeout 1/g' "$_systemd_boot_filepath"
+            sudo sed -i -E 's/\#console\-mode keep/console\-mode keep/g' "$_systemd_boot_filepath"
+        fi
+        
+        printout "Ok"
+
+        return 0
+    fi
+
+    if is_equal "$1" "-fai3"; then
+        if ! is_arch; then
+            printout_exit "You're not using Arch Linux!"
+        fi
+
+        printout_markdown "${color_yellow}**This will install & set up i3wm on a fresh Arch Linux installation. **${color_red}**WARNING!!! This will replace your existing window manager or desktop environment and MAY BREAK YOUR SYSTEM!!! Don't do this if you're not aware!!!**${color_reset}"
+        printout_blank_line
+        printout_no_enter "Are you sure to continue this process [N/y] "
+
+        _confirmation=$(read_input)
+
+        if ! is_equal "$_confirmation" "y"; then
+            printout_exit "Aborted!"
+        fi
+
+        sudo echo "Configuring..."
+
+        install_package "i3" "xorg" "xorg-xinit" "xfce4-terminal" "polybar" "pavucontrol" "xorg-server" "xorg-xrandr" "xorg-xinput" "bluez-utils" "yad"
+        
+        printout "Copying .xinitrc..."
+
+        if ! is_file_exist "$_xinitrc_filepath"; then
+            cp "$_xinitrc_sys_filepath" "$_xinitrc_filepath"
+        fi
+
+        printout "Configuring profiles..."
+
+        if is_file_exist "$_bash_profile_filepath"; then
+            if ! grep -qF "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$_bash_profile_filepath"; then
+                echo "
 if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then
-  exec startx
+    exec startx
 fi
-" >> "$bash_profile_filepath"
-    fi
-  fi
+" >> "$_bash_profile_filepath"
+            fi
+        fi
 
-  if is_file_exist "$profile_filepath"; then
-    if ! grep -qF "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$profile_filepath"; then
-      echo "
+        if is_file_exist "$_profile_filepath"; then
+            if ! grep -qF "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$_profile_filepath"; then
+                echo "
 if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then
-  exec startx
+    exec startx
 fi
-" >> "$profile_filepath"
-    fi
-  fi
+" >> "$_profile_filepath"
+            fi
+        fi
 
-  if is_file_exist "$zprofile_filepath"; then
-    if ! grep -qF "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$zprofile_filepath"; then
-      echo "
+        if is_file_exist "$_zprofile_filepath"; then
+            if ! grep -qF "if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then" "$_zprofile_filepath"; then
+                echo "
 if [ -z \"\$DISPLAY\" ] && [ \"\$XDG_VTNR\" = 1 ]; then
-  exec startx
+    exec startx
 fi
-" >> "$zprofile_filepath"
-    fi
-  fi
+" >> "$_zprofile_filepath"
+            fi
+        fi
 
-  if is_file_exist "$bashrc_filepath"; then
-    if ! grep -qF "[[ \$- != *i* ]] && return" "$bashrc_filepath"; then
-      echo "[[ \$- != *i* ]] && return" >> "$bashrc_filepath"
-    fi
-  fi
+        if is_file_exist "$_bashrc_filepath"; then
+            if ! grep -qF "[[ \$- != *i* ]] && return" "$_bashrc_filepath"; then
+                echo "[[ \$- != *i* ]] && return" >> "$_bashrc_filepath"
+            fi
+        fi
 
-  printout "Configuring i3wm..."
-  create_dir "$config_config_dir"
-  create_dir "$config_i3wm_dir"
-  create_dir "$config_i3status_dir"
-  create_dir "$config_polybar_dir"
+        printout "Configuring i3wm..."
 
-  if ! is_file_exist "$config_i3wm_filepath"; then
-    cp "$config_i3wm_system_filepath" "$config_i3wm_filepath"
-  fi
+        create_dir "$_config_dir"
+        create_dir "$_config_i3_dir"
+        create_dir "$_config_i3status_dir"
+        create_dir "$_config_polybar_dir"
 
-  if ! is_file_exist "$config_i3status_filepath"; then
-    cp "$config_i3status_system_filepath" "$config_i3status_filepath"
-  fi
+        if ! is_file_exist "$_config_i3_filepath"; then
+            cp "$_config_i3_sys_filepath" "$_config_i3_filepath"
+        fi
 
-  if ! is_file_exist "$config_polybar_filepath"; then
-    cp "$config_polybar_system_filepath" "$config_polybar_filepath"
-  fi
+        if ! is_file_exist "$_config_i3status_filepath"; then
+            cp "$_config_i3status_sys_filepath" "$_config_i3status_filepath"
+        fi
 
-  if ! is_file_exist "$config_polybarlaunch_filepath"; then
-    create_file "$config_polybarlaunch_filepath"
-    echo "
+        if ! is_file_exist "$_config_polybar_filepath"; then
+            cp "$_config_polybar_sys_filepath" "$_config_polybar_filepath"
+        fi
+
+        if ! is_file_exist "$_config_polybar_launch_filepath"; then
+            create_file "$_config_polybar_launch_filepath"
+
+            echo "\
 #!/usr/bin/env bash
 
 killall -q polybar || true
 echo \"---\" | tee -a /tmp/polybar1.log || true
 polybar bar 2>&1 | tee -a /tmp/polybar1.log & disown || true
-" > "$config_polybarlaunch_filepath"
-    chmod +x "$config_polybarlaunch_filepath"
-  fi
+" > "$_config_polybar_launch_filepath"
 
-  if ! is_file_exist "$config_polybarlaunch_bluetooth_filepath"; then
-    create_file "$config_polybarlaunch_bluetooth_filepath"
-    echo "
+            chmod +x "$_config_polybar_launch_filepath"
+        fi
+
+        if ! is_file_exist "$_config_polybar_launch_bluetooth_filepath"; then
+            create_file "$_config_polybar_launch_bluetooth_filepath"
+
+            echo "\
 #!/bin/sh
 
-if [ \$(bluetoothctl show | grep \"Powered: yes\" | wc -c) -eq 0 ]
-then
-  echo \"BTOFF\"
-else
-  if [ \$(echo info | bluetoothctl | grep 'Device' | wc -c) -eq 0 ]
-  then
+if [ \$(bluetoothctl show | grep \"Powered: yes\" | wc -c) -eq 0 ]; then
+    echo \"BTOFF\"
+elif [ \$(echo info | bluetoothctl | grep 'Device' | wc -c) -eq 0 ]; then
     echo \"BTCON\"
-  fi
-  echo \"BTON\"
+else
+    echo \"BTON\"
 fi
-" > "$config_polybarlaunch_bluetooth_filepath"
-    chmod +x "$config_polybarlaunch_bluetooth_filepath"
-  fi
+" > "$_config_polybar_launch_bluetooth_filepath"
 
-  if ! is_file_exist "$config_polybarlaunch_bluetooth_toggle_filepath"; then
-    create_file "$config_polybarlaunch_bluetooth_toggle_filepath"
-    echo "
+            chmod +x "$_config_polybar_launch_bluetooth_filepath"
+        fi
+
+        if ! is_file_exist "$_config_polybar_launch_bluetooth_toggle_filepath"; then
+            create_file "$_config_polybar_launch_bluetooth_toggle_filepath"
+
+            echo "\
 #!/bin/sh
 
-if [ \$(bluetoothctl show | grep \"Powered: yes\" | wc -c) -eq 0 ]
-then
-  bluetoothctl power on > /dev/null 2>&1 || true
-  bluetoothctl scan on > /dev/null 2>&1 || true
+if [ \$(bluetoothctl show | grep \"Powered: yes\" | wc -c) -eq 0 ]; then
+    bluetoothctl power on > /dev/null 2>&1 || true
+    bluetoothctl scan on > /dev/null 2>&1 || true
 else
-  bluetoothctl scan off > /dev/null 2>&1 || true
-  bluetoothctl power off > /dev/null 2>&1 || true
+    bluetoothctl scan off > /dev/null 2>&1 || true
+    bluetoothctl power off > /dev/null 2>&1 || true
 fi
-" > "$config_polybarlaunch_bluetooth_toggle_filepath"
-    chmod +x "$config_polybarlaunch_bluetooth_toggle_filepath"
-  fi
+" > "$_config_polybar_launch_bluetooth_toggle_filepath"
 
-  if ! grep -qF "set \$mod Mod" "$config_i3wm_filepath"; then
-    # shellcheck disable=SC2016
-    sed -i '1s/^/set \$mod Mod4\n/' "$config_i3wm_filepath"
-  fi
+            chmod +x "$_config_polybar_launch_bluetooth_toggle_filepath"
+        fi
 
-  # shellcheck disable=SC2016
-  sed -i 's/set \$mod Mod1/set \$mod Mod4/g' "$config_i3wm_filepath"
-  # shellcheck disable=SC2016
-  sed -i 's/Mod1/\$mod/g' "$config_i3wm_filepath"
-  sed -i '/^bar {$/,/^}/s/^/#/g' "$config_i3wm_filepath"
-  # shellcheck disable=SC2016
-  sed -i 's/bindsym \$mod+Return exec i3\-sensible\-terminal/\#bindsym \$mod+Return exec i3\-sensible\-terminal/g' "$config_i3wm_filepath"
-  # shellcheck disable=SC2016
-  sed -i 's/bindsym \$mod+space focus mode\_toggle/\#bindsym \$mod+space focus mode\_toggle/g' "$config_i3wm_filepath"
-  # shellcheck disable=SC2016
-  sed -i 's/bindsym \$mod+Shift+space floating toggle/\#bindsym \$mod+Shift+space floating toggle/g' "$config_i3wm_filepath"
+        if ! grep -qF "set \$mod Mod" "$_config_i3_filepath"; then
+            # shellcheck disable=SC2016
+            sed -i '1s/^/set \$mod Mod4\n/' "$_config_i3_filepath"
+        fi
 
-  if ! grep -qF "bindsym \$mod+Return exec --no-startup-id xfce4-terminal" "$config_i3wm_filepath"; then
-    echo "bindsym \$mod+Return exec --no-startup-id xfce4-terminal" >> "$config_i3wm_filepath"
-  fi
+        # shellcheck disable=SC2016
+        sed -i 's/set \$mod Mod1/set \$mod Mod4/g' "$_config_i3_filepath"
+        # shellcheck disable=SC2016
+        sed -i 's/Mod1/\$mod/g' "$_config_i3_filepath"
+        sed -i '/^bar {$/,/^}/s/^/#/g' "$_config_i3_filepath"
+        # shellcheck disable=SC2016
+        sed -i 's/bindsym \$mod+Return exec i3\-sensible\-terminal/\#bindsym \$mod+Return exec i3\-sensible\-terminal/g' "$_config_i3_filepath"
+        # shellcheck disable=SC2016
+        sed -i 's/bindsym \$mod+space focus mode\_toggle/\#bindsym \$mod+space focus mode\_toggle/g' "$_config_i3_filepath"
+        # shellcheck disable=SC2016
+        sed -i 's/bindsym \$mod+Shift+space floating toggle/\#bindsym \$mod+Shift+space floating toggle/g' "$_config_i3_filepath"
 
-  if ! grep -qF "bindsym \$mod+space exec umar window" "$config_i3wm_filepath"; then
-    echo "bindsym \$mod+space exec umar window" >> "$config_i3wm_filepath"
-  fi
+        if ! grep -qF "bindsym \$mod+Return exec --no-startup-id xfce4-terminal" "$_config_i3_filepath"; then
+            echo "bindsym \$mod+Return exec --no-startup-id xfce4-terminal" >> "$_config_i3_filepath"
+        fi
 
-  if ! grep -qF "default_border pixel 0px" "$config_i3wm_filepath"; then
-    echo "default_border pixel 0px" >> "$config_i3wm_filepath"
-  fi
+        if ! grep -qF "bindsym \$mod+space exec umar window" "$_config_i3_filepath"; then
+            echo "bindsym \$mod+space exec umar window" >> "$_config_i3_filepath"
+        fi
 
-  if ! grep -qF "gaps inner 0px" "$config_i3wm_filepath"; then
-    echo "gaps inner 0px" >> "$config_i3wm_filepath"
-  fi
+        if ! grep -qF "default_border pixel 0px" "$_config_i3_filepath"; then
+            echo "default_border pixel 0px" >> "$_config_i3_filepath"
+        fi
 
-  if ! grep -qF "gaps outer 0px" "$config_i3wm_filepath"; then
-    echo "gaps outer 0px" >> "$config_i3wm_filepath"
-  fi
+        if ! grep -qF "gaps inner 0px" "$_config_i3_filepath"; then
+            echo "gaps inner 0px" >> "$_config_i3_filepath"
+        fi
 
-  if ! grep -qF "exec_always --no-startup-id $config_polybarlaunch_filepath" "$config_i3wm_filepath"; then
-    echo "exec_always --no-startup-id $config_polybarlaunch_filepath" >> "$config_i3wm_filepath"
-  fi
+        if ! grep -qF "gaps outer 0px" "$_config_i3_filepath"; then
+            echo "gaps outer 0px" >> "$_config_i3_filepath"
+        fi
 
-  sed -i 's/background \= \#282A2E/background \= \#000000/g' "$config_polybar_filepath"
-  sed -i 's/background\-alt \= \#373B41/background\-alt \= \#000000/g' "$config_polybar_filepath"
-  sed -i 's/\[bar\/example\]/\[bar\/bar\]/g' "$config_polybar_filepath"
-  sed -i 's/height \= 24pt/height \= 18pt/g' "$config_polybar_filepath"
-  sed -i 's/radius \= 6/radius \= 0/g' "$config_polybar_filepath"
-  sed -i 's/line\-size \= 3pt/line\-size \= 1pt/g' "$config_polybar_filepath"
-  sed -i 's/modules\-right \= filesystem pulseaudio xkeyboard memory cpu wlan eth date/modules\-right \= filesystem pulseaudio xkeyboard memory cpu battery wlan eth bluetooth date/g' "$config_polybar_filepath"
-  sed -i 's/label \= \%title\:0\:60\:\.\.\.\%/label \= \%title\:0\:40\:\.\.\.\%\nlabel\-maxlen \= 40/g' "$config_polybar_filepath"
-  sed -i 's/format\-volume\-prefix \= \"VOL \"/format\-volume\-prefix \= \"AV\"/g' "$config_polybar_filepath"
-  sed -i 's/format\-prefix \= \"RAM \"/format\-prefix \= \"R\"/g' "$config_polybar_filepath"
-  sed -i 's/format\-prefix \= \"CPU \"/format\-prefix \= \"C\"/g' "$config_polybar_filepath"
-  sed -i 's/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%essid\% \%local_ip\%/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%essid\:0\:10\:\.\.\.\% \%local_ip\%\nlabel\-maxlen \= 40/g' "$config_polybar_filepath"
-  sed -i 's/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%local_ip\%/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%local_ip\%\nlabel\-maxlen \= 40/g' "$config_polybar_filepath"
-  sed -i 's/date \= \%H\:\%M/date \= \%Y\-\%m\-\%d \%H\:\%M\:\%S/g' "$config_polybar_filepath"
+        if ! grep -qF "exec_always --no-startup-id $_config_polybar_launch_filepath" "$_config_i3_filepath"; then
+            echo "exec_always --no-startup-id $_config_polybar_launch_filepath" >> "$_config_i3_filepath"
+        fi
 
-  if ! grep -qF "[module/battery]" "$config_polybar_filepath"; then
-    echo "
+        sed -i 's/background \= \#282A2E/background \= \#000000/g' "$_config_polybar_filepath"
+        sed -i 's/background\-alt \= \#373B41/background\-alt \= \#000000/g' "$_config_polybar_filepath"
+        sed -i 's/\[bar\/example\]/\[bar\/bar\]/g' "$_config_polybar_filepath"
+        sed -i 's/height \= 24pt/height \= 18pt/g' "$_config_polybar_filepath"
+        sed -i 's/radius \= 6/radius \= 0/g' "$_config_polybar_filepath"
+        sed -i 's/line\-size \= 3pt/line\-size \= 1pt/g' "$_config_polybar_filepath"
+        sed -i 's/modules\-right \= filesystem pulseaudio xkeyboard memory cpu wlan eth date/modules\-right \= filesystem pulseaudio xkeyboard memory cpu battery wlan eth bluetooth date/g' "$_config_polybar_filepath"
+        sed -i 's/label \= \%title\:0\:60\:\.\.\.\%/label \= \%title\:0\:40\:\.\.\.\%\nlabel\-maxlen \= 40/g' "$_config_polybar_filepath"
+        sed -i 's/format\-volume\-prefix \= \"VOL \"/format\-volume\-prefix \= \"AV\"/g' "$_config_polybar_filepath"
+        sed -i 's/format\-prefix \= \"RAM \"/format\-prefix \= \"R\"/g' "$_config_polybar_filepath"
+        sed -i 's/format\-prefix \= \"CPU \"/format\-prefix \= \"C\"/g' "$_config_polybar_filepath"
+        sed -i 's/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%essid\% \%local_ip\%/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%essid\:0\:10\:\.\.\.\% \%local_ip\%\nlabel\-maxlen \= 40/g' "$_config_polybar_filepath"
+        sed -i 's/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%local_ip\%/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%local_ip\%\nlabel\-maxlen \= 40/g' "$_config_polybar_filepath"
+        sed -i 's/date \= \%H\:\%M/date \= \%Y\-\%m\-\%d \%H\:\%M\:\%S/g' "$_config_polybar_filepath"
+
+        if ! grep -qF "[module/battery]" "$_config_polybar_filepath"; then
+            echo "
 [module/battery]
 type = internal/battery
 ;format_prefix = \"B\"
@@ -686,1196 +1493,659 @@ label-charging = %percentage%%
 label-discharging = %percentage%%
 label-full = %percentage%%
 label-low = %percentage%%
-" >> "$config_polybar_filepath"
-  fi
+" >> "$_config_polybar_filepath"
+        fi
 
-  if ! grep -qF "[module/bluetooth]" "$config_polybar_filepath"; then
-    echo "
+        if ! grep -qF "[module/bluetooth]" "$_config_polybar_filepath"; then
+            echo "
 [module/bluetooth]
 type = custom/script
-exec = $config_polybarlaunch_bluetooth_filepath
+exec = $_config_polybar_launch_bluetooth_filepath
 interval = 2
-click-left = exec $config_polybarlaunch_bluetooth_toggle_filepath
-click-right = exec $config_polybarlaunch_bluetooth_toggle_filepath
+click-left = exec $_config_polybar_launch_bluetooth_toggle_filepath
+click-right = exec $_config_polybar_launch_bluetooth_toggle_filepath
 format-foreground = \${colors.primary}
-" >> "$config_polybar_filepath"
-  fi
+" >> "$_config_polybar_filepath"
+        fi
 
-  printout "Configuring xfce4-terminal..."
-  create_dir "$config_xfce4_dir"
-  create_dir "$config_xfce4_xfconf_dir"
-  create_dir "$config_xfce4_xfconf_xfce_perchannel_xml_dir"
+        printout "Configuring xfce4-terminal..."
 
-  if ! is_file_exist "$config_xfce4_filepath"; then
-    create_file "$config_xfce4_filepath"
-  fi
+        create_dir "$_config_xfce4_dir"
+        create_dir "$_config_xfce4_xfconf_dir"
+        create_dir "$_config_xfce4_xfconf_xfce_perchannel_xml_dir"
 
-  if ! is_file_exist "$config_xfce4launch_filepath"; then
-    create_file "$config_xfce4launch_filepath"
-    chmod +x "$config_xfce4launch_filepath"
-  fi
+        if ! is_file_exist "$_config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_filepath"; then
+            create_file "$_config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_filepath"
+        fi
 
-  echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+        if ! is_file_exist "$_config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_launch_filepath"; then
+            create_file "$_config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_launch_filepath"
+
+            chmod +x "$_config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_launch_filepath"
+        fi
+
+        echo "\
+<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 
 <channel name=\"xfce4-terminal\" version=\"1.0\">
-  <property name=\"font-use-system\" type=\"bool\" value=\"false\"/>
-  <property name=\"font-allow-bold\" type=\"bool\" value=\"true\"/>
-  <property name=\"misc-copy-on-select\" type=\"bool\" value=\"false\"/>
-  <property name=\"misc-menubar-default\" type=\"bool\" value=\"false\"/>
-  <property name=\"misc-borders-default\" type=\"bool\" value=\"true\"/>
-  <property name=\"misc-slim-tabs\" type=\"bool\" value=\"false\"/>
-  <property name=\"scrolling-bar\" type=\"string\" value=\"TERMINAL_SCROLLBAR_NONE\"/>
-  <property name=\"cell-width-scale\" type=\"double\" value=\"1\"/>
-  <property name=\"cell-height-scale\" type=\"double\" value=\"1\"/>
-  <property name=\"misc-cursor-blinks\" type=\"bool\" value=\"true\"/>
-  <property name=\"misc-cursor-shape\" type=\"string\" value=\"TERMINAL_CURSOR_SHAPE_IBEAM\"/>
-  <property name=\"misc-show-unsafe-paste-dialog\" type=\"bool\" value=\"false\"/>
-  <property name=\"misc-confirm-close\" type=\"bool\" value=\"false\"/>
+    <property name=\"font-use-system\" type=\"bool\" value=\"false\"/>
+    <property name=\"font-allow-bold\" type=\"bool\" value=\"true\"/>
+    <property name=\"misc-copy-on-select\" type=\"bool\" value=\"false\"/>
+    <property name=\"misc-menubar-default\" type=\"bool\" value=\"false\"/>
+    <property name=\"misc-borders-default\" type=\"bool\" value=\"true\"/>
+    <property name=\"misc-slim-tabs\" type=\"bool\" value=\"false\"/>
+    <property name=\"scrolling-bar\" type=\"string\" value=\"TERMINAL_SCROLLBAR_NONE\"/>
+    <property name=\"cell-width-scale\" type=\"double\" value=\"1\"/>
+    <property name=\"cell-height-scale\" type=\"double\" value=\"1\"/>
+    <property name=\"misc-cursor-blinks\" type=\"bool\" value=\"true\"/>
+    <property name=\"misc-cursor-shape\" type=\"string\" value=\"TERMINAL_CURSOR_SHAPE_IBEAM\"/>
+    <property name=\"misc-show-unsafe-paste-dialog\" type=\"bool\" value=\"false\"/>
+    <property name=\"misc-confirm-close\" type=\"bool\" value=\"false\"/>
 </channel>
-" > "$config_xfce4_filepath"
-
-  echo "#!/bin/sh
+" > "$_config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_filepath"
+        
+        echo "\
+#!/bin/sh
 
 killall xfconfd || true
-" > "$config_xfce4launch_filepath"
+" > "$_config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_launch_filepath"
 
-  printout "Configuring .xinitrc..."
-  sed -i 's/twm \&/\#twm \&/g' "$xinitrc_filepath"
-  sed -i 's/xclock/\#xclock/g' "$xinitrc_filepath"
-  sed -i 's/exec xterm/\#exec xterm/g' "$xinitrc_filepath"
-  sed -i 's/xterm/\#xterm/g' "$xinitrc_filepath"
+        printout "Configuring .xinitrc..."
 
-  if ! grep -qF "$config_xfce4launch_filepath &" "$xinitrc_filepath"; then
-    echo "$config_xfce4launch_filepath &" >> "$xinitrc_filepath"
-  fi
+        sed -i 's/twm \&/\#twm \&/g' "$_xinitrc_filepath"
+        sed -i 's/xclock/\#xclock/g' "$_xinitrc_filepath"
+        sed -i 's/exec xterm/\#exec xterm/g' "$_xinitrc_filepath"
+        sed -i 's/xterm/\#xterm/g' "$_xinitrc_filepath"
 
-  if ! grep -qF "exec i3" "$xinitrc_filepath"; then
-    echo "exec i3" >> "$xinitrc_filepath"
-  fi
-
-  printout "Done"
-}
-
-command_setupdeveloper() {
-  printout_markdown "${color_yellow}**This will install developer tools. **${color_red}**WARNING!!! This will replace your existing packages!!! Don't do this if you're not aware!!!**${color_reset}"
-
-  printout_blank_line
-
-  printout_no_enter "Are you sure to continue this process [N/y] "
-
-  _30_confirmation=$(read_input)
-
-  if ! is_equal "$_30_confirmation" "y"; then
-    printout_exit "Aborted!"
-  fi
-
-  sudo echo "Configuring..."
-  check_requirements "tar" "wget" "gzip"
-
-  if is_arch; then
-    install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "make" "openssh" "docker" "docker-compose"
-  elif is_debian; then
-    install_package "ca-certificates" "curl"
-    sudo install -m 0755 -d /etc/apt/keyrings
-    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-    sudo chmod a+r /etc/apt/keyrings/docker.asc
-    echo \
-      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "make" "openssh" \
-    "docker-ce" "docker-ce-cli" "containerd.io" "docker-buildx-plugin" "docker-compose-plugin"
-  else
-    install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "make" "openssh"
-  fi
-
-  printout "Configuring ssh..."
-
-  if ! is_file_exist "$ssh_keygen_filepath"; then
-    ssh-keygen -t ed25519
-    eval "$(ssh-agent -s)"
-    ssh-add "$ssh_keygen_dir"
-  fi
-
-  printout "Downloading tools..."
-
-  if ! is_dir_exist "$datagrip_extracted_dir"; then
-    create_dir "$config_datagrip_dir"
-    wget -c --timeout=10 --tries=1 -O "$datagrip_downloaded_filepath" "$datagrip_download_url" &
-  fi
-
-  if ! is_dir_exist "$go_extracted_dir"; then
-    create_dir "$config_go_dir"
-    wget -c --timeout=10 --tries=1 -O "$go_downloaded_filepath" "$go_download_url" &
-  fi
-
-  if ! is_dir_exist "$goland_extracted_dir"; then
-    create_dir "$config_goland_dir"
-    wget -c --timeout=10 --tries=1 -O "$goland_downloaded_filepath" "$goland_download_url" &
-  fi
-
-  if ! is_dir_exist "$idea_extracted_dir"; then
-    create_dir "$config_idea_dir"
-    wget -c --timeout=10 --tries=1 -O "$idea_downloaded_filepath" "$idea_download_url" &
-  fi
-
-  create_dir "$config_postman_dir"
-  wget -c --timeout=10 --tries=1 -O "$postman_downloaded_filepath" "$postman_download_url" &
-
-  if ! is_dir_exist "$pycharm_extracted_dir"; then
-    create_dir "$config_pycharm_dir"
-    wget -c --timeout=10 --tries=1 -O "$pycharm_downloaded_filepath" "$pycharm_download_url" &
-  fi
-
-  if ! is_dir_exist "$rustrover_extracted_dir"; then
-    create_dir "$config_rustrover_dir"
-    wget -c --timeout=10 --tries=1 -O "$rustrover_downloaded_filepath" "$rustrover_download_url" &
-  fi
-
-  if ! is_dir_exist "$webstorm_extracted_dir"; then
-    create_dir "$config_webstorm_dir"
-    wget -c --timeout=10 --tries=1 -O "$webstorm_downloaded_filepath" "$webstorm_download_url" &
-  fi
-
-  if ! is_dir_exist "$nodejs_extracted_dir"; then
-    create_dir "$config_nodejs_dir"
-    wget -c --timeout=10 --tries=1 -O "$nodejs_downloaded_filepath" "$nodejs_download_url" &
-  fi
-
-  wait
-
-  curl --proto '=https' --tlsv1.2 -sSf "$rust_download_url" | sh || true
-  curl "$pyenv_download_url" | bash || true
-  printout "Extracting tools..."
-
-  if is_file_exist "$datagrip_downloaded_filepath"; then
-    tar -v -C "$config_datagrip_dir" -xzf "$datagrip_downloaded_filepath" &
-  fi
-
-  if is_file_exist "$go_downloaded_filepath"; then
-    tar -v -C "$config_go_dir" -xzf "$go_downloaded_filepath" &
-  fi
-
-  if is_file_exist "$goland_downloaded_filepath"; then
-    tar -v -C "$config_goland_dir" -xzf "$goland_downloaded_filepath" &
-  fi
-
-  if is_file_exist "$idea_downloaded_filepath"; then
-    tar -v -C "$config_idea_dir" -xzf "$idea_downloaded_filepath" &
-  fi
-
-  if is_file_exist "$postman_downloaded_filepath"; then
-    tar -v -C "$config_postman_dir" -xzf "$postman_downloaded_filepath" &
-  fi
-
-  if is_file_exist "$pycharm_downloaded_filepath"; then
-    tar -v -C "$config_pycharm_dir" -xzf "$pycharm_downloaded_filepath" &
-  fi
-
-  if is_file_exist "$rustrover_downloaded_filepath"; then
-    tar -v -C "$config_rustrover_dir" -xzf "$rustrover_downloaded_filepath" &
-  fi
-
-  if is_file_exist "$webstorm_downloaded_filepath"; then
-    tar -v -C "$config_webstorm_dir" -xzf "$webstorm_downloaded_filepath" &
-  fi
-
-  if is_file_exist "$nodejs_downloaded_filepath"; then
-    tar -v -C "$config_nodejs_dir" -xJvf "$nodejs_downloaded_filepath" &
-  fi
-
-  wait
-
-  printout "Configuring tools..."
-
-  if is_file_exist "$go_downloaded_filepath"; then
-    mv "$go_extracted_dir_path" "$go_extracted_dir"
-  fi
-
-  if is_file_exist "$nodejs_downloaded_filepath"; then
-    mv "$nodejs_extracted_dir_path" "$nodejs_extracted_dir"
-  fi
-
-  sudo chmod 4755 "$datagrip_chrome_sandbox_filepath"
-  sudo chmod 4755 "$datagrip_extracted_dir"
-  sudo ln -sf "$datagrip_script_filepath" "$datagrip_installed_filepath" || true
-  rm -rf "$datagrip_downloaded_filepath"
-  mkdir "$go_dir" > /dev/null 2>&1 || true
-  mkdir "$go_src_dir" > /dev/null 2>&1 || true
-  mkdir "$go_pkg_dir" > /dev/null 2>&1 || true
-  mkdir "$go_bin_dir" > /dev/null 2>&1 || true
-  sudo rm -rf "$go_installed_filepath"
-  sudo cp -rf "$go_extracted_dir" "$go_installed_filepath"
-  rm -rf "$go_downloaded_filepath"
-  sudo chmod 4755 "$goland_chrome_sandbox_filepath"
-  sudo chmod 4755 "$goland_extracted_dir"
-  sudo ln -sf "$goland_script_filepath" "$goland_installed_filepath" || true
-  rm -rf "$goland_downloaded_filepath"
-  sudo chmod 4755 "$idea_chrome_sandbox_filepath"
-  sudo chmod 4755 "$idea_extracted_dir"
-  sudo ln -sf "$idea_script_filepath" "$idea_installed_filepath" || true
-  rm -rf "$idea_downloaded_filepath"
-  sudo ln -sf "$postman_script_filepath" "$postman_installed_filepath" || true
-  rm -rf "$postman_downloaded_filepath"
-  sudo chmod 4755 "$pycharm_chrome_sandbox_filepath"
-  sudo chmod 4755 "$pycharm_extracted_dir"
-  sudo ln -sf "$pycharm_script_filepath" "$pycharm_installed_filepath" || true
-  rm -rf "$pycharm_downloaded_filepath"
-  sudo chmod 4755 "$rustrover_chrome_sandbox_filepath"
-  sudo chmod 4755 "$rustrover_extracted_dir"
-  sudo ln -sf "$rustrover_script_filepath" "$rustrover_installed_filepath" || true
-  rm -rf "$rustrover_downloaded_filepath"
-  sudo chmod 4755 "$webstorm_chrome_sandbox_filepath"
-  sudo chmod 4755 "$webstorm_extracted_dir"
-  sudo ln -sf "$webstorm_script_filepath" "$webstorm_installed_filepath" || true
-  rm -rf "$webstorm_downloaded_filepath"
-  mkdir "$nodejs_dir" > /dev/null 2>&1 || true
-  mkdir "$nodejs_npm_global_dir" > /dev/null 2>&1 || true
-  sudo mkdir -p "$nodejs_installed_filepath"
-  sudo cp -rf "$nodejs_extracted_dir" "$nodejs_installed_version_filepath"
-  rm -rf "$nodejs_downloaded_filepath"
-  printout "Configuring profiles..."
-
-  if is_file_exist "$bash_profile_filepath"; then
-    if ! grep -qF "export PATH=\$PATH:$go_installed_bin_dir" "$bash_profile_filepath"; then
-      echo "export PATH=\$PATH:$go_installed_bin_dir" >> "$bash_profile_filepath"
-    fi
-
-    if ! grep -qF "export GOPATH=$go_dir" "$bash_profile_filepath"; then
-      echo "export GOPATH=$go_dir" >> "$bash_profile_filepath"
-    fi
-
-    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$bash_profile_filepath"; then
-      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$bash_profile_filepath"
-    fi
-
-    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$bash_profile_filepath"; then
-      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$bash_profile_filepath"
-    fi
-
-    if ! grep -qF "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$bash_profile_filepath"; then
-      echo "export PATH=$nodejs_installed_version_bin_dir:\$PATH" >> "$bash_profile_filepath"
-    fi
-
-    if ! grep -qF "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$bash_profile_filepath"; then
-      echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$bash_profile_filepath"
-    fi
-
-    if ! grep -qF "export PYENV_ROOT=$config_pyenv_dir" "$bash_profile_filepath"; then
-      echo "export PYENV_ROOT=$config_pyenv_dir" >> "$bash_profile_filepath"
-    fi
-
-    if ! grep -qF "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" "$bash_profile_filepath"; then
-      echo "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$bash_profile_filepath"
-    fi
-  fi
-
-  if is_file_exist "$bashrc_filepath"; then
-    if ! grep -qF "[[ \$- != *i* ]] && return" "$bashrc_filepath"; then
-      echo "[[ \$- != *i* ]] && return" >> "$bashrc_filepath"
-    fi
-
-    if ! grep -qF "export PATH=\$PATH:$go_installed_bin_dir" "$bashrc_filepath"; then
-      echo "export PATH=\$PATH:$go_installed_bin_dir" >> "$bashrc_filepath"
-    fi
-
-    if ! grep -qF "export GOPATH=$go_dir" "$bashrc_filepath"; then
-      echo "export GOPATH=$go_dir" >> "$bashrc_filepath"
-    fi
-
-    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$bashrc_filepath"; then
-      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$bashrc_filepath"
-    fi
-
-    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$bashrc_filepath"; then
-      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$bashrc_filepath"
-    fi
-
-    if ! grep -qF "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$bashrc_filepath"; then
-      echo "export PATH=$nodejs_installed_version_bin_dir:\$PATH" >> "$bashrc_filepath"
-    fi
-
-    if ! grep -qF "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$bashrc_filepath"; then
-      echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$bashrc_filepath"
-    fi
-
-    if ! grep -qF "export PYENV_ROOT=$config_pyenv_dir" "$bashrc_filepath"; then
-      echo "export PYENV_ROOT=$config_pyenv_dir" >> "$bashrc_filepath"
-    fi
-
-    if ! grep -qF "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" "$bashrc_filepath"; then
-      echo "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$bashrc_filepath"
-    fi
-  fi
-
-  if is_file_exist "$profile_filepath"; then
-    if ! grep -qF "export PATH=\$PATH:$go_installed_bin_dir" "$profile_filepath"; then
-      echo "export PATH=\$PATH:$go_installed_bin_dir" >> "$profile_filepath"
-    fi
-
-    if ! grep -qF "export GOPATH=$go_dir" "$profile_filepath"; then
-      echo "export GOPATH=$go_dir" >> "$profile_filepath"
-    fi
-
-    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$profile_filepath"; then
-      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$profile_filepath"
-    fi
-
-    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$profile_filepath"; then
-      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$profile_filepath"
-    fi
-
-    if ! grep -qF "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$profile_filepath"; then
-      echo "export PATH=$nodejs_installed_version_bin_dir:\$PATH" >> "$profile_filepath"
-    fi
-
-    if ! grep -qF "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$profile_filepath"; then
-      echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$profile_filepath"
-    fi
-
-    if ! grep -qF "export PYENV_ROOT=$config_pyenv_dir" "$profile_filepath"; then
-      echo "export PYENV_ROOT=$config_pyenv_dir" >> "$profile_filepath"
-    fi
-
-    if ! grep -qF "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" "$profile_filepath"; then
-      echo "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$profile_filepath"
-    fi
-  fi
-
-  if is_file_exist "$zshrc_filepath"; then
-    if ! grep -qF "export PATH=\$PATH:$go_installed_bin_dir" "$zshrc_filepath"; then
-      echo "export PATH=\$PATH:$go_installed_bin_dir" >> "$zshrc_filepath"
-    fi
-
-    if ! grep -qF "export GOPATH=$go_dir" "$zshrc_filepath"; then
-      echo "export GOPATH=$go_dir" >> "$zshrc_filepath"
-    fi
-
-    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$zshrc_filepath"; then
-      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$zshrc_filepath"
-    fi
-
-    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$zshrc_filepath"; then
-      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$zshrc_filepath"
-    fi
-
-    if ! grep -qF "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$zshrc_filepath"; then
-      echo "export PATH=$nodejs_installed_version_bin_dir:\$PATH" >> "$zshrc_filepath"
-    fi
-
-    if ! grep -qF "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$zshrc_filepath"; then
-      echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$zshrc_filepath"
-    fi
-
-    if ! grep -qF "export PYENV_ROOT=$config_pyenv_dir" "$zshrc_filepath"; then
-      echo "export PYENV_ROOT=$config_pyenv_dir" >> "$zshrc_filepath"
-    fi
-
-    if ! grep -qF "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" "$zshrc_filepath"; then
-      echo "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$zshrc_filepath"
-    fi
-  fi
-
-  if is_file_exist "$zprofile_filepath"; then
-    if ! grep -qF "export PATH=\$PATH:$go_installed_bin_dir" "$zprofile_filepath"; then
-      echo "export PATH=\$PATH:$go_installed_bin_dir" >> "$zprofile_filepath"
-    fi
-
-    if ! grep -qF "export GOPATH=$go_dir" "$zprofile_filepath"; then
-      echo "export GOPATH=$go_dir" >> "$zprofile_filepath"
-    fi
-
-    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$zprofile_filepath"; then
-      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$zprofile_filepath"
-    fi
-
-    if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$zprofile_filepath"; then
-      echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$zprofile_filepath"
-    fi
-
-    if ! grep -qF "export PATH=$nodejs_installed_version_bin_dir:\$PATH" "$zprofile_filepath"; then
-      echo "export PATH=$nodejs_installed_version_bin_dir:\$PATH" >> "$zprofile_filepath"
-    fi
-
-    if ! grep -qF "export PATH=$nodejs_npm_global_bin_dir:\$PATH" "$zprofile_filepath"; then
-      echo "export PATH=$nodejs_npm_global_bin_dir:\$PATH" >> "$zprofile_filepath"
-    fi
-
-    if ! grep -qF "export PYENV_ROOT=$config_pyenv_dir" "$zprofile_filepath"; then
-      echo "export PYENV_ROOT=$config_pyenv_dir" >> "$zprofile_filepath"
-    fi
-
-    if ! grep -qF "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" "$zprofile_filepath"; then
-      echo "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$zprofile_filepath"
-    fi
-  fi
-
-  npm config set prefix "$nodejs_npm_global_dir" > /dev/null 2>&1 || true
-  sudo systemctl start docker.socket || true
-  sudo systemctl enable docker.socket || true
-  printout "Done"
-}
-
-command_macbookfan() {
-  if is_no_argument "$@"; then
-    printout_exit "Current Macbook fan speed is $(read_file_content "$macbook_platform_fan_output_filepath")"
-  fi
-
-  _29_min_speed=$(read_file_content "$macbook_platform_fan_min_filepath")
-
-  if [ "$1" -lt "$_29_min_speed" ]; then
-    printout_exit "Value under minimum!"
-  fi
-
-  _29_max_speed=$(read_file_content "$macbook_platform_fan_max_filepath")
-
-  if [ "$1" -gt "$_29_max_speed" ]; then
-    printout_exit "Value above maximum!"
-  fi
-
-  printout_markdown "${color_yellow}**This will configure Macbook Fan Speed. **${color_red}**If you're not using Macbook device, DON'T execute this command (MAY BREAK YOUR SYSTEM)**${color_reset}"
-
-  printout_blank_line
-
-  printout_no_enter "Are you sure to continue this process [N/y] "
-
-  _29_confirmation=$(read_input)
-
-  if ! is_equal "$_29_confirmation" "y"; then
-    printout_exit "Aborted!"
-  fi
-
-  su -c "echo 1 > $macbook_platform_fan_manual_filepath && echo $1 > $macbook_platform_fan_output_filepath"
-}
-
-command_macbookcamera() {
-  printout_markdown "${color_yellow}**This will configure Macbook Camera. **${color_red}**If you're not using Macbook device, DON'T execute this command (MAY BREAK YOUR SYSTEM)**${color_reset}"
-
-  printout_blank_line
-
-  printout_no_enter "Are you sure to continue this process [N/y] "
-
-  _28_confirmation=$(read_input)
-
-  if ! is_equal "$_28_confirmation" "y"; then
-    printout_exit "Aborted!"
-  fi
-
-  check_requirements "git" "sudo" "make"
-
-  if ! is_dir_exist "$config_macbook_camera_driver1_dir"; then
-    git clone "$macbook_camera_driver1_url" "$config_macbook_camera_driver1_dir"
-  fi
-
-  if ! is_dir_exist "$config_macbook_camera_driver2_dir"; then
-    git clone "$macbook_camera_driver2_url" "$config_macbook_camera_driver2_dir"
-  fi
-
-  cd "$config_macbook_camera_driver1_dir" || printout_exit "Camera driver1 not found!"
-  make clean
-
-  make
-
-  sudo make install
-  cd "$config_macbook_camera_driver2_dir" || printout_exit "Camera driver2 not found!"
-  make clean
-
-  make
-
-  sudo make install
-  sudo depmod
-  sudo modprobe -r bdc_pci
-  sudo modprobe facetimehd
-
-  printout_blank_line
-
-  printout_markdown "${color_yellow}**Camera successfully configured. If it not working, try to reboot your system**${color_reset}"
-}
-
-command_macbookaudio() {
-  printout_markdown "${color_yellow}**This will configure Macbook Audio. **${color_red}**If you're not using Macbook device, DON'T execute this command (MAY BREAK YOUR SYSTEM)**${color_reset}"
-
-  printout_blank_line
-
-  printout_no_enter "Are you sure to continue this process [N/y] "
-
-  _27_confirmation=$(read_input)
-
-  if ! is_equal "$_27_confirmation" "y"; then
-    printout_exit "Aborted!"
-  fi
-
-  check_requirements "git" "sudo"
-
-  if ! is_dir_exist "$config_macbook_audio_driver1_dir"; then
-    git clone "$macbook_audio_driver1_url" "$config_macbook_audio_driver1_dir"
-  fi
-
-  cd "$config_macbook_audio_driver1_dir" || printout_exit "Audio driver1 not found!"
-  sudo "./$config_macbook_audio_driver1_installation_script_name"
-
-  printout_blank_line
-
-  printout_markdown "${color_yellow}**Audio successfully configured. You may need to reboot your system or restart your audio service(s)**${color_reset}"
-}
-
-command_resolution() {
-  check_requirements "xrandr"
-
-  if is_no_argument "$@"; then
-    printout_exit "Current screen resolution is $(xrandr | grep '\*' | awk '{print $1}')"
-  fi
-
-  if is_empty "$1" || is_empty "$2"; then
-    printout_exit "Current screen resolution is $(xrandr | grep '\*' | awk '{print $1}')"
-  fi
-
-  xrandr --output "$1" --mode "$2"
-}
-
-command_output() {
-  check_requirements "xrandr"
-  xrandr --current
-}
-
-command_brightness() {
-  check_requirements "xrandr" "bc"
-
-  if is_no_argument "$@"; then
-    printout_exit "Current brightness value is $(xrandr --verbose | awk '/Brightness/ { print $2 * 100; exit}')"
-  fi
-
-  if is_empty "$1" || is_empty "$2"; then
-    printout_exit "Current brightness value is $(xrandr --verbose | awk '/Brightness/ { print $2 * 100; exit}')"
-  fi
-
-  _26_brightness=$(printout "scale=2; ${2} / 100" | bc)
-
-  printout "${_26_brightness} < 0.10" | bc | grep -q 1
-
-  if is_equal "$?" "0"; then
-    printout_exit "Value under minimum!"
-  fi
-
-  printout "${_26_brightness} > 1.00" | bc | grep -q 1
-
-  if is_equal "$?" "0"; then
-    printout_exit "Value above maximum!"
-  fi
-
-  xrandr --output "$1" --brightness "$_26_brightness"
-}
-
-command_touchpad() {
-  check_requirements "xinput"
-  printout_markdown "${color_yellow}**This will configure touchpad device**${color_reset}"
-
-  printout_blank_line
-
-  xinput list
-
-  printout_blank_line
-
-  printout_no_enter "Enter your Touchpad Device ID..."
-
-  _25_device_id=$(read_input)
-
-  if is_empty "$_25_device_id"; then
-    printout_exit "Device ID can't be empty!"
-  fi
-
-  printout_no_enter "
-You're about to configure this Touchpad Device:
-
-$(xinput list | grep "id=${_25_device_id}")
-
-Are you sure? [N/y] "
-
-  _25_confirmation=$(read_input)
-
-  if ! is_equal "$_25_confirmation" "y"; then
-    printout_exit "Aborted!"
-  fi
-
-  xinput set-prop $_25_device_id "libinput Tapping Enabled" 1
-  xinput set-prop $_25_device_id "libinput Natural Scrolling Enabled" 0
-}
-
-command_audiocard() {
-  check_requirements "pactl"
-  pactl list cards
-}
-
-command_audio() {
-  check_requirements "pulsemixer"
-  pulsemixer
-}
-
-command_changeaiapikey() {
-  check_ai_config
-  configure_ai_api_key
-  change_file_content_line "3" "$ai_api_key" "$config_ai_filepath"
-  printout "OK"
-}
-
-command_changeaitype() {
-  check_ai_config
-  configure_ai_type
-  change_file_content_line "1" "$ai_type" "$config_ai_filepath"
-  printout "OK"
-}
-
-command_changeaimodel() {
-  check_ai_config
-  configure_ai_model
-  change_file_content_line "2" "$ai_model" "$config_ai_filepath"
-  printout "OK"
-}
-
-command_changerundesc() {
-  printout_no_enter "Enter a name... "
-
-  _2_name=$(read_input)
-
-  if is_empty "$_2_name"; then
-    printout_exit "The name can't be empty!"
-  fi
-
-  if is_contain "$_2_name" ":"; then
-    printout_exit "The name can't contain a colon!"
-  fi
-
-  _2_name_exist=$(read_file_content "$config_run_list_filepath" | while IFS=: read -r _2_name_config _ _; do
-    if is_equal "$_2_name" "$_2_name_config" && ! is_empty "$_2_name_config"; then
-      printout_exit "exist"
-    fi
-  done)
-
-  if ! is_equal "$_2_name_exist" "exist"; then
-    printout_exit "${color_green}$_2_name${color_reset} command not found!"
-  fi
-
-  printout_no_enter "Enter a description... "
-
-  _2_description=$(read_input)
-
-  if is_contain "$_2_description" ":"; then
-    printout_exit "The description can't contain a colon!"
-  fi
-
-  read_file_content "$config_run_list_filepath" | while IFS=: read -r _2_name_config _ _2_command_config; do
-    if is_equal "$_2_name" "$_2_name_config" && ! is_empty "$_2_name_config"; then
-      change_file_content_line_by_keyword "$_2_name_config:" "$_2_name_config:$_2_description:$_2_command_config" "$config_run_list_filepath"
-      break
-    fi
-  done
-}
-
-command_changeruncommand() {
-  printout_no_enter "Enter a name... "
-
-  _3_name=$(read_input)
-
-  if is_empty "$_3_name"; then
-    printout_exit "The name can't be empty!"
-  fi
-
-  if is_contain "$_3_name" ":"; then
-    printout_exit "The name can't contain a colon!"
-  fi
-
-  _3_name_exist=$(read_file_content "$config_run_list_filepath" | while IFS=: read -r _3_name_config _ _; do
-    if is_equal "$_3_name" "$_3_name_config" && ! is_empty "$_3_name_config"; then
-      printout_exit "exist"
-    fi
-  done)
-
-  if ! is_equal "$_3_name_exist" "exist"; then
-    printout_exit "${color_green}$_3_name${color_reset} command not found!"
-  fi
-
-  printout_no_enter "Enter the execution command... "
-
-  _3_command=$(read_input)
-
-  if is_empty "$_3_command"; then
-    printout_exit "The execution command can't be empty!"
-  fi
-
-  read_file_content "$config_run_list_filepath" | while IFS=: read -r _3_name_config _3_description_config _; do
-    if is_equal "$_3_name" "$_3_name_config" && ! is_empty "$_3_name_config"; then
-      change_file_content_line_by_keyword "$_3_name_config:" "$_3_name_config:$_3_description_config:$_3_command" "$config_run_list_filepath"
-      break
-    fi
-  done
-}
-
-command_getsmarter() {
-  check_requirements "curl" "sudo"
-  curl -L "$repo_url/$script_name" -o "/tmp/$script_name"
-  sudo mv "/tmp/$script_name" "$install_dir/$target_name"
-  sudo chmod +x "$install_dir/$target_name"
-
-  if [ -x "$install_dir/$target_name" ]; then
-    printout_exit "OK"
-  else
-    printout_exit "Operation failed!"
-  fi
-}
-
-command_listrun() {
-  _4_cfg="$(read_file_content "$config_run_list_filepath")"
-
-  if is_empty "$_4_cfg"; then
-    printout_exit "No custom commands have been set"
-  fi
-
-  printout "$_4_cfg" | while IFS=: read -r _4_name _4_description _4_command; do
-    if is_empty "$_4_name" && is_empty "$_4_description" && is_empty "$_4_command"; then
-      continue
-    fi
-
-    printf "${color_green}%-20s ${color_reset}%-30s ${color_cyan}%b${color_reset}\n" "$_4_name" "$_4_description" "$_4_command"
-  done
-}
-
-command_setrun() {
-  printout_no_enter "Enter a name... "
-
-  _5_name=$(read_input)
-
-  if is_empty "$_5_name"; then
-    printout_exit "The name can't be empty!"
-  fi
-
-  if is_contain "$_5_name" ":"; then
-    printout_exit "The name can't contain a colon!"
-  fi
-
-  _5_name_exist=$(read_file_content "$config_run_list_filepath" | while IFS=: read -r _5_name_config _ _; do
-    if is_equal "$_5_name" "$_5_name_config"; then
-      printout_exit "exist"
-    fi
-  done)
-
-  if is_equal "$_5_name_exist" "exist"; then
-    printout_exit "The name already exists!"
-  fi
-
-  printout_no_enter "Enter a description... "
-
-  _5_description=$(read_input)
-
-  if is_contain "$_5_description" ":"; then
-    printout_exit "The description can't contain a colon!"
-  fi
-
-  printout_no_enter "Enter the execution command... "
-
-  _5_command=$(read_input)
-
-  if is_empty "$_5_command"; then
-    printout_exit "The execution command can't be empty!"
-  fi
-
-  _5_cfg=$(append_content_to_file "$_5_name:$_5_description:$_5_command" "$config_run_list_filepath")
-
-  write_to_file "$_5_cfg" "$config_run_list_filepath"
-  printout "OK"
-}
-
-command_showimage() {
-  if is_no_argument "$@"; then
-    printout_exit "You didn't provide any names to show!"
-  fi
-
-  check_requirements "feh"
-  feh "$@" &
-}
-
-command_playaudio() {
-  if is_no_argument "$@"; then
-    printout_exit "You didn't provide any names to play!"
-  fi
-
-  check_requirements "mpg123"
-  mpg123 -v "$@"
-}
-
-command_playvideo() {
-  if is_no_argument "$@"; then
-    printout_exit "You didn't provide any names to play!"
-  fi
-
-  check_requirements "mpv"
-  mpv "$@" > /dev/null 2>&1 &
-}
-
-command_testhttp() {
-  check_requirements "siege"
-
-  _6_concurrent="10"
-  _6_time=""
-  _6_retry=""
-  _6_url=""
-  _6_url_header="$http_header"
-  _6_url_user_agent=""
-  _6_url_content_type=""
-
-  while [ $# -gt 0 ]; do
-    case "$1" in
-      -c)
-        _6_concurrent="${1#-c}"
-
-        if [ -z "$_6_concurrent" ]; then
-          shift
-
-          _6_concurrent="$1"
+        if ! grep -qF "$_config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_launch_filepath &" "$_xinitrc_filepath"; then
+            echo "$_config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_launch_filepath &" >> "$_xinitrc_filepath"
         fi
-        ;;
-      -t)
-        _6_time="${1#-t}"
 
-        if [ -z "$_6_time" ]; then
-          shift
-
-          _6_time="$1"
+        if ! grep -qF "exec i3" "$_xinitrc_filepath"; then
+            echo "exec i3" >> "$_xinitrc_filepath"
         fi
-        ;;
-      -r)
-        _6_retry="${1#-r}"
 
-        if [ -z "$_6_retry" ]; then
-          shift
+        printout "Ok"
 
-          _6_retry="$1"
-        fi
-        ;;
-      -u)
-        _6_url="${1#-u}"
-
-        if [ -z "$_6_url" ]; then
-          shift
-
-          _6_url="$1"
-        fi
-        ;;
-      -userAgent)
-        _6_url_user_agent="${1#-userAgent}"
-
-        if [ -z "$_6_url_user_agent" ]; then
-          shift
-
-          _6_url_user_agent="$1"
-        fi
-        ;;
-      -header)
-        _6_url_header="${1#-header}"
-
-        if [ -z "$_6_url_header" ]; then
-          shift
-
-          _6_url_header="$1"
-        fi
-        ;;
-      -contentType)
-        _6_url_content_type="${1#-contentType}"
-
-        if [ -z "$_6_url_content_type" ]; then
-          shift
-
-          _6_url_content_type="$1"
-        fi
-        ;;
-    esac
-
-    shift
-  done
-
-  if is_empty "$_6_url"; then
-    printout_exit "Please provide a URL to test!\nUse this option: ${color_cyan}-u ${color_blue}URL${color_reset}"
-  fi
-
-  printout "url=$_6_url | concurrent=$_6_concurrent | time=${_6_time}S | retry=$_6_retry | header=$_6_url_header | userAgent=$_6_url_user_agent | contentType=$_6_url_content_type\n"
-
-  if ! is_empty "$_6_time"; then
-     execute siege -vbp "-c$_6_concurrent" "-t${_6_time}S" --header="$_6_url_header" --user-agent="$_6_url_user_agent" --content-type="$_6_url_content_type" "$_6_url"
-  elif ! is_empty "$_6_retry"; then
-     execute siege -vbp "-c$_6_concurrent" "-r$_6_retry" --header="$_6_url_header" --user-agent="$_6_url_user_agent" --content-type="$_6_url_content_type" "$_6_url"
-  else
-    execute siege -vbp "-c$_6_concurrent" "-t10S" --header="$_6_url_header" --user-agent="$_6_url_user_agent" --content-type="$_6_url_content_type" "$_6_url"
-  fi
-}
-
-command_setai() {
-  configure_ai_type
-  configure_ai_model
-  configure_ai_api_key
-  write_to_file "$(printout "$ai_type\n$ai_model\n$ai_api_key")" "$config_ai_filepath"
-  printout "AI configuration registered"
-}
-
-command_chat() {
-  check_requirements "jq"
-
-  check_ai_config
-
-  printout "${color_yellow}$ai_type ($ai_model)${color_reset}\n"
-
-  _7_prompt=""
-
-  while true; do
-    printout_no_enter "${color_yellow}>_${color_reset} "
-
-    _7_chat_prompt="$(read_input)"
-    _7_chat_prompt="{\"role\": \"user\", \"parts\":[{\"text\": \"$(printout "$_7_chat_prompt" | escape_json_string)\"}]},"
-
-    if is_empty "$_7_prompt"; then
-      _7_prompt="$_7_chat_prompt"
-    else
-      _7_prompt="$_7_prompt $_7_chat_prompt"
+        return 0
     fi
 
-    _7_response=""
-
-    printout_blank_line
-
-    if is_ai_google; then
-      _7_response=$(http_request_google_ai "$(printout "$_7_prompt" | remove_trailing_comma)")
-    fi
-
-    _7_prompt="$_7_prompt {\"role\": \"model\", \"parts\":[{\"text\": \"$(printout "$_7_response" | escape_json_string)\"}]},"
-
-    printout_typing "$(printout "$_7_response" | markdown_parse)"
-
-    printout_blank_line
-  done
-}
-
-command_showai() {
-  check_ai_config
-
-  _8_api_key="* * * * *"
-
-  if is_empty "$ai_api_key"; then
-    _8_api_key=""
-  fi
-
-  printout "Type: ${color_yellow}$ai_type\n${color_reset}Model: ${color_yellow}$ai_model\n${color_reset}API key: ${color_blue}$_8_api_key${color_reset}"
-}
-
-command_removerun() {
-  if is_no_argument "$@"; then
-    printout_exit "You didn't provide any custom command(s) to remove!"
-  fi
-
-  for _9_arg in "$@"; do
-    read_file_content "$config_run_list_filepath" | while IFS=: read -r _9_name_config _ _; do
-      if is_equal "$_9_arg" "$_9_name_config" && ! is_empty "$_9_name_config"; then
-        delete_line_from_file_by_keyword "$_9_name_config:" "$config_run_list_filepath"
-        break
-      fi
-    done
-  done
-
-  printout "OK"
-}
-
-command_open() {
-  if is_no_argument "$@"; then
-    printout_exit "You didn't provide any names to open!"
-  fi
-
-  _10_not_exist=""
-
-  for _10_arg in "$@"; do
-    if is_package_exist "$_10_arg" || is_user_package_exist "$_10_arg"; then
-      execute_async_no_std_out "$_10_arg"
-      continue
-    fi
-
-    _10_not_exist="yes"
-
-    printout "${color_red}$_10_arg ${color_reset}package not found!"
-  done
-
-  if ! is_equal "$_10_not_exist" "yes"; then
-    clear_shell
-  fi
-}
-
-command_kill() {
-  if is_no_argument "$@"; then
-    printout_exit "You didn't provide any names to kill!"
-  fi
-
-  check_requirements "sudo"
-
-  _11_process_list=""
-
-  printout_blank_line
-
-  for _11_arg in "$@"; do
-    # shellcheck disable=SC2009
-    _11_process_list="$_11_process_list\n$(ps -ef | grep "$_11_arg" | grep -v "$pid" | awk '{print $2}')"
-
-    # shellcheck disable=SC2009
-    ps aux | grep "$_11_arg" | grep -v "$pid"
-  done
-
-  _11_process_list=$(printout "$_11_process_list")
-
-  printout_no_enter "\nAll processes listed above will be terminated. Are you sure? [N/y] "
-
-  _11_confirmation=$(read_input)
-
-  if ! is_equal "$_11_confirmation" "y"; then
-    printout "\nOperation aborted!"
-    return 0
-  fi
-
-  printout "$_11_process_list" | while IFS= read -r _11_line; do
-    if ! is_empty "$_11_line"; then
-      sudo kill -9 "$_11_line" > /dev/null 2>&1
-    fi
-  done
-
-  printout "\nAll processes have been terminated!"
-}
-
-command_search() {
-  if is_no_argument "$@"; then
-    printout_exit "You didn't provide any keywords to search!"
-  fi
-
-  check_requirements "w3m"
-  execute w3m "$search_url$(printout "$*" | sed 's/ /+/g')"
-  clear_shell
-}
-
-command_install() {
-  if is_no_argument "$@"; then
-    printout_exit "You didn't provide any names to install!"
-  fi
-
-  install_package "$@"
-}
-
-command_remove() {
-  if is_no_argument "$@"; then
-    printout_exit "You didn't provide any names to remove!"
-  fi
-
-  remove_package "$@"
-}
-
-command_upgrade() {
-  upgrade_package "$@"
-}
-
-command_version() {
-  printout "$version"
-}
-
-command_reveal() {
-  check_requirements "vim"
-  execute vim -R "$install_dir/$target_name"
-}
-
-command_run() {
-  if is_no_argument "$@"; then
-    printout_exit "You didn't provide any commands to run!"
-  fi
-
-  write_to_file "not exist" "$config_tmp_value_filepath"
-
-  for _12_arg in "$@"; do
-    read_file_content "$config_run_list_filepath" | while IFS=: read -r _12_name _12_description _12_command; do
-      if is_empty "$_12_name" && is_empty "$_12_description" && is_empty "$_12_command"; then
-        continue
-      fi
-
-      if is_equal "$_12_arg" "$_12_name"; then
-        write_to_file "exist" "$config_tmp_value_filepath"
-        printout "\n${color_green}$_12_name${color_reset} >_ ${color_cyan}$_12_command${color_reset}\n"
-        execute_eval "$_12_command"
+    if is_equal "$1" "-d"; then
+        printout_markdown "${color_yellow}**This will install developer tools. **${color_red}**WARNING!!! This will replace your existing packages!!! Don't do this if you're not aware!!!**${color_reset}"
         printout_blank_line
-        break
-      fi
-    done
+        printout_no_enter "Are you sure to continue this process [N/y] "
 
-    if ! is_equal "$(get_tmp_value)" "exist"; then
-      printout "${color_green}$_12_arg${color_reset} command not found!"
+        _confirmation=$(read_input)
+
+        if ! is_equal "$_confirmation" "y"; then
+            printout_exit "Aborted!"
+        fi
+
+        sudo echo "Configuring..."
+
+        check_requirements "tar" "wget" "gzip"
+
+        if is_arch; then
+            install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "make" "openssh" "docker" "docker-compose"
+        elif is_debian; then
+            install_package "ca-certificates" "curl"
+
+            sudo install -m 0755 -d /etc/apt/keyrings
+            sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+            sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+                $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+            
+            install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "make" "openssh" \
+                "docker-ce" "docker-ce-cli" "containerd.io" "docker-buildx-plugin" "docker-compose-plugin"
+        else
+            install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "make" "openssh"
+        fi
+
+        printout "Configuring ssh..."
+
+        if ! is_file_exist "$_ssh_filepath"; then
+            ssh-keygen -t $_ssh_name
+
+            eval "$(ssh-agent -s)"
+
+            ssh-add "$_ssh_dir"
+        fi
+
+        printout "Downloading tools..."
+
+        if ! is_dir_exist "$_datagrip_version_dir"; then
+            create_dir "$_datagrip_dir"
+
+            wget -c --timeout=10 --tries=1 -O "$_datagrip_downloaded_filepath" "$_datagrip_download_url" &
+        fi
+
+        if ! is_dir_exist "$_goland_version_dir"; then
+            create_dir "$_goland_dir"
+
+            wget -c --timeout=10 --tries=1 -O "$_goland_downloaded_filepath" "$_goland_download_url" &
+        fi
+
+        if ! is_dir_exist "$_pycharm_version_dir"; then
+            create_dir "$_pycharm_dir"
+
+            wget -c --timeout=10 --tries=1 -O "$_pycharm_downloaded_filepath" "$_pycharm_download_url" &
+        fi
+
+        if ! is_dir_exist "$_idea_version_dir"; then
+            create_dir "$_idea_dir"
+
+            wget -c --timeout=10 --tries=1 -O "$_idea_downloaded_filepath" "$_idea_download_url" &
+        fi
+
+        if ! is_dir_exist "$_webstorm_version_dir"; then
+            create_dir "$_webstorm_dir"
+
+            wget -c --timeout=10 --tries=1 -O "$_webstorm_downloaded_filepath" "$_webstorm_download_url" &
+        fi
+
+        if ! is_dir_exist "$_rustrover_version_dir"; then
+            create_dir "$_rustrover_dir"
+
+            wget -c --timeout=10 --tries=1 -O "$_rustrover_downloaded_filepath" "$_rustrover_download_url" &
+        fi
+
+        if ! is_dir_exist "$_go_version_dir"; then
+            create_dir "$_go_dir"
+
+            wget -c --timeout=10 --tries=1 -O "$_go_downloaded_filepath" "$_go_download_url" &
+        fi
+
+        if ! is_dir_exist "$_nodejs_version_dir"; then
+            create_dir "$_nodejs_dir"
+
+            wget -c --timeout=10 --tries=1 -O "$_nodejs_downloaded_filepath" "$_nodejs_download_url" &
+        fi
+
+        create_dir "$_postman_dir"
+
+        wget -c --timeout=10 --tries=1 -O "$_postman_downloaded_filepath" "$_postman_download_url" &
+
+        wait
+
+        curl --proto '=https' --tlsv1.2 -sSf "$_rust_download_url" | sh || true
+        curl "$_pyenv_download_url" | bash || true
+
+        printout "Extracting tools..."
+
+        if is_file_exist "$_datagrip_downloaded_filepath"; then
+            tar -v -C "$_datagrip_dir" -xzf "$_datagrip_downloaded_filepath" &
+        fi
+
+        if is_file_exist "$_goland_downloaded_filepath"; then
+            tar -v -C "$_goland_dir" -xzf "$_goland_downloaded_filepath" &
+        fi
+
+        if is_file_exist "$_pycharm_downloaded_filepath"; then
+            tar -v -C "$_pycharm_dir" -xzf "$_pycharm_downloaded_filepath" &
+        fi
+
+        if is_file_exist "$_idea_downloaded_filepath"; then
+            tar -v -C "$_idea_dir" -xzf "$_idea_downloaded_filepath" &
+        fi
+
+        if is_file_exist "$_webstorm_downloaded_filepath"; then
+            tar -v -C "$_webstorm_dir" -xzf "$_webstorm_downloaded_filepath" &
+        fi
+
+        if is_file_exist "$_rustrover_downloaded_filepath"; then
+            tar -v -C "$_rustrover_dir" -xzf "$_rustrover_downloaded_filepath" &
+        fi
+
+        if is_file_exist "$_go_downloaded_filepath"; then
+            tar -v -C "$_go_dir" -xzf "$_go_downloaded_filepath" &
+        fi
+
+        if is_file_exist "$_nodejs_downloaded_filepath"; then
+            tar -v -C "$_nodejs_dir" -xJvf "$_nodejs_downloaded_filepath" &
+        fi
+
+        if is_file_exist "$_postman_downloaded_filepath"; then
+            tar -v -C "$_postman_dir" -xzf "$_postman_downloaded_filepath" &
+        fi
+
+        wait
+
+        printout "Configuring tools..."
+
+        sudo chmod 4755 "$_datagrip_chrome_sandbox_filepath"
+        sudo chmod 4755 "$_datagrip_version_dir"
+        sudo ln -sf "$_datagrip_filepath" "$_datagrip_sys_filepath" || sudo ln -sf "$_datagrip_filepath.sh" "$_datagrip_sys_filepath" || true
+
+        rm -rf "$_datagrip_downloaded_filepath"
+
+        sudo chmod 4755 "$_goland_chrome_sandbox_filepath"
+        sudo chmod 4755 "$_goland_version_dir"
+        sudo ln -sf "$_goland_filepath" "$_goland_sys_filepath" || sudo ln -sf "$_goland_filepath.sh" "$_goland_sys_filepath" || true
+
+        rm -rf "$_goland_downloaded_filepath"
+
+        sudo chmod 4755 "$_pycharm_chrome_sandbox_filepath"
+        sudo chmod 4755 "$_pycharm_version_dir"
+        sudo ln -sf "$_pycharm_filepath" "$_pycharm_sys_filepath" || sudo ln -sf "$_pycharm_filepath.sh" "$_pycharm_sys_filepath" || true
+
+        rm -rf "$_pycharm_downloaded_filepath"
+
+        sudo chmod 4755 "$_idea_chrome_sandbox_filepath"
+        sudo chmod 4755 "$_idea_version_dir"
+        sudo ln -sf "$_idea_filepath" "$_idea_sys_filepath" || sudo ln -sf "$_idea_filepath.sh" "$_idea_sys_filepath" || true
+
+        rm -rf "$_idea_downloaded_filepath"
+
+        sudo chmod 4755 "$_webstorm_chrome_sandbox_filepath"
+        sudo chmod 4755 "$_webstorm_version_dir"
+        sudo ln -sf "$_webstorm_filepath" "$_webstorm_sys_filepath" || sudo ln -sf "$_webstorm_filepath.sh" "$_webstorm_sys_filepath" || true
+
+        rm -rf "$_webstorm_downloaded_filepath"
+
+        sudo chmod 4755 "$_rustrover_chrome_sandbox_filepath"
+        sudo chmod 4755 "$_rustrover_version_dir"
+        sudo ln -sf "$_rustrover_filepath" "$_rustrover_sys_filepath" || sudo ln -sf "$_rustrover_filepath.sh" "$_rustrover_sys_filepath" || true
+
+        rm -rf "$_rustrover_downloaded_filepath"
+
+        if is_file_exist "$_go_downloaded_filepath"; then
+            mv "$_go_extracted_dir" "$_go_version_dir"
+        fi
+
+        mkdir "$_go_home_dir" > /dev/null 2>&1 || true
+        mkdir "$_go_home_bin_dir" > /dev/null 2>&1 || true
+        mkdir "$_go_home_pkg_dir" > /dev/null 2>&1 || true
+        mkdir "$_go_home_src_dir" > /dev/null 2>&1 || true
+
+        sudo rm -rf "$_go_sys_dir"
+        sudo cp -rf "$_go_version_dir" "$_go_sys_dir"
+
+        rm -rf "$_go_downloaded_filepath"
+
+        if is_file_exist "$_nodejs_downloaded_filepath"; then
+            mv "$_nodejs_extracted_dir" "$_nodejs_version_dir"
+        fi
+
+        mkdir "$_nodejs_home_dir" > /dev/null 2>&1 || true
+        mkdir "$_npm_global_dir" > /dev/null 2>&1 || true
+
+        sudo mkdir -p "$_nodejs_lib_dir"
+        sudo cp -rf "$_nodejs_version_dir" "$_nodejs_version_lib_dir"
+
+        npm config set prefix "$_npm_global_dir" > /dev/null 2>&1 || true
+
+        rm -rf "$_nodejs_downloaded_filepath"
+
+        sudo ln -sf "$_postman_filepath" "$_postman_sys_filepath" || true
+
+        rm -rf "$_postman_downloaded_filepath"
+
+        sudo systemctl start docker.socket || true
+        sudo systemctl enable docker.socket || true
+
+        printout "Configuring profiles..."
+
+        if is_file_exist "$_bash_profile_filepath"; then
+            if ! grep -qF "export PATH=\$PATH:$_go_bin_sys_dir" "$_bash_profile_filepath"; then
+                echo "export PATH=\$PATH:$_go_bin_sys_dir" >> "$_bash_profile_filepath"
+            fi
+
+            if ! grep -qF "export GOPATH=$_go_home_dir" "$_bash_profile_filepath"; then
+                echo "export GOPATH=$_go_home_dir" >> "$_bash_profile_filepath"
+            fi
+
+            if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$_bash_profile_filepath"; then
+                echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$_bash_profile_filepath"
+            fi
+
+            if ! grep -qF "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" "$_bash_profile_filepath"; then
+                echo "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" >> "$_bash_profile_filepath"
+            fi
+
+            if ! grep -qF "export PATH=$_npm_bin_global_dir:\$PATH" "$_bash_profile_filepath"; then
+                echo "export PATH=$_npm_bin_global_dir:\$PATH" >> "$_bash_profile_filepath"
+            fi
+
+            if ! grep -qF "export PYENV_ROOT=$_pyenv_home_dir" "$_bash_profile_filepath"; then
+                echo "export PYENV_ROOT=$_pyenv_home_dir" >> "$_bash_profile_filepath"
+            fi
+
+            if ! grep -qF "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" "$_bash_profile_filepath"; then
+                echo "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$_bash_profile_filepath"
+            fi
+        fi
+
+        if is_file_exist "$_bashrc_filepath"; then
+            if ! grep -qF "[[ \$- != *i* ]] && return" "$_bashrc_filepath"; then
+                echo "[[ \$- != *i* ]] && return" >> "$_bashrc_filepath"
+            fi
+
+            if ! grep -qF "export PATH=\$PATH:$_go_bin_sys_dir" "$_bashrc_filepath"; then
+                echo "export PATH=\$PATH:$_go_bin_sys_dir" >> "$_bashrc_filepath"
+            fi
+
+            if ! grep -qF "export GOPATH=$_go_home_dir" "$_bashrc_filepath"; then
+                echo "export GOPATH=$_go_home_dir" >> "$_bashrc_filepath"
+            fi
+
+            if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$_bashrc_filepath"; then
+                echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$_bashrc_filepath"
+            fi
+
+            if ! grep -qF "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" "$_bashrc_filepath"; then
+                echo "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" >> "$_bashrc_filepath"
+            fi
+
+            if ! grep -qF "export PATH=$_npm_bin_global_dir:\$PATH" "$_bashrc_filepath"; then
+                echo "export PATH=$_npm_bin_global_dir:\$PATH" >> "$_bashrc_filepath"
+            fi
+
+            if ! grep -qF "export PYENV_ROOT=$_pyenv_home_dir" "$_bashrc_filepath"; then
+                echo "export PYENV_ROOT=$_pyenv_home_dir" >> "$_bashrc_filepath"
+            fi
+
+            if ! grep -qF "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" "$_bashrc_filepath"; then
+                echo "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$_bashrc_filepath"
+            fi
+
+            if ! grep -qF "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" "$_bashrc_filepath"; then
+                echo "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$_bashrc_filepath"
+            fi
+        fi
+
+        if is_file_exist "$_profile_filepath"; then
+            if ! grep -qF "export PATH=\$PATH:$_go_bin_sys_dir" "$_profile_filepath"; then
+                echo "export PATH=\$PATH:$_go_bin_sys_dir" >> "$_profile_filepath"
+            fi
+
+            if ! grep -qF "export GOPATH=$_go_home_dir" "$_profile_filepath"; then
+                echo "export GOPATH=$_go_home_dir" >> "$_profile_filepath"
+            fi
+
+            if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$_profile_filepath"; then
+                echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$_profile_filepath"
+            fi
+
+            if ! grep -qF "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" "$_profile_filepath"; then
+                echo "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" >> "$_profile_filepath"
+            fi
+
+            if ! grep -qF "export PATH=$_npm_bin_global_dir:\$PATH" "$_profile_filepath"; then
+                echo "export PATH=$_npm_bin_global_dir:\$PATH" >> "$_profile_filepath"
+            fi
+
+            if ! grep -qF "export PYENV_ROOT=$_pyenv_home_dir" "$_profile_filepath"; then
+                echo "export PYENV_ROOT=$_pyenv_home_dir" >> "$_profile_filepath"
+            fi
+
+            if ! grep -qF "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" "$_profile_filepath"; then
+                echo "command -v pyenv >/dev/null || export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$_profile_filepath"
+            fi
+        fi
+
+        if is_file_exist "$_zshrc_filepath"; then
+            if ! grep -qF "export PATH=\$PATH:$_go_bin_sys_dir" "$_zshrc_filepath"; then
+                echo "export PATH=\$PATH:$_go_bin_sys_dir" >> "$_zshrc_filepath"
+            fi
+
+            if ! grep -qF "export GOPATH=$_go_home_dir" "$_zshrc_filepath"; then
+                echo "export GOPATH=$_go_home_dir" >> "$_zshrc_filepath"
+            fi
+
+            if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$_zshrc_filepath"; then
+                echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$_zshrc_filepath"
+            fi
+
+            if ! grep -qF "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" "$_zshrc_filepath"; then
+                echo "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" >> "$_zshrc_filepath"
+            fi
+
+            if ! grep -qF "export PATH=$_npm_bin_global_dir:\$PATH" "$_zshrc_filepath"; then
+                echo "export PATH=$_npm_bin_global_dir:\$PATH" >> "$_zshrc_filepath"
+            fi
+
+            if ! grep -qF "export PYENV_ROOT=$_pyenv_home_dir" "$_zshrc_filepath"; then
+                echo "export PYENV_ROOT=$_pyenv_home_dir" >> "$_zshrc_filepath"
+            fi
+
+            if ! grep -qF "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" "$_zshrc_filepath"; then
+                echo "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$_zshrc_filepath"
+            fi
+        fi
+
+        if is_file_exist "$_zprofile_filepath"; then
+            if ! grep -qF "export PATH=\$PATH:$_go_bin_sys_dir" "$_zprofile_filepath"; then
+                echo "export PATH=\$PATH:$_go_bin_sys_dir" >> "$_zprofile_filepath"
+            fi
+
+            if ! grep -qF "export GOPATH=$_go_home_dir" "$_zprofile_filepath"; then
+                echo "export GOPATH=$_go_home_dir" >> "$_zprofile_filepath"
+            fi
+
+            if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$_zprofile_filepath"; then
+                echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$_zprofile_filepath"
+            fi
+
+            if ! grep -qF "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" "$_zprofile_filepath"; then
+                echo "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" >> "$_zprofile_filepath"
+            fi
+
+            if ! grep -qF "export PATH=$_npm_bin_global_dir:\$PATH" "$_zprofile_filepath"; then
+                echo "export PATH=$_npm_bin_global_dir:\$PATH" >> "$_zprofile_filepath"
+            fi
+
+            if ! grep -qF "export PYENV_ROOT=$_pyenv_home_dir" "$_zprofile_filepath"; then
+                echo "export PYENV_ROOT=$_pyenv_home_dir" >> "$_zprofile_filepath"
+            fi
+
+            if ! grep -qF "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" "$_zprofile_filepath"; then
+                echo "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$_zprofile_filepath"
+            fi
+        fi
+
+        printout "Ok"
+
+        return 0
     fi
-  done
+
+    if is_equal "$1" "-ag"; then
+        if ! is_arch; then
+            printout_exit "You're not using Arch Linux!"
+        fi
+
+        printout_markdown "${color_yellow}**This will set up gaming tools on Arch Linux. **${color_reset}"
+        printout_blank_line
+        printout_no_enter "Are you sure to continue this process [N/y] "
+
+        _confirmation=$(read_input)
+
+        if ! is_equal "$_confirmation" "y"; then
+            printout_exit "Aborted!"
+        fi
+
+        sudo echo "Configuring..."
+
+        printout "Configuring pacman multilib..."
+
+        sudo sed -i 's/\#\[multilib\]/\[multilib\]\nInclude \= \/etc\/pacman\.d\/mirrorlist/g' "/etc/pacman.conf"
+
+        upgrade_package ""
+
+        install_package "xdg-desktop-portal" "lib32-systemd" "xf86-video-vesa" "lib32-mesa" "lib32-vulkan-radeon" "lib32-amdvlk" \
+            "lib32-vulkan-intel" "lib32-nvidia-utils" "ttf-liberation" "steam" "nvidia-utils" "vulkan-nouveau" "lib32-vulkan-nouveau" \
+            "vulkan-radeon" "amdvlk" "vulkan-swrast" "lib32-vulkan-swrast" "vulkan-tools" "vulkan-icd-loader" "lib32-vulkan-icd-loader"
+
+        printout "Ok"
+
+        return 0
+    fi
+
+    printout "Aborted!"
 }
 
-command_prompt() {
-  if is_no_argument "$@"; then
-    printout_exit "You didn't provide any prompt text!"
-  fi
+command_intmb() {
+    if is_no_argument "$@"; then
+        printout_exit "An option is required!"
+    fi
 
-  check_requirements "jq"
+    _config_audio_driver1_dir="$HOME/.umar/macbook/audio"
+    _config_audio_driver1_script_name="install.cirrus.driver.sh"
+    _config_audio_driver1_url="https://github.com/davidjo/snd_hda_macbookpro.git"
+    _config_camera_driver1_dir="$HOME/.umar/macbook/camera1"
+    _config_camera_driver2_dir="$HOME/.umar/macbook/camera2"
+    _config_camera_driver1_url="https://github.com/patjak/facetimehd-firmware.git"
+    _config_camera_driver2_url="https://github.com/patjak/facetimehd.git"
+    _config_bluetooth_driver1_dir="$HOME/.umar/macbook/bluetooth"
+    _config_bluetooth_driver1_script_name="install.bluetooth.sh"
+    _config_bluetooth_driver1_url="https://github.com/leifliddy/macbook12-bluetooth-driver.git"
+    _fan_speed_min_filepath="/sys/devices/platform/applesmc.768/fan1_min"
+    _fan_speed_max_filepath="/sys/devices/platform/applesmc.768/fan1_max"
+    _fan_speed_output_filepath="/sys/devices/platform/applesmc.768/fan1_output"
+    _fan_speed_manual_filepath="/sys/devices/platform/applesmc.768/fan1_manual"
 
-  check_ai_config
-  printout "${color_yellow}$ai_type ($ai_model)${color_reset}\n"
+    if is_equal "$1" "-a"; then
+        printout_markdown "${color_yellow}**This will configure Intel Macbook Audio. **${color_red}**If you're not using Intel Macbook device, DON'T execute this command (MAY BREAK YOUR SYSTEM)**${color_reset}"
+        printout_blank_line
+        printout_no_enter "Are you sure to continue this process [N/y] "
 
-  _13_response=""
+        _confirmation=$(read_input)
 
-  if is_ai_google; then
-    _13_response=$(http_request_google_ai "$(printout "{\"role\": \"user\", \"parts\":[{\"text\": \"$(printout "$*" | escape_json_string)\"}]}," | remove_trailing_comma)")
-  fi
+        if ! is_equal "$_confirmation" "y"; then
+            printout_exit "Aborted!"
+        fi
 
-  printout_typing "$(printout "$_13_response" | markdown_parse)"
+        check_requirements "git" "sudo"
 
-  printout_blank_line
-}
+        if ! is_dir_exist "$_config_audio_driver1_dir"; then
+            git clone "$_config_audio_driver1_url" "$_config_audio_driver1_dir"
+        fi
 
-command_window() {
-  check_requirements "yad"
+        cd "$_config_audio_driver1_dir" || printout_exit "Audio driver1 not found!"
 
-  _14_command=$(yad --entry --sticky --no-buttons --width=400 --title "" --text "BE CAREFUL ABOUT WHAT YOU TYPE, MAKE SURE THERE IS NOTHING THAT CAN BREAK YOUR SYSTEM" --text-align "fill" --undecorated)
+        sudo "./$_config_audio_driver1_script_name"
 
-  if is_empty "$_14_command"; then
-    return 0
-  fi
+        printout_blank_line
+        printout_markdown "${color_yellow}**Audio successfully configured. You may need to reboot your system or restart your audio service(s)**${color_reset}"
+        printout "Ok"
 
-  if ! is_start_with "$_14_command" "umar"; then
-    _14_command="umar $_14_command"
-  fi
+        return 0
+    fi
 
-  if is_start_with "$_14_command" "umar help"; then
-    open_terminal_and_execute_wait "umar"
-  elif is_start_with "$_14_command" "umar show image" || is_start_with "$_14_command" "umar play video"; then
-    execute_eval "$_14_command"
-  elif is_start_with "$_14_command" "umar open" || is_start_with "$_14_command" "umar ss"; then
-    $_14_command
-  elif is_start_with "$_14_command" "umar search" || is_start_with "$_14_command" "umar play audio" \
-  || is_start_with "$_14_command" "umar audio" || is_start_with "$_14_command" "umar bluetooth"; then
-    open_terminal_and_execute "$_14_command"
-  else
-    open_terminal_and_execute_wait "$_14_command"
-  fi
-}
+    if is_equal "$1" "-c"; then
+        printout_markdown "${color_yellow}**This will configure Intel Macbook Camera. **${color_red}**If you're not using Intel Macbook device, DON'T execute this command (MAY BREAK YOUR SYSTEM)**${color_reset}"
+        printout_blank_line
+        printout_no_enter "Are you sure to continue this process [N/y] "
 
-command_wifi() {
-  check_requirements "nmcli"
+        _confirmation=$(read_input)
 
-  if [ "$1" = "" ]; then
-    printout "Scanning..."
-    nmcli radio wifi on
-    nmcli device wifi rescan
-    nmcli device wifi list
-    return 0
-  fi
+        if ! is_equal "$_confirmation" "y"; then
+            printout_exit "Aborted!"
+        fi
 
-  printout "Scanning..."
-  nmcli radio wifi on
-  nmcli device wifi rescan
-  printout "OK"
-  printout "Connecting..."
-  nmcli device wifi connect --ask "$1"
-  printout "OK"
+        check_requirements "git" "sudo" "make"
+
+        if ! is_dir_exist "$_config_camera_driver1_dir"; then
+            git clone "$_config_camera_driver1_url" "$_config_camera_driver1_dir"
+        fi
+
+        if ! is_dir_exist "$_config_camera_driver2_dir"; then
+            git clone "$_config_camera_driver2_url" "$_config_camera_driver2_dir"
+        fi
+
+        cd "$_config_camera_driver1_dir" || printout_exit "Camera driver1 not found!"
+        
+        make clean
+        make
+
+        sudo make install
+        
+        cd "$_config_camera_driver2_dir" || printout_exit "Camera driver2 not found!"
+        
+        make clean
+        make
+
+        sudo make install
+        sudo depmod
+        sudo modprobe -r bdc_pci
+        sudo modprobe facetimehd
+
+        printout_blank_line
+        printout_markdown "${color_yellow}**Camera successfully configured. If it not working, try to reboot your system**${color_reset}"
+        printout "Ok"
+
+        return 0
+    fi
+
+    if is_equal "$1" "-b"; then
+        printout_markdown "${color_yellow}**This will configure Intel Macbook Bluetooth. **${color_red}**If you're not using Intel Macbook device, DON'T execute this command (MAY BREAK YOUR SYSTEM)**${color_reset}"
+        printout_blank_line
+        printout_no_enter "Are you sure to continue this process [N/y] "
+
+        _confirmation=$(read_input)
+
+        if ! is_equal "$_confirmation" "y"; then
+            printout_exit "Aborted!"
+        fi
+
+        check_requirements "git" "sudo"
+
+        if ! is_dir_exist "$_config_bluetooth_driver1_dir"; then
+            git clone "$_config_bluetooth_driver1_url" "$_config_bluetooth_driver1_dir"
+        fi
+
+        cd "$_config_bluetooth_driver1_dir" || printout_exit "Bluetooth driver1 not found!"
+
+        sudo "./$_config_bluetooth_driver1_script_name"
+
+        printout_blank_line
+        printout_markdown "${color_yellow}**Bluetooth successfully configured. You may need to reboot your system or restart your bluetooth service(s)**${color_reset}"
+        printout "Ok"
+
+        return 0
+    fi
+
+    if is_equal "$1" "-f"; then
+        shift
+
+        if is_no_argument "$@"; then
+            printout "Current Macbook fan speed is $(read_file_content "$_fan_speed_output_filepath")"
+
+            return 0
+        fi
+
+        printout_markdown "${color_yellow}**This will configure Macbook Fan Speed. **${color_red}**If you're not using Macbook device, DON'T execute this command (MAY BREAK YOUR SYSTEM)**${color_reset}"
+        printout_blank_line
+        printout_no_enter "Are you sure to continue this process [N/y] "
+
+        _confirmation=$(read_input)
+
+        if ! is_equal "$_confirmation" "y"; then
+            printout_exit "Aborted!"
+        fi
+
+        _min_speed=$(read_file_content "$_fan_speed_min_filepath")
+
+        if [ "$1" -lt "$_min_speed" ]; then
+            printout_exit "Value under minimum!"
+        fi
+
+        _max_speed=$(read_file_content "$_fan_speed_max_filepath")
+
+        if [ "$1" -gt "$_max_speed" ]; then
+            printout_exit "Value above maximum!"
+        fi
+
+        su -c "echo 1 > $_fan_speed_manual_filepath && echo $1 > $_fan_speed_output_filepath"
+
+        printout "$(read_file_content "$_fan_speed_output_filepath")"
+        printout "Ok"
+
+        return 0
+    fi
+
+    printout "Aborted!"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -1886,63 +2156,64 @@ command_wifi() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 printout() {
-  printf "%b" "$1\n"
+    printf "%b" "$1\n"
 }
 
 printout_no_enter() {
-  printf "%b" "$1"
+    printf "%b" "$1"
 }
 
 printout_as_is() {
-  printf "%s" "$1"
+    printf "%s" "$1"
 }
 
 printout_exit() {
-  printout "$1"
-  exit 0
+    printout "$1"
+
+    exit 0
 }
 
 printout_blank_line() {
-  printout ""
+    printout ""
 }
 
 printout_markdown() {
-  printout "$(printout "$1" | markdown_parse)"
+    printout "$(printout "$1" | markdown_parse)"
 }
 
 printout_markdown_no_enter() {
-  printout_no_enter "$(printout_no_enter "$1" | markdown_parse)"
+    printout_no_enter "$(printout_no_enter "$1" | markdown_parse)"
 }
 
 printout_typing() {
-  _16_text=$(printout_no_enter "$1" | sed 's/$/\\n/' | tr -d '\n')
-  _16_i=0
+    __text=$(printout_no_enter "$1" | sed 's/$/\\n/' | tr -d '\n')
+    __i=0
 
-  while [ $_16_i -lt ${#_16_text} ]; do
-    # shellcheck disable=SC2004
-    _16_char=$(printout_as_is "$_16_text" | cut -c $(($_16_i+1)))
+    while [ $__i -lt ${#__text} ]; do
+        # shellcheck disable=SC2004
+        __char=$(printout_as_is "$__text" | cut -c $(($__i+1)))
 
-    if is_equal "$_16_char" "\\"; then
-      # shellcheck disable=SC2004
-      _16_next_char=$(printout_as_is "$_16_text" | cut -c $(($_16_i+2)))
+        if is_equal "$__char" "\\"; then
+            # shellcheck disable=SC2004
+            __next_char=$(printout_as_is "$__text" | cut -c $(($__i+2)))
 
-      if is_equal "$_16_next_char" "n"; then
-        printout_blank_line
+            if is_equal "$__next_char" "n"; then
+                printout_blank_line
+
+                # shellcheck disable=SC2004
+                __i=$(($__i + 1))
+            fi
+        else
+            printout_no_enter "$__char"
+        fi
+
+        sleep "0.005"
 
         # shellcheck disable=SC2004
-        _16_i=$(($_16_i + 1))
-      fi
-    else
-      printout_no_enter "$_16_char"
-    fi
+        __i=$(($__i + 1))
+    done
 
-    sleep "$typing_speed"
-
-    # shellcheck disable=SC2004
-    _16_i=$(($_16_i + 1))
-  done
-
-  printout_blank_line
+    printout_blank_line
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -1952,108 +2223,96 @@ printout_typing() {
 #
 # ---------------------------------------------------------------------------------------------------------------------
 
-check_ai_config() {
-  if is_empty "$ai_type"; then
-    printout_exit "You didn't provide any AI type to process!\nYou can use this command to set up a new one: ${color_cyan}umar set ai${color_reset}"
-  fi
-
-  if is_empty "$ai_url"; then
-    printout_exit "You didn't provide any AI URL to process!\nYou can use this command to set up a new one: ${color_cyan}umar set ai${color_reset}"
-  fi
-
-  if is_empty "$ai_model"; then
-    printout_exit "You didn't provide any AI model to process!\nYou can use this command to set up a new one: ${color_cyan}umar set ai${color_reset}"
-  fi
-}
-
 check_requirements() {
-  _17_not_exist=""
-  _17_iwd=""
-  _17_networkmanager=""
+    __not_exist=""
+    __iwd=""
+    __networkmanager=""
 
-  for _17_arg in "$@"; do
-    if is_package_exist "$_17_arg" || is_user_package_exist "$_17_arg"; then
-        continue
+    for __arg in "$@"; do
+        if is_package_exist "$__arg" || is_user_package_exist "$__arg"; then
+            continue
+        fi
+
+        if is_equal "$__arg" "iwctl"; then
+            __arg="iwd"
+            __iwd="yes"
+        fi
+
+        if is_equal "$__arg" "nmcli"; then
+            __arg="networkmanager"
+            __networkmanager="yes"
+        fi
+
+        if is_equal "$__arg" "pactl"; then
+            __arg="pulseaudio-utils"
+        fi
+
+        if is_equal "$__arg" "xinput"; then
+            __arg="xorg-xinput"
+        fi
+
+        if is_equal "$__arg" "xrandr"; then
+            __arg="xorg-xrandr"
+        fi
+
+        if is_equal "$__arg" "bluetoothctl"; then
+            __arg="bluez"
+
+            if is_arch; then
+                __arg="bluez-utils"
+            fi
+        fi
+
+        if is_empty "$__not_exist"; then
+            __not_exist="$__arg"
+        else
+            __not_exist="$__not_exist $__arg"
+        fi
+    done
+
+    if is_empty "$__not_exist"; then
+        return 0
     fi
 
-    if is_equal "$_17_arg" "iwctl"; then
-      _17_arg="iwd"
-      _17_iwd="yes"
+    if is_equal "$__iwd" "yes"; then
+        printout_markdown "${color_yellow}**It seems you want to install **${color_red}**iwd**${color_yellow}**. If you have any other network or wireless daemon installed, **${color_red}**it might cause a conflict between them (MAY BREAK YOUR SYSTEM)**${color_reset}"
     fi
 
-    if is_equal "$_17_arg" "nmcli"; then
-      _17_arg="networkmanager"
-      _17_networkmanager="yes"
+    if is_equal "$__networkmanager" "yes"; then
+        printout_markdown "${color_yellow}**It seems you want to install **${color_red}**networkmanager**${color_yellow}**. If you have any other network or wireless daemon installed, **${color_red}**it might cause a conflict between them (MAY BREAK YOUR SYSTEM)**${color_reset}"
     fi
 
-    if is_equal "$_17_arg" "pactl"; then
-      _17_arg="pulseaudio-utils"
+    printout_markdown_no_enter "${color_red}**$__not_exist** ${color_reset}package(s) are not installed. Do you want to install them? [N/y] "
+
+    __confirmation=$(read_input)
+
+    if ! is_equal "$__confirmation" "y"; then
+        printout_exit "Aborted!"
     fi
 
-    if is_equal "$_17_arg" "xinput"; then
-      _17_arg="xorg-xinput"
+    if is_unknown; then
+        printout "Unknown distribution!"
+        printout_exit "Aborted!"
     fi
 
-    if is_equal "$_17_arg" "xrandr"; then
-      _17_arg="xorg-xrandr"
+    install_package_arg_split "$__not_exist"
+
+    if is_equal "$__iwd" "yes"; then
+        sudo systemctl stop iwd.service > /dev/null 2>&1
+        sudo systemctl start iwd.service > /dev/null 2>&1
+
+        sleep 2
     fi
 
-    if is_equal "$_17_arg" "bluetoothctl"; then
-      _17_arg="bluez"
+    if is_equal "$__networkmanager" "yes"; then
+        sudo systemctl stop NetworkManager > /dev/null 2>&1
+        sudo systemctl start NetworkManager > /dev/null 2>&1
+        sudo systemctl enable --now NetworkManager > /dev/null 2>&1
 
-      if is_arch; then
-        _17_arg="bluez-utils"
-      fi
+        sleep 2
     fi
 
-    if is_empty "$_17_not_exist"; then
-      _17_not_exist="$_17_arg"
-    else
-      _17_not_exist="$_17_not_exist $_17_arg"
-    fi
-  done
-
-  if is_empty "$_17_not_exist"; then
-    return 0
-  fi
-
-  if is_equal "$_17_iwd" "yes"; then
-    printout_markdown "${color_yellow}**It seems you want to install **${color_red}**iwd**${color_yellow}**. If you have any other network or wireless daemon installed, **${color_red}**it might cause a conflict between them (MAY BREAK YOUR SYSTEM)**${color_reset}"
-  fi
-
-  if is_equal "$_17_networkmanager" "yes"; then
-    printout_markdown "${color_yellow}**It seems you want to install **${color_red}**networkmanager**${color_yellow}**. If you have any other network or wireless daemon installed, **${color_red}**it might cause a conflict between them (MAY BREAK YOUR SYSTEM)**${color_reset}"
-  fi
-
-  printout_markdown_no_enter "${color_red}**$_17_not_exist** ${color_reset}package(s) are not installed. Do you want to install them? [N/y] "
-
-  _17_confirmation=$(read_input)
-
-  if ! is_equal "$_17_confirmation" "y"; then
-    printout_exit "I need that package(s) to process the command!"
-  fi
-
-  if is_unknown; then
-    printout "Unknown distribution!"
-    printout_exit "I need that package(s) to process the command!"
-  fi
-
-  install_package_arg_split "$_17_not_exist"
-
-  if is_equal "$_17_iwd" "yes"; then
-    sudo systemctl stop iwd.service > /dev/null 2>&1
-    sudo systemctl start iwd.service > /dev/null 2>&1
-    sleep 2
-  fi
-
-  if is_equal "$_17_networkmanager" "yes"; then
-    sudo systemctl stop NetworkManager > /dev/null 2>&1
-    sudo systemctl start NetworkManager > /dev/null 2>&1
-    sudo systemctl enable --now NetworkManager > /dev/null 2>&1
-    sleep 2
-  fi
-
-  printout "The required package(s) have been installed. Refresh the current console/terminal session and run the command again"
+    printout "The required package(s) have been installed, you may need to refresh the current console/terminal session"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2064,63 +2323,59 @@ check_requirements() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 is_equal() {
-  [ "$1" = "$2" ]
+    [ "$1" = "$2" ]
 }
 
 is_empty() {
-  is_equal "$1" ""
+    is_equal "$1" ""
 }
 
 is_contain() {
-  printout "$1" | grep -qF "$2"
+    printout "$1" | grep -qF "$2"
 }
 
 is_start_with() {
-  [ "${1#$2}" != "$1" ]
+    [ "${1#$2}" != "$1" ]
 }
 
 is_no_argument() {
-  [ $# -eq 0 ]
+    [ $# -eq 0 ]
 }
 
 is_arch() {
-  is_equal "$distro" "arch" || is_equal "$distro" "manjaro"
+    is_equal "$distro" "arch" || is_equal "$distro" "manjaro"
 }
 
 is_debian() {
-  is_equal "$distro" "debian" || is_equal "$distro" "ubuntu"
+    is_equal "$distro" "debian" || is_equal "$distro" "ubuntu"
 }
 
 is_fedora() {
-  is_equal "$distro" "fedora" || is_equal "$distro" "centos"
+    is_equal "$distro" "fedora" || is_equal "$distro" "centos"
 }
 
 is_unknown() {
-  is_equal "$distro" ""
+    is_equal "$distro" ""
 }
 
 is_de_i3wm() {
-  is_equal "$de" "i3wm" || is_equal "$de" "i3" || is_equal "$de" "I3WM" || is_equal "$de" "I3"
+    is_equal "$de" "i3wm" || is_equal "$de" "i3" || is_equal "$de" "I3WM" || is_equal "$de" "I3"
 }
 
 is_package_exist() {
-  command -v "$1" > /dev/null 2>&1
+    command -v "$1" > /dev/null 2>&1
 }
 
 is_user_package_exist() {
-  test -f "$user_package_dir/$1"
+    test -f "/usr/local/bin/$1"
 }
 
 is_file_exist() {
-  [ -f "$1" ]
+    [ -f "$1" ]
 }
 
 is_dir_exist() {
-  [ -d "$1" ]
-}
-
-is_ai_google() {
-  is_equal "$ai_type" "google"
+    [ -d "$1" ]
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2131,12 +2386,15 @@ is_ai_google() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 get_tmp_value() {
-  if ! is_file_exist "$config_tmp_value_filepath"; then
-    return 0
-  fi
+    __tmp_filepath="$HOME/.umar/tmp_value.cfg"
 
-  read_file_content "$config_tmp_value_filepath"
-  clear_tmp_value
+    if ! is_file_exist "$__tmp_filepath"; then
+        return 0
+    fi
+
+    read_file_content "$__tmp_filepath"
+
+    clear_tmp_value
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2147,23 +2405,23 @@ get_tmp_value() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 install_package() {
-  if is_arch; then
-    sudo pacman -S "$@"
-  fi
+    if is_arch; then
+        sudo pacman -S "$@"
+    fi
 
-  if is_debian; then
-    sudo apt update
-    sudo apt install "$@"
-  fi
+    if is_debian; then
+        sudo apt update
+        sudo apt install "$@"
+    fi
 
-  if is_fedora; then
-    sudo dnf install "$@"
-  fi
+    if is_fedora; then
+        sudo dnf install "$@"
+    fi
 }
 
 install_package_arg_split() {
-  # shellcheck disable=SC2068
-  install_package $@
+    # shellcheck disable=SC2068
+    install_package $@
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2174,21 +2432,21 @@ install_package_arg_split() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 remove_package() {
-  if is_arch; then
-    sudo pacman -Rsd --cascade "$@"
-  fi
+    if is_arch; then
+        sudo pacman -Rsd --cascade "$@"
+    fi
 
-  if is_debian; then
-    sudo apt autoremove --purge "$@"
-  fi
+    if is_debian; then
+        sudo apt autoremove --purge "$@"
+    fi
 
-  if is_fedora; then
-    sudo dnf remove "$@"
-  fi
+    if is_fedora; then
+        sudo dnf remove "$@"
+    fi
 }
 
 remove_trailing_comma() {
-  sed 's/,$//'
+    sed 's/,$//'
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2199,19 +2457,19 @@ remove_trailing_comma() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 upgrade_package() {
-  if is_arch; then
-    sudo pacman -Syu "$@"
-  fi
+    if is_arch; then
+        sudo pacman -Syu "$@"
+    fi
 
-  if is_debian; then
-    sudo apt update
-    sudo apt autoremove --purge
-    sudo apt upgrade "$@"
-  fi
+    if is_debian; then
+        sudo apt update
+        sudo apt autoremove --purge
+        sudo apt upgrade "$@"
+    fi
 
-  if is_fedora; then
-    sudo dnf upgrade "$@"
-  fi
+    if is_fedora; then
+        sudo dnf upgrade "$@"
+    fi
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2222,67 +2480,74 @@ upgrade_package() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 execute() {
-  if is_de_i3wm; then
-    i3-msg split h > /dev/null 2>&1
-  fi
+    if is_de_i3wm; then
+        i3-msg split h > /dev/null 2>&1
+    fi
 
-  if is_equal "$1" "__execute_async=true"; then
-    shift
-    exec "$@" &
-  elif is_equal "$1" "__execute_async_no_std_out=true"; then
-    shift
-    exec "$@" > /dev/null 2>&1 &
-  elif is_equal "$1" "__execute_no_std_out=true"; then
-    shift
-    exec "$@" > /dev/null 2>&1
-  elif is_equal "$1" "__execute_eval=true"; then
-    shift
-    eval "$@"
-  elif is_equal "$1" "__execute_eval_async=true"; then
-    shift
-    eval "$@" &
-  elif is_equal "$1" "__execute_eval_async_no_std_out=true"; then
-    shift
-    eval "$@" > /dev/null 2>&1 &
-  elif is_equal "$1" "__execute_eval_no_std_out=true"; then
-    shift
-    eval "$@" > /dev/null 2>&1
-  else
-    exec "$@"
-  fi
+    if is_equal "$1" "__execute_async=true"; then
+        shift
 
-  if is_de_i3wm; then
-    i3-msg focus right > /dev/null 2>&1
-    i3-msg focus left > /dev/null 2>&1
-  fi
+        exec "$@" &
+    elif is_equal "$1" "__execute_async_no_std_out=true"; then
+        shift
+
+        exec "$@" > /dev/null 2>&1 &
+    elif is_equal "$1" "__execute_no_std_out=true"; then
+        shift
+
+        exec "$@" > /dev/null 2>&1
+    elif is_equal "$1" "__execute_eval=true"; then
+        shift
+
+        eval "$@"
+    elif is_equal "$1" "__execute_eval_async=true"; then
+        shift
+
+        eval "$@" &
+    elif is_equal "$1" "__execute_eval_async_no_std_out=true"; then
+        shift
+
+        eval "$@" > /dev/null 2>&1 &
+    elif is_equal "$1" "__execute_eval_no_std_out=true"; then
+        shift
+
+        eval "$@" > /dev/null 2>&1
+    else
+        exec "$@"
+    fi
+
+    if is_de_i3wm; then
+        i3-msg focus right > /dev/null 2>&1
+        i3-msg focus left > /dev/null 2>&1
+    fi
 }
 
 execute_no_std_out() {
-  execute "__execute_no_std_out=true" "$@"
+    execute "__execute_no_std_out=true" "$@"
 }
 
 execute_async() {
-  execute "__execute_async=true" "$@"
+    execute "__execute_async=true" "$@"
 }
 
 execute_async_no_std_out() {
-  execute "__execute_async_no_std_out=true" "$@"
+    execute "__execute_async_no_std_out=true" "$@"
 }
 
 execute_eval() {
-  execute "__execute_eval=true" "$@"
+    execute "__execute_eval=true" "$@"
 }
 
 execute_eval_no_std_out() {
-  execute "__execute_eval_no_std_out=true" "$@"
+    execute "__execute_eval_no_std_out=true" "$@"
 }
 
 execute_eval_async() {
-  execute "__execute_eval_async=true" "$@"
+    execute "__execute_eval_async=true" "$@"
 }
 
 execute_eval_async_no_std_out() {
-  execute "__execute_eval_async_no_std_out=true" "$@"
+    execute "__execute_eval_async_no_std_out=true" "$@"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2293,15 +2558,17 @@ execute_eval_async_no_std_out() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 clear_shell() {
-  if is_de_i3wm; then
-    i3-msg kill > /dev/null 2>&1
-  fi
+    if is_de_i3wm; then
+        i3-msg kill > /dev/null 2>&1
+    fi
 }
 
 clear_tmp_value() {
-  if is_file_exist "$config_tmp_value_filepath"; then
-    rm -rf "$config_tmp_value_filepath"
-  fi
+    __tmp_filepath="$HOME/.umar/tmp_value.cfg"
+
+    if is_file_exist "$__tmp_filepath"; then
+        rm -rf "$__tmp_filepath"
+    fi
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2312,7 +2579,7 @@ clear_tmp_value() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 delete_line_from_file_by_keyword() {
-  sed -i "/^$1/d" "$2"
+    sed -i "/^$1/d" "$2"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2323,15 +2590,15 @@ delete_line_from_file_by_keyword() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 create_dir() {
-  if ! is_dir_exist "$1"; then
-    mkdir "$1"
-  fi
+    if ! is_dir_exist "$1"; then
+        mkdir "$1"
+    fi
 }
 
 create_file() {
-  if ! is_file_exist "$1"; then
-    touch "$1"
-  fi
+    if ! is_file_exist "$1"; then
+        touch "$1"
+    fi
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2342,7 +2609,11 @@ create_file() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 write_to_file() {
-  printout "$1" > "$2"
+    printout "$1" > "$2"
+}
+
+write_to_tmp_value_file() {
+    write_to_file "$1" "$HOME/.umar/tmp_value.cfg"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2353,110 +2624,20 @@ write_to_file() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 read_file_content() {
-  if ! is_file_exist "$1"; then
-    printout_exit "${color_red}$1 ${color_reset}file not found!"
-  fi
+    if ! is_file_exist "$1"; then
+        printout_exit "${color_red}$1 ${color_reset}file not found!"
+    fi
 
-  cat "$1"
+    cat "$1"
 }
 
 read_file_content_line() {
-  sed -n "${1}p" "$2"
+    sed -n "${1}p" "$2"
 }
 
 read_input() {
-  read -r _18_input < /dev/tty
-  printout "$_18_input"
-}
-
-# ---------------------------------------------------------------------------------------------------------------------
-#
-# `configure`
-# Configures something
-#
-# ---------------------------------------------------------------------------------------------------------------------
-
-configure_ai_type() {
-  printout_no_enter "\
-AI type:
-
-1. Google
-
-Choose the AI type number... \
-"
-
-  _19_type=$(read_input)
-
-  if is_empty "$_19_type"; then
-    printout_exit "AI type can't be empty!"
-  fi
-
-  if ! is_equal "$_19_type" "1"; then
-    printout_exit "You chose the wrong AI type number!"
-  fi
-
-  if is_equal "$_19_type" "1"; then
-    ai_type="google"
-  fi
-}
-
-configure_ai_model() {
-  if is_empty "$ai_type"; then
-    ai_type=$(read_file_content_line "1" "$config_ai_filepath")
-  fi
-
-  if is_ai_google; then
-    printout_no_enter "
-AI model:
-
-1. Gemini 1.0 Pro
-2. Gemini 1.5 Pro
-3. Gemini 1.5 Flash
-
-Choose the AI model number... \
-"
-  else
-    printout_exit "You chose the wrong AI type number!"
-  fi
-
-  _20_model=$(read_input)
-
-  if is_empty "$_20_model"; then
-    printout_exit "AI model can't be empty!"
-  fi
-
-  if is_ai_google; then
-    if ! is_equal "$_20_model" "1" && ! is_equal "$_20_model" "2" && ! is_equal "$_20_model" "3"; then
-      printout_exit "You chose the wrong AI model number!"
-    fi
-
-    # shellcheck disable=SC2086
-    ai_model=$(eval "echo "\$gemini_model_${_20_model}"")
-  fi
-}
-
-configure_ai_api_key() {
-  if is_empty "$ai_type"; then
-    ai_type=$(read_file_content_line "1" "$config_ai_filepath")
-  fi
-
-  if is_ai_google; then
-    printout_no_enter "
-You'll need an API key to use the AI. You can follow this documentation -> https://ai.google.dev/gemini-api/docs/api-key
-
-Enter the API key... \
-"
-  else
-    printout_exit "You chose the wrong AI type number!"
-  fi
-
-  _21_api_key=$(read_input)
-
-  if is_ai_google && is_empty "$_21_api_key"; then
-    printout_exit "API Key can't be empty!"
-  fi
-
-  ai_api_key="$_21_api_key"
+    read -r __input < /dev/tty
+    printout "$__input"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2467,7 +2648,7 @@ Enter the API key... \
 # ---------------------------------------------------------------------------------------------------------------------
 
 append_content_to_file() {
-  printout "$(read_file_content "$2")\n$1"
+    printout "$(read_file_content "$2")\n$1"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2478,23 +2659,23 @@ append_content_to_file() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 open_terminal_and_execute() {
-  check_requirements "xfce4-terminal"
+    check_requirements "xfce4-terminal"
 
-  _22_command=""
+    __command=""
 
-  if is_equal "$1" "__o_t_a_e_wait=true"; then
-    shift
+    if is_equal "$1" "__o_t_a_e_wait=true"; then
+        shift
 
-    _22_command="sh -c '$*; printf \"\n\nPress Enter to exit\n\n\"; read -r _ < /dev/tty'"
-  else
-    _22_command="sh -c '$*'"
-  fi
+        __command="sh -c '$*; printf \"\n\nPress Enter to exit\n\n\"; read -r _ < /dev/tty'"
+    else
+        __command="sh -c '$*'"
+    fi
 
-  xfce4-terminal -e "$_22_command"
+    xfce4-terminal -e "$__command"
 }
 
 open_terminal_and_execute_wait() {
-  open_terminal_and_execute "__o_t_a_e_wait=true" "$@"
+    open_terminal_and_execute "__o_t_a_e_wait=true" "$@"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2505,11 +2686,11 @@ open_terminal_and_execute_wait() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 change_file_content_line() {
-  sed -i "$1s|.*|$2|" "$3"
+    sed -i "$1s|.*|$2|" "$3"
 }
 
 change_file_content_line_by_keyword() {
-  sed -i "s|^$1.*|$2|" "$3"
+    sed -i "s|^$1.*|$2|" "$3"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2520,86 +2701,82 @@ change_file_content_line_by_keyword() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 http_request() {
-  check_requirements "curl"
+    check_requirements "curl"
 
-  _23_url=""
-  _23_content_type="application/json"
-  _23_method="POST"
-  _23_request_body=""
+    __url=""
+    __content_type="application/json"
+    __method="POST"
+    __request_body=""
 
-  while [ $# -gt 0 ]; do
-    case "$1" in
-      -url)
-        _23_url="${1#-url}"
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            -url)
+                __url="${1#-url}"
 
-        if [ -z "$_23_url" ]; then
-          shift
+                if [ -z "$__url" ]; then
+                    shift
 
-          _23_url="$1"
-        fi
-        ;;
-      -contentType)
-        _23_content_type="${1#-contentType}"
+                    __url="$1"
+                fi
+                ;;
+            -contentType)
+                __content_type="${1#-contentType}"
 
-        if [ -z "$_23_content_type" ]; then
-          shift
+                if [ -z "$__content_type" ]; then
+                    shift
 
-          _23_content_type="$1"
-        fi
-        ;;
-      -method)
-        _23_method="${1#-method}"
+                    __content_type="$1"
+                fi
+                ;;
+            -method)
+                __method="${1#-method}"
 
-        if [ -z "$_23_method" ]; then
-          shift
+                if [ -z "$__method" ]; then
+                    shift
 
-          _23_method="$1"
-        fi
-        ;;
-      -requestBody)
-        _23_request_body="${1#-requestBody}"
+                    __method="$1"
+                fi
+                ;;
+            -requestBody)
+                __request_body="${1#-requestBody}"
 
-        if [ -z "$_23_request_body" ]; then
-          shift
+                if [ -z "$__request_body" ]; then
+                    shift
 
-          _23_request_body="$1"
-        fi
-        ;;
-    esac
+                    __request_body="$1"
+                fi
+                ;;
+        esac
 
-    shift
-  done
+        shift
+    done
 
-  curl "$_23_url" -H "$http_header" -H "Content-Type: $_23_content_type" -X "$_23_method" -d "$_23_request_body"
+    curl "$__url" -H "X-TOOL:curl" -H "Content-Type: $__content_type" -X "$__method" -d "$__request_body"
 }
 
 http_request_google_ai() {
-  if ! is_ai_google; then
-    return 0
-  fi
+    check_requirements "jq"
 
-  check_requirements "jq"
-
-  _24_http_response=$(http_request -url "$ai_url/$ai_model:generateContent?key=$ai_api_key" -requestBody "
-    {
-      \"contents\": [
-        $1
-      ],
-      \"generationConfig\": {
+    __http_response=$(http_request -url "https://generativelanguage.googleapis.com/v1beta/models/$1:generateContent?key=$2" -requestBody "
+{
+    \"contents\": [
+        $3
+    ],
+    \"generationConfig\": {
         \"temperature\": 0.9
-      }
-    }"
-  )
+    }
+}"
+    )
 
-  printout_blank_line
+    printout_blank_line
 
-  _24_text=$(printf '%s\n' "$_24_http_response" | jq -r '.candidates[0].content.parts[0].text')
+    __text=$(printf '%s\n' "$__http_response" | jq -r '.candidates[0].content.parts[0].text')
 
-  if is_equal "$_24_text" "null"; then
-    printout_exit "$_24_http_response"
-  fi
+    if is_equal "$__text" "null"; then
+        printout_exit "$__http_response"
+    fi
 
-  printout "$_24_text"
+    printout "$__text"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2610,7 +2787,7 @@ http_request_google_ai() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 escape_json_string() {
-  sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\n/\\n/g' -e 's/\r/\\r/g' -e 's/\t/\\t/g' -e 's/\b/\\b/g' -e 's/\f/\\f/g'
+    sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\n/\\n/g' -e 's/\r/\\r/g' -e 's/\t/\\t/g' -e 's/\b/\\b/g' -e 's/\f/\\f/g'
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2621,74 +2798,76 @@ escape_json_string() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 markdown_parse() {
-  awk '
-    BEGIN {
-      bold_start = "\033[1m"
-      bold_end = "\033[0m"
-      italic_start = "\033[3m"
-      italic_end = "\033[0m"
-      header_start = "\033[1;37m"
-      header_end = "\033[0m"
-      strikethrough_start = "\033[9m"
-      strikethrough_end = "\033[0m"
-      code_start = "\033[0;36m"
-      code_end = "\033[0m"
-      link_start = "\033[4m"
-      link_end = "\033[0m"
-      horizontal_rule = "\033[2m────────────────────────────────────────────────────────────\033[0m"
-      code_block_start = "\033[0;32m"
-      code_block_end = "\033[0m"
-    }
+    awk '
+BEGIN {
+    bold_start = "\033[1m"
+    bold_end = "\033[0m"
+    italic_start = "\033[3m"
+    italic_end = "\033[0m"
+    header_start = "\033[1;37m"
+    header_end = "\033[0m"
+    strikethrough_start = "\033[9m"
+    strikethrough_end = "\033[0m"
+    code_start = "\033[0;36m"
+    code_end = "\033[0m"
+    link_start = "\033[4m"
+    link_end = "\033[0m"
+    horizontal_rule = "\033[2m────────────────────────────────────────────────────────────\033[0m"
+    code_block_start = "\033[0;32m"
+    code_block_end = "\033[0m"
+}
 
-    {
-      if ($0 ~ /^# /) {
+{
+    if ($0 ~ /^# /) {
         sub(/^# +/, "")
         print header_start $0 header_end
         next
-      }
+    }
 
-      if ($0 ~ /^[-*]\{3,}$/) {
+    if ($0 ~ /^[-*]\{3,}$/) {
         print horizontal_rule
         next
-      }
+    }
 
-      if (index($0, "```") > 0) {
+    if (index($0, "```") > 0) {
         if (in_code_block) {
-          print code_block_end
-          in_code_block = 0
+            print code_block_end
+            in_code_block = 0
         } else {
-          print code_block_start
-          in_code_block = 1
+            print code_block_start
+            in_code_block = 1
         }
+
         next
-      }
-      if (in_code_block) {
+    }
+
+    if (in_code_block) {
         print $0
         next
-      }
-
-      while (match($0, /\[([^\]]+)\]\([^\)]+\)/)) {
-        $0 = substr($0, 1, RSTART-1) link_start substr($0, RSTART+1, RLENGTH-2) link_end substr($0, RSTART+RLENGTH)
-      }
-
-      while (match($0, /~~([^~]+)~~/)) {
-        $0 = substr($0, 1, RSTART-1) strikethrough_start substr($0, RSTART+2, RLENGTH-4) strikethrough_end substr($0, RSTART+RLENGTH)
-      }
-
-      while (match($0, /\*\*([^*]+)\*\*/)) {
-        $0 = substr($0, 1, RSTART-1) bold_start substr($0, RSTART+2, RLENGTH-4) bold_end substr($0, RSTART+RLENGTH)
-      }
-
-      while (match($0, /\*([^*]+)\*/)) {
-        $0 = substr($0, 1, RSTART-1) italic_start substr($0, RSTART+1, RLENGTH-2) italic_end substr($0, RSTART+RLENGTH)
-      }
-
-      while (match($0, /`([^`]+)`/)) {
-        $0 = substr($0, 1, RSTART-1) code_start substr($0, RSTART+1, RLENGTH-2) code_end substr($0, RSTART+RLENGTH)
-      }
-
-      print
     }
+
+    while (match($0, /\[([^\]]+)\]\([^\)]+\)/)) {
+        $0 = substr($0, 1, RSTART-1) link_start substr($0, RSTART+1, RLENGTH-2) link_end substr($0, RSTART+RLENGTH)
+    }
+
+    while (match($0, /~~([^~]+)~~/)) {
+        $0 = substr($0, 1, RSTART-1) strikethrough_start substr($0, RSTART+2, RLENGTH-4) strikethrough_end substr($0, RSTART+RLENGTH)
+    }
+
+    while (match($0, /\*\*([^*]+)\*\*/)) {
+        $0 = substr($0, 1, RSTART-1) bold_start substr($0, RSTART+2, RLENGTH-4) bold_end substr($0, RSTART+RLENGTH)
+    }
+
+    while (match($0, /\*([^*]+)\*/)) {
+        $0 = substr($0, 1, RSTART-1) italic_start substr($0, RSTART+1, RLENGTH-2) italic_end substr($0, RSTART+RLENGTH)
+    }
+
+    while (match($0, /`([^`]+)`/)) {
+        $0 = substr($0, 1, RSTART-1) code_start substr($0, RSTART+1, RLENGTH-2) code_end substr($0, RSTART+RLENGTH)
+    }
+
+    print
+}
     '
 }
 

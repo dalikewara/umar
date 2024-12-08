@@ -13,7 +13,7 @@ curl -L https://raw.githubusercontent.com/dalikewara/umar/master/install.sh | sh
 If you already have **umar** installed, simply run the following command to upgrade to the latest version:
 
 ```sh
-umar getsmarter
+umar u
 ```
 
 ## Usage
