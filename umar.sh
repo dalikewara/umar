@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.0.2"
+version="v3.0.3"
 pid=$$
 distro=""
 de=""
@@ -117,8 +117,9 @@ ${color_cyan}${bold_start}    -f ${bold_end}${color_reset}                   :fu
 ${color_green}${bold_start}stp ${bold_end}${color_reset}OPTION                :Use setup function(s)
 ${color_cyan}${bold_start}    -fa ${bold_end}${color_reset}                  :setup fresh Arch Linux installation
 ${color_cyan}${bold_start}    -fai3 ${bold_end}${color_reset}                :setup i3wm on a fresh Arch Linux installation
-${color_cyan}${bold_start}    -d ${bold_end}${color_reset}                   :install developer tools
-${color_cyan}${bold_start}    -ag ${bold_end}${color_reset}                  :install gaming tools on Arch Linux
+${color_cyan}${bold_start}    -d ${bold_end}${color_reset}                   :install developer tools: DataGrip, GoLand, PyCharm, IDEA, WebStorm, \
+RustRover, Go, NVM, Rust, PyEnv, Postman, Docker, Git, Vim, Meld
+${color_cyan}${bold_start}    -ag ${bold_end}${color_reset}                  :install gaming tools on Arch Linux: Steam, Graphical Drivers
 ${color_green}${bold_start}intmb ${bold_end}${color_reset}OPTION              :Use Intel MacBook function(s)
 ${color_cyan}${bold_start}    -a ${bold_end}${color_reset}                   :configure audio
 ${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                   :configure camera
@@ -132,8 +133,8 @@ ${color_cyan}${bold_start}    -f ${bold_end}${color_reset}[SPEED]            :se
 
         printout "$(printout "\
 All functions have been tested on ${color_yellow}**Arch Linux**${color_reset}. They might work on other distros, \
-but I'm not sure. ${color_red}**DON'T EXECUTE ANYTHING IF YOU'RE NOT SURE, IT MAY BREAK YOUR SYSTEM**${color_reset}\
-        " | markdown_parse)"
+but I'm not sure. ${color_red}**DON'T EXECUTE ANYTHING IF YOU'RE NOT SURE, IT MAY BREAK YOUR SYSTEM**${color_reset}
+" | markdown_parse)\n"
 
         return 0
     fi
@@ -1107,47 +1108,47 @@ command_stp() {
     _config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_filepath="$HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-terminal.xml"
     _config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_launch_filepath="$HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-terminal-launch.sh"
     _datagrip_dir="$HOME/.umar/datagrip"
-    _datagrip_version_dir="$HOME/.umar/datagrip/DataGrip-2023.3.3"
-    _datagrip_filepath="$HOME/.umar/datagrip/DataGrip-2023.3.3/bin/datagrip"
-    _datagrip_chrome_sandbox_filepath="$HOME/.umar/datagrip/DataGrip-2023.3.3/jbr/lib/chrome-sandbox"
-    _datagrip_downloaded_filepath="$HOME/.umar/datagrip/datagrip-2023.3.3.tar.gz"
+    _datagrip_version_dir="$HOME/.umar/datagrip/DataGrip-2024.3.2"
+    _datagrip_filepath="$HOME/.umar/datagrip/DataGrip-2024.3.2/bin/datagrip"
+    _datagrip_chrome_sandbox_filepath="$HOME/.umar/datagrip/DataGrip-2024.3.2/jbr/lib/chrome-sandbox"
+    _datagrip_downloaded_filepath="$HOME/.umar/datagrip/datagrip-2024.3.2.tar.gz"
     _datagrip_sys_filepath="/usr/local/bin/datagrip"
-    _datagrip_download_url="https://download.jetbrains.com/datagrip/datagrip-2023.3.3.tar.gz"
+    _datagrip_download_url="https://download-cdn.jetbrains.com/datagrip/datagrip-2024.3.2.tar.gz"
     _goland_dir="$HOME/.umar/goland"
-    _goland_version_dir="$HOME/.umar/goland/GoLand-2023.3.2"
-    _goland_filepath="$HOME/.umar/goland/GoLand-2023.3.2/bin/goland"
-    _goland_chrome_sandbox_filepath="$HOME/.umar/goland/GoLand-2023.3.2/jbr/lib/chrome-sandbox"
-    _goland_downloaded_filepath="$HOME/.umar/goland/goland-2023.3.2.tar.gz"
+    _goland_version_dir="$HOME/.umar/goland/GoLand-2024.3"
+    _goland_filepath="$HOME/.umar/goland/GoLand-2024.3/bin/goland"
+    _goland_chrome_sandbox_filepath="$HOME/.umar/goland/GoLand-2024.3/jbr/lib/chrome-sandbox"
+    _goland_downloaded_filepath="$HOME/.umar/goland/goland-2024.3.tar.gz"
     _goland_sys_filepath="/usr/local/bin/goland"
-    _goland_download_url="https://download.jetbrains.com/go/goland-2023.3.2.tar.gz"
+    _goland_download_url="https://download-cdn.jetbrains.com/go/goland-2024.3.tar.gz"
     _pycharm_dir="$HOME/.umar/pycharm"
-    _pycharm_version_dir="$HOME/.umar/pycharm/pycharm-2023.3.2"
-    _pycharm_filepath="$HOME/.umar/pycharm/pycharm-2023.3.2/bin/pycharm"
-    _pycharm_chrome_sandbox_filepath="$HOME/.umar/pycharm/pycharm-2023.3.2/jbr/lib/chrome-sandbox"
-    _pycharm_downloaded_filepath="$HOME/.umar/pycharm/pycharm-professional-2023.3.2.tar.gz"
+    _pycharm_version_dir="$HOME/.umar/pycharm/pycharm-2024.3"
+    _pycharm_filepath="$HOME/.umar/pycharm/pycharm-2024.3/bin/pycharm"
+    _pycharm_chrome_sandbox_filepath="$HOME/.umar/pycharm/pycharm-2024.3/jbr/lib/chrome-sandbox"
+    _pycharm_downloaded_filepath="$HOME/.umar/pycharm/pycharm-professional-2024.3.tar.gz"
     _pycharm_sys_filepath="/usr/local/bin/pycharm"
-    _pycharm_download_url="https://download.jetbrains.com/python/pycharm-professional-2023.3.2.tar.gz"
+    _pycharm_download_url="https://download-cdn.jetbrains.com/python/pycharm-professional-2024.3.tar.gz"
     _idea_dir="$HOME/.umar/idea"
-    _idea_version_dir="$HOME/.umar/idea/idea-IU-233.13135.103"
-    _idea_filepath="$HOME/.umar/idea/idea-IU-233.13135.103/bin/idea"
-    _idea_chrome_sandbox_filepath="$HOME/.umar/idea/idea-IU-233.13135.103/jbr/lib/chrome-sandbox"
-    _idea_downloaded_filepath="$HOME/.umar/idea/ideaIU-2023.3.2.tar.gz"
+    _idea_version_dir="$HOME/.umar/idea/idea-IU-243.22562.145"
+    _idea_filepath="$HOME/.umar/idea/idea-IU-243.22562.145/bin/idea"
+    _idea_chrome_sandbox_filepath="$HOME/.umar/idea/idea-IU-243.22562.145/jbr/lib/chrome-sandbox"
+    _idea_downloaded_filepath="$HOME/.umar/idea/ideaIU-2024.3.1.tar.gz"
     _idea_sys_filepath="/usr/local/bin/idea"
-    _idea_download_url="https://download-cdn.jetbrains.com/idea/ideaIU-2023.3.2.tar.gz"
+    _idea_download_url="https://download-cdn.jetbrains.com/idea/ideaIU-2024.3.1.tar.gz"
     _webstorm_dir="$HOME/.umar/webstorm"
-    _webstorm_version_dir="$HOME/.umar/webstorm/WebStorm-241.17011.90"
-    _webstorm_filepath="$HOME/.umar/webstorm/WebStorm-241.17011.90/bin/webstorm"
-    _webstorm_chrome_sandbox_filepath="$HOME/.umar/webstorm/WebStorm-241.17011.90/jbr/lib/chrome-sandbox"
-    _webstorm_downloaded_filepath="$HOME/.umar/webstorm/WebStorm-2024.1.3.tar.gz"
+    _webstorm_version_dir="$HOME/.umar/webstorm/WebStorm-243.22562.112"
+    _webstorm_filepath="$HOME/.umar/webstorm/WebStorm-243.22562.112/bin/webstorm"
+    _webstorm_chrome_sandbox_filepath="$HOME/.umar/webstorm/WebStorm-243.22562.112/jbr/lib/chrome-sandbox"
+    _webstorm_downloaded_filepath="$HOME/.umar/webstorm/WebStorm-2024.3.1.tar.gz"
     _webstorm_sys_filepath="/usr/local/bin/webstorm"
-    _webstorm_download_url="https://download.jetbrains.com/webstorm/WebStorm-2024.1.3.tar.gz"
+    _webstorm_download_url="https://download-cdn.jetbrains.com/webstorm/WebStorm-2024.3.1.tar.gz"
     _rustrover_dir="$HOME/.umar/rustrover"
-    _rustrover_version_dir="$HOME/.umar/rustrover/RustRover-2024.1"
-    _rustrover_filepath="$HOME/.umar/rustrover/RustRover-2024.1/bin/rustrover"
-    _rustrover_chrome_sandbox_filepath="$HOME/.umar/rustrover/RustRover-2024.1/jbr/lib/chrome-sandbox"
-    _rustrover_downloaded_filepath="$HOME/.umar/rustrover/RustRover-2024.1.tar.gz"
+    _rustrover_version_dir="$HOME/.umar/rustrover/RustRover-2024.3"
+    _rustrover_filepath="$HOME/.umar/rustrover/RustRover-2024.3/bin/rustrover"
+    _rustrover_chrome_sandbox_filepath="$HOME/.umar/rustrover/RustRover-2024.3/jbr/lib/chrome-sandbox"
+    _rustrover_downloaded_filepath="$HOME/.umar/rustrover/RustRover-2024.3.tar.gz"
     _rustrover_sys_filepath="/usr/local/bin/rustrover"
-    _rustrover_download_url="https://download.jetbrains.com/rustrover/RustRover-2024.1.tar.gz"
+    _rustrover_download_url="https://download-cdn.jetbrains.com/rustrover/RustRover-2024.3.tar.gz"
     _go_dir="$HOME/.umar/go"
     _go_home_dir="$HOME/go"
     _go_home_bin_dir="$HOME/go/bin"
@@ -1159,17 +1160,8 @@ command_stp() {
     _go_sys_dir="/usr/local/go"
     _go_bin_sys_dir="/usr/local/go/bin"
     _go_download_url="https://go.dev/dl/go1.23.2.linux-amd64.tar.gz"
-    _nodejs_dir="$HOME/.umar/nodejs"
-    _nodejs_home_dir="$HOME/nodejs"
-    _nodejs_version_dir="$HOME/.umar/nodejs/v21.6.1"
-    _nodejs_extracted_dir="$HOME/.umar/nodejs/node-v21.6.1-linux-x64"
-    _nodejs_lib_dir="/usr/local/lib/nodejs"
-    _nodejs_version_lib_dir="/usr/local/lib/nodejs/node-v21.6.1-linux-x64"
-    _nodejs_version_bin_lib_dir="/usr/local/lib/nodejs/node-v21.6.1-linux-x64/bin"
-    _nodejs_downloaded_filepath="$HOME/.umar/nodejs/node-v21.6.1-linux-x64.tar.xz"
-    _nodejs_download_url="https://nodejs.org/dist/v21.6.1/node-v21.6.1-linux-x64.tar.xz"
-    _npm_global_dir="$HOME/.npm-global"
-    _npm_bin_global_dir="$HOME/.npm-global/bin"
+    _nvm_download_url="https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh"
+    _nodejs_version="22"
     _rust_download_url="https://sh.rustup.rs"
     _pyenv_home_dir="$HOME/.pyenv"
     _pyenv_download_url="https://pyenv.run"
@@ -1657,12 +1649,6 @@ killall xfconfd || true
             wget -c --timeout=10 --tries=1 -O "$_go_downloaded_filepath" "$_go_download_url" &
         fi
 
-        if ! is_dir_exist "$_nodejs_version_dir"; then
-            create_dir "$_nodejs_dir"
-
-            wget -c --timeout=10 --tries=1 -O "$_nodejs_downloaded_filepath" "$_nodejs_download_url" &
-        fi
-
         create_dir "$_postman_dir"
 
         wget -c --timeout=10 --tries=1 -O "$_postman_downloaded_filepath" "$_postman_download_url" &
@@ -1671,6 +1657,13 @@ killall xfconfd || true
 
         curl --proto '=https' --tlsv1.2 -sSf "$_rust_download_url" | sh || true
         curl "$_pyenv_download_url" | bash || true
+        curl -o- "$_nvm_download_url" | bash || true
+
+        export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+        nvm install "$_nodejs_version"
+        nvm use "$_nodejs_version"
 
         printout "Extracting tools..."
 
@@ -1700,10 +1693,6 @@ killall xfconfd || true
 
         if is_file_exist "$_go_downloaded_filepath"; then
             tar -v -C "$_go_dir" -xzf "$_go_downloaded_filepath" &
-        fi
-
-        if is_file_exist "$_nodejs_downloaded_filepath"; then
-            tar -v -C "$_nodejs_dir" -xJvf "$_nodejs_downloaded_filepath" &
         fi
 
         if is_file_exist "$_postman_downloaded_filepath"; then
@@ -1764,20 +1753,6 @@ killall xfconfd || true
 
         rm -rf "$_go_downloaded_filepath"
 
-        if is_file_exist "$_nodejs_downloaded_filepath"; then
-            mv "$_nodejs_extracted_dir" "$_nodejs_version_dir"
-        fi
-
-        mkdir "$_nodejs_home_dir" > /dev/null 2>&1 || true
-        mkdir "$_npm_global_dir" > /dev/null 2>&1 || true
-
-        sudo mkdir -p "$_nodejs_lib_dir"
-        sudo cp -rf "$_nodejs_version_dir" "$_nodejs_version_lib_dir"
-
-        npm config set prefix "$_npm_global_dir" > /dev/null 2>&1 || true
-
-        rm -rf "$_nodejs_downloaded_filepath"
-
         sudo ln -sf "$_postman_filepath" "$_postman_sys_filepath" || true
 
         rm -rf "$_postman_downloaded_filepath"
@@ -1798,14 +1773,6 @@ killall xfconfd || true
 
             if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$_bash_profile_filepath"; then
                 echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$_bash_profile_filepath"
-            fi
-
-            if ! grep -qF "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" "$_bash_profile_filepath"; then
-                echo "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" >> "$_bash_profile_filepath"
-            fi
-
-            if ! grep -qF "export PATH=$_npm_bin_global_dir:\$PATH" "$_bash_profile_filepath"; then
-                echo "export PATH=$_npm_bin_global_dir:\$PATH" >> "$_bash_profile_filepath"
             fi
 
             if ! grep -qF "export PYENV_ROOT=$_pyenv_home_dir" "$_bash_profile_filepath"; then
@@ -1834,14 +1801,6 @@ killall xfconfd || true
                 echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$_bashrc_filepath"
             fi
 
-            if ! grep -qF "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" "$_bashrc_filepath"; then
-                echo "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" >> "$_bashrc_filepath"
-            fi
-
-            if ! grep -qF "export PATH=$_npm_bin_global_dir:\$PATH" "$_bashrc_filepath"; then
-                echo "export PATH=$_npm_bin_global_dir:\$PATH" >> "$_bashrc_filepath"
-            fi
-
             if ! grep -qF "export PYENV_ROOT=$_pyenv_home_dir" "$_bashrc_filepath"; then
                 echo "export PYENV_ROOT=$_pyenv_home_dir" >> "$_bashrc_filepath"
             fi
@@ -1868,14 +1827,6 @@ killall xfconfd || true
                 echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$_profile_filepath"
             fi
 
-            if ! grep -qF "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" "$_profile_filepath"; then
-                echo "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" >> "$_profile_filepath"
-            fi
-
-            if ! grep -qF "export PATH=$_npm_bin_global_dir:\$PATH" "$_profile_filepath"; then
-                echo "export PATH=$_npm_bin_global_dir:\$PATH" >> "$_profile_filepath"
-            fi
-
             if ! grep -qF "export PYENV_ROOT=$_pyenv_home_dir" "$_profile_filepath"; then
                 echo "export PYENV_ROOT=$_pyenv_home_dir" >> "$_profile_filepath"
             fi
@@ -1898,14 +1849,6 @@ killall xfconfd || true
                 echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$_zshrc_filepath"
             fi
 
-            if ! grep -qF "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" "$_zshrc_filepath"; then
-                echo "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" >> "$_zshrc_filepath"
-            fi
-
-            if ! grep -qF "export PATH=$_npm_bin_global_dir:\$PATH" "$_zshrc_filepath"; then
-                echo "export PATH=$_npm_bin_global_dir:\$PATH" >> "$_zshrc_filepath"
-            fi
-
             if ! grep -qF "export PYENV_ROOT=$_pyenv_home_dir" "$_zshrc_filepath"; then
                 echo "export PYENV_ROOT=$_pyenv_home_dir" >> "$_zshrc_filepath"
             fi
@@ -1926,14 +1869,6 @@ killall xfconfd || true
 
             if ! grep -qF "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" "$_zprofile_filepath"; then
                 echo "export PATH=\$PATH:\$GOROOT/bin:\$GOPATH/bin" >> "$_zprofile_filepath"
-            fi
-
-            if ! grep -qF "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" "$_zprofile_filepath"; then
-                echo "export PATH=$_nodejs_version_bin_lib_dir:\$PATH" >> "$_zprofile_filepath"
-            fi
-
-            if ! grep -qF "export PATH=$_npm_bin_global_dir:\$PATH" "$_zprofile_filepath"; then
-                echo "export PATH=$_npm_bin_global_dir:\$PATH" >> "$_zprofile_filepath"
             fi
 
             if ! grep -qF "export PYENV_ROOT=$_pyenv_home_dir" "$_zprofile_filepath"; then

@@ -2,6 +2,9 @@
 
 ## 2024
 
+- **v3.0.3* (2024-12-11)
+  - Fix some issues
+
 - **v3.0.0 - v3.0.2* (2024-12-08)
   - Fix some issues
   - Refactor v3
