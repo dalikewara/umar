@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.0.4"
+version="v3.0.5"
 pid=$$
 distro=""
 de=""
@@ -1171,7 +1171,7 @@ command_stp() {
     _postman_sys_filepath="/usr/local/bin/postman"
     _postman_download_url="https://dl.pstmn.io/download/latest/linux_64"
     _sublimetext_dir="$HOME/.umar/sublimetext"
-    _sublimetext_filepath="$HOME/.umar/sublimetext/sublimetext/sublime_text"
+    _sublimetext_filepath="$HOME/.umar/sublimetext/sublime_text/sublime_text"
     _sublimetext_downloaded_filepath="$HOME/.umar/sublimetext/sublime_text_build_4180_x64.tar.xz"
     _sublimetext_sys_filepath="/usr/local/bin/sublimetext"
     _sublimetext_download_url="https://download.sublimetext.com/sublime_text_build_4180_x64.tar.xz"
