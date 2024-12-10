@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.0.3"
+version="v3.0.4"
 pid=$$
 distro=""
 de=""
@@ -118,7 +118,7 @@ ${color_green}${bold_start}stp ${bold_end}${color_reset}OPTION                :U
 ${color_cyan}${bold_start}    -fa ${bold_end}${color_reset}                  :setup fresh Arch Linux installation
 ${color_cyan}${bold_start}    -fai3 ${bold_end}${color_reset}                :setup i3wm on a fresh Arch Linux installation
 ${color_cyan}${bold_start}    -d ${bold_end}${color_reset}                   :install developer tools: DataGrip, GoLand, PyCharm, IDEA, WebStorm, \
-RustRover, Go, NVM, Rust, PyEnv, Postman, Docker, Git, Vim, Meld
+RustRover, Go, NVM, Rust, PyEnv, Postman, Docker, Git, Vim, Meld, Sublime Text
 ${color_cyan}${bold_start}    -ag ${bold_end}${color_reset}                  :install gaming tools on Arch Linux: Steam, Graphical Drivers
 ${color_green}${bold_start}intmb ${bold_end}${color_reset}OPTION              :Use Intel MacBook function(s)
 ${color_cyan}${bold_start}    -a ${bold_end}${color_reset}                   :configure audio
@@ -1170,6 +1170,11 @@ command_stp() {
     _postman_downloaded_filepath="$HOME/.umar/postman/postman.tar.gz"
     _postman_sys_filepath="/usr/local/bin/postman"
     _postman_download_url="https://dl.pstmn.io/download/latest/linux_64"
+    _sublimetext_dir="$HOME/.umar/sublimetext"
+    _sublimetext_filepath="$HOME/.umar/sublimetext/sublimetext/sublime_text"
+    _sublimetext_downloaded_filepath="$HOME/.umar/sublimetext/sublime_text_build_4180_x64.tar.xz"
+    _sublimetext_sys_filepath="/usr/local/bin/sublimetext"
+    _sublimetext_download_url="https://download.sublimetext.com/sublime_text_build_4180_x64.tar.xz"
 
     if is_equal "$1" "-fa"; then
         if ! is_arch; then
@@ -1653,6 +1658,10 @@ killall xfconfd || true
 
         wget -c --timeout=10 --tries=1 -O "$_postman_downloaded_filepath" "$_postman_download_url" &
 
+        create_dir "$_sublimetext_dir"
+
+        wget -c --timeout=10 --tries=1 -O "$_sublimetext_downloaded_filepath" "$_sublimetext_download_url" &
+
         wait
 
         curl --proto '=https' --tlsv1.2 -sSf "$_rust_download_url" | sh || true
@@ -1697,6 +1706,10 @@ killall xfconfd || true
 
         if is_file_exist "$_postman_downloaded_filepath"; then
             tar -v -C "$_postman_dir" -xzf "$_postman_downloaded_filepath" &
+        fi
+
+        if is_file_exist "$_sublimetext_downloaded_filepath"; then
+            tar -v -C "$_sublimetext_dir" -xzf "$_sublimetext_downloaded_filepath" &
         fi
 
         wait
@@ -1756,6 +1769,10 @@ killall xfconfd || true
         sudo ln -sf "$_postman_filepath" "$_postman_sys_filepath" || true
 
         rm -rf "$_postman_downloaded_filepath"
+
+        sudo ln -sf "$_sublimetext_filepath" "$_sublimetext_sys_filepath" || true
+
+        rm -rf "$_sublimetext_downloaded_filepath"
 
         sudo systemctl start docker.socket || true
         sudo systemctl enable docker.socket || true
