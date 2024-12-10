@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.0.5"
+version="v3.0.6"
 pid=$$
 distro=""
 de=""
@@ -1709,7 +1709,7 @@ killall xfconfd || true
         fi
 
         if is_file_exist "$_sublimetext_downloaded_filepath"; then
-            tar -v -C "$_sublimetext_dir" -xzf "$_sublimetext_downloaded_filepath" &
+            tar -v -C "$_sublimetext_dir" -xvf "$_sublimetext_downloaded_filepath" &
         fi
 
         wait
