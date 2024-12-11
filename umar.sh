@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.0.6"
+version="v3.1.0"
 pid=$$
 distro=""
 de=""
@@ -487,10 +487,13 @@ command_ai() {
 
         printout "${color_yellow}$_type ($_model)${color_reset}\n"
 
+        _prompt=$(printout "$*" | escape_json_string)
         _response=""
 
         if is_equal "$_type" "google"; then
-            _response=$(http_request_google_ai "$_model" "$_api_key" "$(printout "{\"role\": \"user\", \"parts\":[{\"text\": \"$(printout "$*" | escape_json_string)\"}]}," | remove_trailing_comma)")
+            _response=$(http_request_google_ai "$_model" "$_api_key" "$(printout "{\"role\": \"user\", \"parts\":[{\"text\": \"$_prompt\"}]}," | remove_trailing_comma)")
+        elif is_equal "$_type" "chatgpt"; then
+            _response=$(http_request_chatgpt_ai "$_model" "$_api_key" "$(printout "{\"role\": \"user\", \"content\": \"$_prompt\"}," | remove_trailing_comma)")
         fi
 
         printout_typing "$(printout "$_response" | markdown_parse)"
@@ -508,8 +511,19 @@ command_ai() {
             printout_no_enter "${color_yellow}>_${color_reset} "
 
             _chat_prompt="$(read_input)"
-            _chat_prompt="{\"role\": \"user\", \"parts\":[{\"text\": \"$(printout "$_chat_prompt" | escape_json_string)\"}]},"
 
+            if is_equal "$_chat_prompt" "exit"; then
+                break
+            fi
+
+            _chat_prompt=$(printout "$_chat_prompt" | escape_json_string)
+
+            if is_equal "$_type" "google"; then
+                _chat_prompt="{\"role\": \"user\", \"parts\":[{\"text\": \"$(printout "$_chat_prompt" | escape_json_string)\"}]},"
+            elif is_equal "$_type" "chatgpt"; then
+                _chat_prompt="{\"role\": \"user\", \"content\": \"$(printout "$_chat_prompt" | escape_json_string)\"},"
+            fi
+            
             if is_empty "$_prompt"; then
                 _prompt="$_chat_prompt"
             else
@@ -522,12 +536,13 @@ command_ai() {
 
             if is_equal "$_type" "google"; then
                 _response=$(http_request_google_ai "$_model" "$_api_key" "$(printout "$_prompt" | remove_trailing_comma)")
+            elif is_equal "$_type" "chatgpt"; then
+                _response=$(http_request_chatgpt_ai "$_model" "$_api_key" "$(printout "$_prompt" | remove_trailing_comma)")
             fi
 
             _prompt="$_prompt {\"role\": \"model\", \"parts\":[{\"text\": \"$(printout "$_response" | escape_json_string)\"}]},"
 
             printout_typing "$(printout "$_response" | markdown_parse)"
-
             printout_blank_line
         done
 
@@ -549,6 +564,7 @@ command_ai() {
 AI type:
 
 1. Google
+2. ChatGPT
 
 Choose the AI type number... "
         
@@ -558,12 +574,16 @@ Choose the AI type number... "
             printout_exit "AI type can't be empty!"
         fi
 
-        if ! is_equal "$_type" "1"; then
+        if ! is_equal "$_type" "1" && ! is_equal "$_type" "2"; then
             printout_exit "Wrong AI type!"
         fi
 
         if is_equal "$_type" "1"; then
             _type="google"
+        fi
+
+        if is_equal "$_type" "2"; then
+            _type="chatgpt"
         fi
     fi
 
@@ -576,9 +596,22 @@ Choose the AI type number... "
             printout_no_enter "
 AI model:
 
-1. Gemini 1.0 Pro
-2. Gemini 1.5 Pro
-3. Gemini 1.5 Flash
+1. gemini-1.0-pro
+2. gemini-1.5-pro
+3. gemini-1.5-flash
+
+Choose the AI model number... "
+        elif is_equal "$_type" "chatgpt"; then
+            printout_no_enter "
+AI model:
+
+1. gpt-4o-mini
+2. gpt-3.5-turbo
+3. gpt-3.5-turbo-0125
+4. gpt-3.5-turbo-1106
+5. gpt-3.5-turbo-16k
+6. gpt-3.5-turbo-instruct
+7. gpt-3.5-turbo-instruct-0914
 
 Choose the AI model number... "
         else
@@ -607,6 +640,38 @@ Choose the AI model number... "
             if is_equal "$_model" "3"; then
                 _model="gemini-1.5-flash"
             fi
+        elif is_equal "$_type" "chatgpt"; then
+            if ! is_equal "$_model" "1" && ! is_equal "$_model" "2" && ! is_equal "$_model" "3" && ! is_equal "$_model" "4" && ! is_equal "$_model" "5" && ! is_equal "$_model" "6" && ! is_equal "$_model" "7"; then
+                printout_exit "Wrong AI model!"
+            fi
+
+            if is_equal "$_model" "1"; then
+                _model="gpt-4o-mini"
+            fi
+
+            if is_equal "$_model" "2"; then
+                _model="gpt-3.5-turbo"
+            fi
+
+            if is_equal "$_model" "3"; then
+                _model="gpt-3.5-turbo-0125"
+            fi
+
+            if is_equal "$_model" "3"; then
+                _model="gpt-3.5-turbo-1106"
+            fi
+
+            if is_equal "$_model" "3"; then
+                _model="gpt-3.5-turbo-16k"
+            fi
+
+            if is_equal "$_model" "3"; then
+                _model="gpt-3.5-turbo-instruct"
+            fi
+
+            if is_equal "$_model" "3"; then
+                _model="gpt-3.5-turbo-instruct-0914"
+            fi
         fi
     fi
 
@@ -620,6 +685,11 @@ Choose the AI model number... "
 You'll need an API key to use the AI. You can follow this documentation -> https://ai.google.dev/gemini-api/docs/api-key
 
 Enter the API key... "
+        elif is_equal "$_type" "chatgpt"; then
+printout_no_enter "
+You'll need an API key to use the AI. Log in/Sign up to your OpenAI account and create a new API key
+
+Enter the API key... "
         else
             printout_exit "Wrong AI type!"
         fi
@@ -627,7 +697,9 @@ Enter the API key... "
         _api_key=$(read_input)
 
         if is_equal "$_type" "google" && is_empty "$_api_key"; then
-            printout_exit "API Key can't be empty!"
+            printout_exit "API key can't be empty!"
+        elif is_equal "$_type" "chatgpt" && is_empty "$_api_key"; then
+            printout_exit "API key can't be empty!"
         fi
     fi
 
@@ -2656,9 +2728,10 @@ http_request() {
     check_requirements "curl"
 
     __url=""
-    __content_type="application/json"
+    __content_type="Content-Type: application/json"
     __method="POST"
     __request_body=""
+    __authentication=""
 
     while [ $# -gt 0 ]; do
         case "$1" in
@@ -2671,13 +2744,22 @@ http_request() {
                     __url="$1"
                 fi
                 ;;
+            -authentication)
+                __authentication="${1#-authentication}"
+
+                if [ -z "$__authentication" ]; then
+                    shift
+
+                    __authentication="Authorization: $1"
+                fi
+                ;;
             -contentType)
                 __content_type="${1#-contentType}"
 
                 if [ -z "$__content_type" ]; then
                     shift
 
-                    __content_type="$1"
+                    __content_type="Content-Type: $1"
                 fi
                 ;;
             -method)
@@ -2703,7 +2785,7 @@ http_request() {
         shift
     done
 
-    curl "$__url" -H "X-TOOL:curl" -H "Content-Type: $__content_type" -X "$__method" -d "$__request_body"
+    curl "$__url" -H "$__authentication" -H "X-TOOL:curl" -H "$__content_type" -X "$__method" -d "$__request_body"
 }
 
 http_request_google_ai() {
@@ -2731,6 +2813,29 @@ http_request_google_ai() {
     printout "$__text"
 }
 
+http_request_chatgpt_ai() {
+    check_requirements "jq"
+
+    __http_response=$(http_request -url "https://api.openai.com/v1/chat/completions" -authentication "Bearer $2" -requestBody "
+{
+    \"model\": \"$1\",
+    \"messages\": [
+        $3
+    ]
+}"
+    )
+
+    printout_blank_line
+
+    __text=$(printf '%s\n' "$__http_response" | jq -r '.choices[0].message.content')
+
+    if is_equal "$__text" "null"; then
+        printout_exit "$__http_response"
+    fi
+
+    printout "$__text"
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 #
 # `escape`
@@ -2739,7 +2844,7 @@ http_request_google_ai() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 escape_json_string() {
-    sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\n/\\n/g' -e 's/\r/\\r/g' -e 's/\t/\\t/g' -e 's/\b/\\b/g' -e 's/\f/\\f/g'
+    sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\n/\\n/g' -e 's/\r/\\r/g' -e 's/\t/\\t/g' -e 's/\f/\\f/g'
 }
 
 # ---------------------------------------------------------------------------------------------------------------------

@@ -2,6 +2,10 @@
 
 ## 2024
 
+- **v3.1.0* (2024-12-12)
+  - Fix some issues
+  - Add support for ChatGPT AI
+
 - **v3.0.3 - v3.0.6* (2024-12-11)
   - Fix some issues
 
