@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.1.0"
+version="v3.1.1"
 pid=$$
 distro=""
 de=""
@@ -74,7 +74,7 @@ ${color_cyan}${bold_start}    -s                    ${bold_end}${color_reset}:se
 ${color_cyan}${bold_start}    -r ${bold_end}${color_reset}COMMANDS...        :remove custom command(s)
 ${color_cyan}${bold_start}    -cd                   ${bold_end}${color_reset}:change custom command description
 ${color_cyan}${bold_start}    -cc                   ${bold_end}${color_reset}:change custom command
-${color_green}${bold_start}ai ${bold_end}${color_reset}[OPTION]               :Use AI function(s)
+${color_green}${bold_start}ai ${bold_end}${color_reset}[OPTION]               :Use AI function(s). Supported AI: Google, ChatGPT
 ${color_cyan}${bold_start}    -p ${bold_end}${color_reset}PROMPT_TEXT        :prompt to AI
 ${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                   :start AI chat session
 ${color_cyan}${bold_start}    -i ${bold_end}${color_reset}                   :show AI information
