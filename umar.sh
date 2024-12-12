@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.2.4"
+version="v3.2.5"
 pid=$$
 distro=""
 de=""
@@ -499,6 +499,14 @@ command_ai() {
             elif is_equal "$_type" "chatgpt"; then
                 _apikey=$(read_file_content_line "2" "$_apikey_filepath")
             fi
+        fi
+    fi
+
+    if is_equal "$1" "-p" || is_equal "$1" "-c"; then
+        if is_equal "$_type" "google" && is_empty "$_apikey"; then
+            printout_exit "You need an API key to continue the process!\nYou can use this command to set a new one: ${color_cyan}umar ai -ca${color_reset}"
+        elif is_equal "$_type" "chatgpt" && is_empty "$_apikey"; then
+            printout_exit "You need an API key to continue the process!\nYou can use this command to set a new one: ${color_cyan}umar ai -ca${color_reset}"
         fi
     fi
 
