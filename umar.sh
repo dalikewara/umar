@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.2.5"
+version="v3.2.6"
 pid=$$
 distro=""
 de=""
@@ -128,7 +128,6 @@ ${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                   :co
 ${color_cyan}${bold_start}    -b ${bold_end}${color_reset}                   :configure bluetooth
 ${color_cyan}${bold_start}    -f ${bold_end}${color_reset}[SPEED]            :set fan speed
         " | while IFS=: read -r name description; do
-            # printf "%-26s" "$name"
             printout_no_enter "$name"
             printout "$description" | fold -s -w $(($(tput cols) - 26)) | sed '2,$s/^/                          /'
         done
@@ -476,7 +475,7 @@ command_ai() {
     if ! is_file_exist "$_apikey_filepath"; then
         create_file "$_apikey_filepath"
 
-        write_to_file "$(printout "* * * * *\n* * * * *")" "$_apikey_filepath"
+        write_to_file "$(printout " \n ")" "$_apikey_filepath"
     fi
 
     if ! is_equal "$1" "-s"; then
@@ -2465,7 +2464,7 @@ is_equal() {
 }
 
 is_empty() {
-    is_equal "$1" ""
+    is_equal "$1" "" || is_equal "$1" " "
 }
 
 is_contain() {
