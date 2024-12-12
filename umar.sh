@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.2.1"
+version="v3.2.2"
 pid=$$
 distro=""
 de=""
@@ -102,7 +102,7 @@ ${color_green}${bold_start}batt ${bold_end}${color_reset}OPTION               :U
 ${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                   :show battery capacity
 ${color_green}${bold_start}dev ${bold_end}${color_reset}                      :Show available device(s)
 ${color_green}${bold_start}reso ${bold_end}${color_reset}[DEVICE RESOLUTION]  :Set screen resolution
-${color_green}${bold_start}bri ${bold_end}${color_reset}[DEVICE BRIGTNESS]    :Set screen brightness
+${color_green}${bold_start}bri ${bold_end}${color_reset}[DEVICE BRIGHTNESS]   :Set screen brightness
 ${color_green}${bold_start}tcpd ${bold_end}${color_reset}                     :Configure touchpad device
 ${color_green}${bold_start}wifi ${bold_end}${color_reset}[SSID]               :Scan or connect to a Wi-Fi using nmcli
 ${color_green}${bold_start}thttp ${bold_end}${color_reset}OPTIONS...          :Test and benchmark HTTP URL
