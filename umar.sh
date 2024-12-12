@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.1.1"
+version="v3.2.0"
 pid=$$
 distro=""
 de=""
@@ -66,7 +66,8 @@ I may get smarter every day. I can also use AI, but you need to manually set up 
         printout "\
 ${color_green}${bold_start}u                         ${bold_end}${color_reset}:Make me smarter by updating me to the latest version
 ${color_green}${bold_start}v                         ${bold_end}${color_reset}:Show my current version
-${color_green}${bold_start}r                         ${bold_end}${color_reset}:Reveal my source code
+${color_green}${bold_start}r                         ${bold_end}${color_reset}:Reveal/open my source code
+${color_green}${bold_start}p                         ${bold_end}${color_reset}:Print my source code
 ${color_green}${bold_start}w                         ${bold_end}${color_reset}:Open my command window. You may create a keyboard shortcut for this command to open my command window directly
 ${color_green}${bold_start}run ${bold_end}${color_reset}OPTION | COMMANDS...  :Run custom command(s)
 ${color_cyan}${bold_start}    -l                    ${bold_end}${color_reset}:get list custom command(s)
@@ -180,6 +181,10 @@ command_r() {
     check_requirements "vim"
 
     execute vim -R "/usr/local/bin/umar"
+}
+
+command_p() {
+    cat "/usr/local/bin/umar"
 }
 
 command_w() {
@@ -1179,6 +1184,8 @@ command_stp() {
     _config_xfce4_xfconf_xfce_perchannel_xml_dir="$HOME/.config/xfce4/xfconf/xfce-perchannel-xml"
     _config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_filepath="$HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-terminal.xml"
     _config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_launch_filepath="$HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-terminal-launch.sh"
+    _config_gtk3_dir="$HOME/.config/gtk-3.0"
+    _config_gtk3_filepath="$HOME/.config/gtk-3.0/settings.ini"
     _datagrip_dir="$HOME/.umar/datagrip"
     _datagrip_version_dir="$HOME/.umar/datagrip/DataGrip-2024.3.2"
     _datagrip_filepath="$HOME/.umar/datagrip/DataGrip-2024.3.2/bin/datagrip"
@@ -1344,6 +1351,26 @@ command_stp() {
 
             sudo sed -i -E 's/timeout ([0-9]+)/timeout 1/g' "$_systemd_boot_filepath"
             sudo sed -i -E 's/\#console\-mode keep/console\-mode keep/g' "$_systemd_boot_filepath"
+        fi
+
+        printout "Configuring dark theme..."
+
+        if ! is_dir_exist "$_config_gtk3_dir"; then
+            create_dir "$_config_gtk3_dir"
+        fi
+
+        if ! is_file_exist "$_config_gtk3_filepath"; then
+            create_file "$_config_gtk3_filepath"
+        fi
+
+        if ! grep -qF "[Settings]" "$_config_gtk3_filepath"; then
+            echo "\
+[Settings]
+gtk-icon-theme-name = Adwaita
+gtk-theme-name = Adwaita
+gtk-font-name = DejaVu Sans 11
+gtk-application-prefer-dark-theme = true
+" >> "$_config_gtk3_filepath"
         fi
         
         printout "Ok"
