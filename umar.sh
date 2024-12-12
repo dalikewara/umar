@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.2.6"
+version="v3.2.7"
 pid=$$
 distro=""
 de=""
@@ -2734,7 +2734,7 @@ create_dir() {
 
 create_file() {
     if ! is_file_exist "$1"; then
-        touch "$1"
+        touch "$1" || echo "" > "$1"
     fi
 }
 
