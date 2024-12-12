@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.2.3"
+version="v3.2.4"
 pid=$$
 distro=""
 de=""
@@ -466,17 +466,23 @@ command_ai() {
     check_requirements "jq"
 
     _cfg_filepath="$HOME/.umar/ai.cfg"
+    _apikey_filepath="$HOME/.umar/ai.apikey"
     _type=""
     _model=""
-    _api_key=""
+    _apikey=""
 
     create_file "$_cfg_filepath"
+
+    if ! is_file_exist "$_apikey_filepath"; then
+        create_file "$_apikey_filepath"
+
+        write_to_file "$(printout "* * * * *\n* * * * *")" "$_apikey_filepath"
+    fi
 
     if ! is_equal "$1" "-s"; then
         if is_file_exist "$_cfg_filepath"; then
             _type=$(read_file_content_line "1" "$_cfg_filepath")
             _model=$(read_file_content_line "2" "$_cfg_filepath")
-            _api_key=$(read_file_content_line "3" "$_cfg_filepath")
         fi
 
         if is_empty "$_type"; then
@@ -485,6 +491,14 @@ command_ai() {
 
         if is_empty "$_model"; then
             printout_exit "You didn't provide any AI model to process!\nYou can use this command to set up a new one: ${color_cyan}umar ai -s${color_reset}"
+        fi
+
+        if is_file_exist "$_apikey_filepath"; then
+            if is_equal "$_type" "google"; then
+                _apikey=$(read_file_content_line "1" "$_apikey_filepath")
+            elif is_equal "$_type" "chatgpt"; then
+                _apikey=$(read_file_content_line "2" "$_apikey_filepath")
+            fi
         fi
     fi
 
@@ -497,9 +511,9 @@ command_ai() {
         _response=""
 
         if is_equal "$_type" "google"; then
-            _response=$(http_request_google_ai "$_model" "$_api_key" "$(printout "{\"role\": \"user\", \"parts\":[{\"text\": \"$_prompt\"}]}," | remove_trailing_comma)")
+            _response=$(http_request_google_ai "$_model" "$_apikey" "$(printout "{\"role\": \"user\", \"parts\":[{\"text\": \"$_prompt\"}]}," | remove_trailing_comma)")
         elif is_equal "$_type" "chatgpt"; then
-            _response=$(http_request_chatgpt_ai "$_model" "$_api_key" "$(printout "{\"role\": \"user\", \"content\": \"$_prompt\"}," | remove_trailing_comma)")
+            _response=$(http_request_chatgpt_ai "$_model" "$_apikey" "$(printout "{\"role\": \"user\", \"content\": \"$_prompt\"}," | remove_trailing_comma)")
         fi
 
         printout_typing "$(printout "$_response" | markdown_parse)"
@@ -541,9 +555,9 @@ command_ai() {
             printout_blank_line
 
             if is_equal "$_type" "google"; then
-                _response=$(http_request_google_ai "$_model" "$_api_key" "$(printout "$_prompt" | remove_trailing_comma)")
+                _response=$(http_request_google_ai "$_model" "$_apikey" "$(printout "$_prompt" | remove_trailing_comma)")
             elif is_equal "$_type" "chatgpt"; then
-                _response=$(http_request_chatgpt_ai "$_model" "$_api_key" "$(printout "$_prompt" | remove_trailing_comma)")
+                _response=$(http_request_chatgpt_ai "$_model" "$_apikey" "$(printout "$_prompt" | remove_trailing_comma)")
             fi
 
             _prompt="$_prompt {\"role\": \"model\", \"parts\":[{\"text\": \"$(printout "$_response" | escape_json_string)\"}]},"
@@ -556,11 +570,11 @@ command_ai() {
     fi
 
     if is_equal "$1" "" || is_equal "$1" "-i"; then
-        if ! is_empty "$_api_key"; then
-            _api_key="* * * * *"
+        if ! is_empty "$_apikey"; then
+            _apikey="* * * * *"
         fi
 
-        printout "Type: ${color_yellow}$_type\n${color_reset}Model: ${color_yellow}$_model\n${color_reset}API key: ${color_blue}$_api_key${color_reset}"
+        printout "Type: ${color_yellow}$_type\n${color_reset}Model: ${color_yellow}$_model\n${color_reset}API key: ${color_blue}$_apikey${color_reset}"
         
         return 0
     fi
@@ -593,7 +607,7 @@ Choose the AI type number... "
         fi
     fi
 
-    if is_equal "$1" "-s" || is_equal "$1" "-cm"; then
+    if is_equal "$1" "-s" || is_equal "$1" "-cm" || is_equal "$1" "-ct"; then
         if is_empty "$_type"; then
             _type=$(read_file_content_line "1" "$_cfg_filepath")
         fi
@@ -700,17 +714,23 @@ Enter the API key... "
             printout_exit "Wrong AI type!"
         fi
 
-        _api_key=$(read_input)
+        _apikey=$(read_input)
 
-        if is_equal "$_type" "google" && is_empty "$_api_key"; then
+        if is_equal "$_type" "google" && is_empty "$_apikey"; then
             printout_exit "API key can't be empty!"
-        elif is_equal "$_type" "chatgpt" && is_empty "$_api_key"; then
+        elif is_equal "$_type" "chatgpt" && is_empty "$_apikey"; then
             printout_exit "API key can't be empty!"
         fi
     fi
 
     if is_equal "$1" "-s"; then
-        write_to_file "$(printout "$_type\n$_model\n$_api_key")" "$_cfg_filepath"
+        write_to_file "$(printout "$_type\n$_model")" "$_cfg_filepath"
+
+        if is_equal "$_type" "google"; then
+            change_file_content_line "1" "$_apikey" "$_apikey_filepath"
+        elif is_equal "$_type" "chatgpt"; then
+            change_file_content_line "2" "$_apikey" "$_apikey_filepath"
+        fi
 
         printout "AI configuration registered"
 
@@ -719,6 +739,7 @@ Enter the API key... "
 
     if is_equal "$1" "-ct"; then
         change_file_content_line "1" "$_type" "$_cfg_filepath"
+        change_file_content_line "2" "$_model" "$_cfg_filepath"
 
         printout "Ok"
 
@@ -734,7 +755,11 @@ Enter the API key... "
     fi
 
     if is_equal "$1" "-ca"; then
-        change_file_content_line "3" "$_api_key" "$_cfg_filepath"
+        if is_equal "$_type" "google"; then
+            change_file_content_line "1" "$_apikey" "$_apikey_filepath"
+        elif is_equal "$_type" "chatgpt"; then
+            change_file_content_line "2" "$_apikey" "$_apikey_filepath"
+        fi
 
         printout "Ok"
 
