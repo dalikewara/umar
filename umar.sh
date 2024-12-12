@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.2.2"
+version="v3.2.3"
 pid=$$
 distro=""
 de=""
@@ -1187,6 +1187,7 @@ command_stp() {
     _config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_launch_filepath="$HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-terminal-launch.sh"
     _config_gtk3_dir="$HOME/.config/gtk-3.0"
     _config_gtk3_filepath="$HOME/.config/gtk-3.0/settings.ini"
+    _config_vim_filepath="$HOME/.vimrc"
     _datagrip_dir="$HOME/.umar/datagrip"
     _datagrip_version_dir="$HOME/.umar/datagrip/DataGrip-2024.3.2"
     _datagrip_filepath="$HOME/.umar/datagrip/DataGrip-2024.3.2/bin/datagrip"
@@ -1372,6 +1373,32 @@ gtk-theme-name = Adwaita
 gtk-font-name = DejaVu Sans 11
 gtk-application-prefer-dark-theme = true
 " >> "$_config_gtk3_filepath"
+        fi
+
+        printout "Configuring vim..."
+
+        if ! is_file_exist "$_config_vim_filepath"; then
+            create_file "$_config_vim_filepath"
+        fi
+
+        if ! grep -qF "set tabstop=4" "$_config_vim_filepath"; then
+            echo "set tabstop=4" >> "$_config_vim_filepath"
+        fi
+
+        if ! grep -qF "set shiftwidth=4" "$_config_vim_filepath"; then
+            echo "set shiftwidth=4" >> "$_config_vim_filepath"
+        fi
+
+        if ! grep -qF "set expandtab" "$_config_vim_filepath"; then
+            echo "set expandtab" >> "$_config_vim_filepath"
+        fi
+
+        if ! grep -qF "set number" "$_config_vim_filepath"; then
+            echo "set number" >> "$_config_vim_filepath"
+        fi
+
+        if ! grep -qF "syntax on" "$_config_vim_filepath"; then
+            echo "syntax on" >> "$_config_vim_filepath"
         fi
         
         printout "Ok"
@@ -1708,6 +1735,32 @@ killall xfconfd || true
             eval "$(ssh-agent -s)"
 
             ssh-add "$_ssh_dir"
+        fi
+
+        printout "Configuring vim..."
+
+        if ! is_file_exist "$_config_vim_filepath"; then
+            create_file "$_config_vim_filepath"
+        fi
+
+        if ! grep -qF "set tabstop=4" "$_config_vim_filepath"; then
+            echo "set tabstop=4" >> "$_config_vim_filepath"
+        fi
+
+        if ! grep -qF "set shiftwidth=4" "$_config_vim_filepath"; then
+            echo "set shiftwidth=4" >> "$_config_vim_filepath"
+        fi
+
+        if ! grep -qF "set expandtab" "$_config_vim_filepath"; then
+            echo "set expandtab" >> "$_config_vim_filepath"
+        fi
+
+        if ! grep -qF "set number" "$_config_vim_filepath"; then
+            echo "set number" >> "$_config_vim_filepath"
+        fi
+
+        if ! grep -qF "syntax on" "$_config_vim_filepath"; then
+            echo "syntax on" >> "$_config_vim_filepath"
         fi
 
         printout "Downloading tools..."
