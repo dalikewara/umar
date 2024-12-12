@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.2.0"
+version="v3.2.1"
 pid=$$
 distro=""
 de=""
@@ -22,6 +22,7 @@ umar() {
         arch*) distro="arch" ;;
         debian*) distro="debian" ;;
         ubuntu*) distro="ubuntu" ;;
+        xubuntu*) distro="xubuntu" ;;
         fedora*) distro="fedora" ;;
         centos*) distro="centos" ;;
         manjaro*) distro="manjaro" ;;
@@ -61,7 +62,7 @@ umar() {
 I am Umar (${color_yellow}$version${color_reset}), your Linux assistant. I can help \
 you with the common tasks listed below. I will continue to be updated indefinitely, as \
 my creator may need to add new features, update my logic, fix issues, or make other changes. \
-I may get smarter every day. I can also use AI, but you need to manually set up the configuration first.
+I can also use AI, but you need to manually set up the configuration first.
 "
         printout "\
 ${color_green}${bold_start}u                         ${bold_end}${color_reset}:Make me smarter by updating me to the latest version
@@ -2398,7 +2399,7 @@ is_arch() {
 }
 
 is_debian() {
-    is_equal "$distro" "debian" || is_equal "$distro" "ubuntu"
+    is_equal "$distro" "debian" || is_equal "$distro" "ubuntu" || is_equal "$distro" "xubuntu"
 }
 
 is_fedora() {

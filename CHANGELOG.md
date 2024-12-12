@@ -2,7 +2,7 @@
 
 ## 2024
 
-- **v3.1.0 - v3.2.0* (2024-12-12)
+- **v3.1.0 - v3.2.1* (2024-12-12)
   - Fix some issues
   - Add support for `ChatGPT` AI
   - Add `p` command
