@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.2.7"
+version="v3.2.8"
 pid=$$
 distro=""
 de=""
@@ -1959,6 +1959,7 @@ killall xfconfd || true
 
         rm -rf "$_sublimetext_downloaded_filepath"
 
+        sudo gpasswd -a $USER docker || true
         sudo systemctl start docker.socket || true
         sudo systemctl enable docker.socket || true
 
