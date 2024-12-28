@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.2.8"
+version="v3.2.9"
 pid=$$
 distro=""
 de=""
@@ -129,7 +129,7 @@ ${color_cyan}${bold_start}    -b ${bold_end}${color_reset}                   :co
 ${color_cyan}${bold_start}    -f ${bold_end}${color_reset}[SPEED]            :set fan speed
         " | while IFS=: read -r name description; do
             printout_no_enter "$name"
-            printout "$description" | fold -s -w $(($(tput cols) - 26)) | sed '2,$s/^/                          /'
+            printout "$description" | fold -s -w $(($(tput cols) - 27)) | sed '2,$s/^/                           /'
         done
 
         printout "$(printout "\
