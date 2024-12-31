@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.2.9"
+version="v3.2.10"
 pid=$$
 distro=""
 de=""
@@ -539,8 +539,14 @@ command_ai() {
 
             _chat_prompt="$(read_input)"
 
-            if is_equal "$_chat_prompt" "exit"; then
+            if is_equal "$_chat_prompt" "exit" || is_equal "$_chat_prompt" "abort"; then
+                printout "Aborted!"
+
                 break
+            fi
+
+            if is_empty "$_chat_prompt"; then
+                continue
             fi
 
             _chat_prompt=$(printout "$_chat_prompt" | escape_json_string)
@@ -561,13 +567,20 @@ command_ai() {
 
             printout_blank_line
 
+            _prompt=$(printf "%s" "$_prompt" | tr '
+' ' ')
+
             if is_equal "$_type" "google"; then
                 _response=$(http_request_google_ai "$_model" "$_apikey" "$(printout "$_prompt" | remove_trailing_comma)")
             elif is_equal "$_type" "chatgpt"; then
                 _response=$(http_request_chatgpt_ai "$_model" "$_apikey" "$(printout "$_prompt" | remove_trailing_comma)")
             fi
 
-            _prompt="$_prompt {\"role\": \"model\", \"parts\":[{\"text\": \"$(printout "$_response" | escape_json_string)\"}]},"
+            if is_equal "$_type" "google"; then
+                _prompt="$_prompt {\"role\": \"model\", \"parts\":[{\"text\": \"$(printout "$_response" | escape_json_string)\"}]},"
+            elif is_equal "$_type" "chatgpt"; then
+                _prompt="$_prompt {\"role\": \"model\", \"content\": \"$(printout "$_response" | escape_json_string)\"},"
+            fi
 
             printout_typing "$(printout "$_response" | markdown_parse)"
             printout_blank_line
@@ -2905,7 +2918,7 @@ http_request() {
 http_request_google_ai() {
     check_requirements "jq"
 
-    __http_response=$(http_request -url "https://generativelanguage.googleapis.com/v1beta/models/$1:generateContent?key=$2" -requestBody "
+    __http_response=$(http_request -url "https://generativelanguage.googleapis.com/v1beta/models/$1:generateContent?key=$2" -requestBody "\
 {
     \"contents\": [
         $3
@@ -2920,17 +2933,23 @@ http_request_google_ai() {
 
     __text=$(printf '%s\n' "$__http_response" | jq -r '.candidates[0].content.parts[0].text')
 
-    if is_equal "$__text" "null"; then
-        printout_exit "$__http_response"
+    if ! is_equal "$__text" "null"; then
+        printout_exit "$__text"
     fi
 
-    printout "$__text"
+    __text=$(printf '%s\n' "$__http_response" | jq -r '.error.message')
+
+    if ! is_equal "$__text" "null"; then
+        printout_exit "$__text"
+    fi
+
+    printout "$__http_response"
 }
 
 http_request_chatgpt_ai() {
     check_requirements "jq"
 
-    __http_response=$(http_request -url "https://api.openai.com/v1/chat/completions" -authentication "Bearer $2" -requestBody "
+    __http_response=$(http_request -url "https://api.openai.com/v1/chat/completions" -authentication "Bearer $2" -requestBody "\
 {
     \"model\": \"$1\",
     \"messages\": [
@@ -2943,11 +2962,17 @@ http_request_chatgpt_ai() {
 
     __text=$(printf '%s\n' "$__http_response" | jq -r '.choices[0].message.content')
 
-    if is_equal "$__text" "null"; then
-        printout_exit "$__http_response"
+    if ! is_equal "$__text" "null"; then
+        printout_exit "$__text"
     fi
 
-    printout "$__text"
+    __text=$(printf '%s\n' "$__http_response" | jq -r '.error.message')
+
+    if ! is_equal "$__text" "null"; then
+        printout_exit "$__text"
+    fi
+
+    printout "$__http_response"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
