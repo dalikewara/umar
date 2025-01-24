@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.2.10"
+version="v3.2.11"
 pid=$$
 distro=""
 de=""
@@ -1030,7 +1030,7 @@ command_tcpd() {
     xinput list
 
     printout_blank_line
-    printout_no_enter "Enter your Touchpad Device ID..."
+    printout_no_enter "Enter your Touchpad Device ID... "
 
     _device_id=$(read_input)
 

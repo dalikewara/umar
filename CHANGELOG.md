@@ -1,59 +1,64 @@
 # Changelogs
 
+## 2025
+
+- **v3.2.11** (2025-01-24)
+  - Fix some issues
+
 ## 2024
 
-- **v3.2.10* (2024-12-31)
+- **v3.2.10** (2024-12-31)
   - Fix AI issues
 
-- **v3.2.9* (2024-12-28)
+- **v3.2.9** (2024-12-28)
   - Fix some issues
 
-- **v3.2.8* (2024-12-22)
+- **v3.2.8** (2024-12-22)
   - Fix some issues
 
-- **v3.1.0 - v3.2.7* (2024-12-12)
+- **v3.1.0 - v3.2.7** (2024-12-12)
   - Fix some issues
   - Add support for `ChatGPT` AI
   - Add `p` command
   - Set default theme to dark theme on fresh Arch Linux setup
 
-- **v3.0.3 - v3.0.6* (2024-12-11)
+- **v3.0.3 - v3.0.6** (2024-12-11)
   - Fix some issues
 
-- **v3.0.0 - v3.0.2* (2024-12-08)
+- **v3.0.0 - v3.0.2** (2024-12-08)
   - Fix some issues
   - Refactor v3
 
-- **v2.8.16 - v2.9.2* (2024-11-19)
+- **v2.8.16 - v2.9.2** (2024-11-19)
   - Fix some issues
   - Add `ss` command
 
-- **v2.8.15* (2024-11-18)
+- **v2.8.15** (2024-11-18)
   - Fix some issues
 
-- **v2.8.14* (2024-11-16)
+- **v2.8.14** (2024-11-16)
   - Fix some issues
 
-- **v2.8.11 - v2.8.13* (2024-11-14)
+- **v2.8.11 - v2.8.13** (2024-11-14)
   - Fix some issues
 
-- **v2.8.9 - v2.8.10* (2024-11-10)
+- **v2.8.9 - v2.8.10** (2024-11-10)
   - Fix some issues
 
-- **v2.8.8* (2024-11-09)
+- **v2.8.8** (2024-11-09)
   - Fix some issues
 
-- **v2.8.3 - v2.8.7* (2024-11-07)
+- **v2.8.3 - v2.8.7** (2024-11-07)
   - Fix some issues
 
-- **v2.8.0 - v2.8.2* (2024-11-06)
+- **v2.8.0 - v2.8.2** (2024-11-06)
   - Fix some issues
   - Add `bluetooth` & `macbookbluetooth` command
 
-- **v2.7.4 - v2.7.5* (2024-11-04)
+- **v2.7.4 - v2.7.5** (2024-11-04)
   - Fix some issues
 
-- **v2.6.13 - v2.7.3* (2024-11-03)
+- **v2.6.13 - v2.7.3** (2024-11-03)
   - Fix some issues
   - Add `setuparchgame` command
 
