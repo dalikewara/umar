@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.2.11"
+version="v3.3.0"
 pid=$$
 distro=""
 de=""
@@ -65,71 +65,73 @@ my creator may need to add new features, update my logic, fix issues, or make ot
 I can also use AI, but you need to manually set up the configuration first.
 "
         printout "\
-${color_green}${bold_start}u                         ${bold_end}${color_reset}:Make me smarter by updating me to the latest version
-${color_green}${bold_start}v                         ${bold_end}${color_reset}:Show my current version
-${color_green}${bold_start}r                         ${bold_end}${color_reset}:Reveal/open my source code
-${color_green}${bold_start}p                         ${bold_end}${color_reset}:Print my source code
-${color_green}${bold_start}w                         ${bold_end}${color_reset}:Open my command window. You may create a keyboard shortcut for this command to open my command window directly
-${color_green}${bold_start}run ${bold_end}${color_reset}OPTION | COMMANDS...  :Run custom command(s)
-${color_cyan}${bold_start}    -l                    ${bold_end}${color_reset}:get list custom command(s)
-${color_cyan}${bold_start}    -s                    ${bold_end}${color_reset}:set new custom command
-${color_cyan}${bold_start}    -r ${bold_end}${color_reset}COMMANDS...        :remove custom command(s)
-${color_cyan}${bold_start}    -cd                   ${bold_end}${color_reset}:change custom command description
-${color_cyan}${bold_start}    -cc                   ${bold_end}${color_reset}:change custom command
-${color_green}${bold_start}ai ${bold_end}${color_reset}[OPTION]               :Use AI function(s). Supported AI: Google, ChatGPT
-${color_cyan}${bold_start}    -p ${bold_end}${color_reset}PROMPT_TEXT        :prompt to AI
-${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                   :start AI chat session
-${color_cyan}${bold_start}    -i ${bold_end}${color_reset}                   :show AI information
-${color_cyan}${bold_start}    -s ${bold_end}${color_reset}                   :set AI config
-${color_cyan}${bold_start}    -ct ${bold_end}${color_reset}                  :change AI type
-${color_cyan}${bold_start}    -cm ${bold_end}${color_reset}                  :change AI model
-${color_cyan}${bold_start}    -ca ${bold_end}${color_reset}                  :change AI api key
-${color_green}${bold_start}open ${bold_end}${color_reset}PACKAGES...          :Open package(s)
-${color_green}${bold_start}kill ${bold_end}${color_reset}NAMES...             :Kill package(s) process
-${color_green}${bold_start}ins ${bold_end}${color_reset}PACKAGES...           :Install package(s)
-${color_green}${bold_start}rm ${bold_end}${color_reset}PACKAGES...            :Remove package(s)
-${color_green}${bold_start}upg ${bold_end}${color_reset}[PACKAGES...]         :Upgrade package(s)
-${color_green}${bold_start}srch ${bold_end}${color_reset}TEXT...              :Search for the given keyword(s) using a terminal browser
-${color_green}${bold_start}au ${bold_end}${color_reset}[OPTION]               :Use audio function(s)
-${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                   :show audio cards
-${color_cyan}${bold_start}    -p ${bold_end}${color_reset}AUDIO_FILEPATHS... :play audio
-${color_green}${bold_start}img ${bold_end}${color_reset}OPTION                :Use image function(s)
-${color_cyan}${bold_start}    -s ${bold_end}${color_reset}IMAGE_FILEPATHS... :show image
-${color_green}${bold_start}vid ${bold_end}${color_reset}OPTION                :Use video function(s)
-${color_cyan}${bold_start}    -p ${bold_end}${color_reset}VIDEO_FILEPATH     :play video
-${color_green}${bold_start}bth ${bold_end}${color_reset}                      :Open bluetooth manager
-${color_green}${bold_start}batt ${bold_end}${color_reset}OPTION               :Use battery function(s)
-${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                   :show battery capacity
-${color_green}${bold_start}dev ${bold_end}${color_reset}                      :Show available device(s)
-${color_green}${bold_start}reso ${bold_end}${color_reset}[DEVICE RESOLUTION]  :Set screen resolution
-${color_green}${bold_start}bri ${bold_end}${color_reset}[DEVICE BRIGHTNESS]   :Set screen brightness
-${color_green}${bold_start}tcpd ${bold_end}${color_reset}                     :Configure touchpad device
-${color_green}${bold_start}wifi ${bold_end}${color_reset}[SSID]               :Scan or connect to a Wi-Fi using nmcli
-${color_green}${bold_start}thttp ${bold_end}${color_reset}OPTIONS...          :Test and benchmark HTTP URL
-${color_cyan}${bold_start}    -c ${bold_end}${color_reset}NUM                :concurrent
-${color_cyan}${bold_start}    -r ${bold_end}${color_reset}NUM                :retry
-${color_cyan}${bold_start}    -t ${bold_end}${color_reset}SECONDS            :time duration
-${color_cyan}${bold_start}    -header ${bold_end}${color_reset}TEXT          :header
-${color_cyan}${bold_start}    -userAgent ${bold_end}${color_reset}TEXT       :user agent
-${color_cyan}${bold_start}    -contentType ${bold_end}${color_reset}TEXT     :content type
-${color_cyan}${bold_start}    -u ${bold_end}${color_reset}URL                :url
-${color_green}${bold_start}ss ${bold_end}${color_reset}[OPTION]               :Take a screenshot
-${color_cyan}${bold_start}    -a ${bold_end}${color_reset}                   :area
-${color_cyan}${bold_start}    -f ${bold_end}${color_reset}                   :fullscreen
-${color_green}${bold_start}stp ${bold_end}${color_reset}OPTION                :Use setup function(s)
-${color_cyan}${bold_start}    -fa ${bold_end}${color_reset}                  :setup fresh Arch Linux installation
-${color_cyan}${bold_start}    -fai3 ${bold_end}${color_reset}                :setup i3wm on a fresh Arch Linux installation
-${color_cyan}${bold_start}    -d ${bold_end}${color_reset}                   :install developer tools: DataGrip, GoLand, PyCharm, IDEA, WebStorm, \
+${color_green}${bold_start}u                         ${bold_end}${color_reset}   :Make me smarter by updating me to the latest version
+${color_green}${bold_start}v                         ${bold_end}${color_reset}   :Show my current version
+${color_green}${bold_start}r                         ${bold_end}${color_reset}   :Reveal/open my source code
+${color_green}${bold_start}p                         ${bold_end}${color_reset}   :Print my source code
+${color_green}${bold_start}w                         ${bold_end}${color_reset}   :Open my command window. You may create a keyboard shortcut for this command to open my command window directly
+${color_green}${bold_start}run ${bold_end}${color_reset}OPTION | COMMANDS...     :Run custom command(s)
+${color_cyan}${bold_start}    -l                    ${bold_end}${color_reset}   :get list custom command(s)
+${color_cyan}${bold_start}    -s                    ${bold_end}${color_reset}   :set new custom command
+${color_cyan}${bold_start}    -r ${bold_end}${color_reset}COMMANDS...           :remove custom command(s)
+${color_cyan}${bold_start}    -cd                   ${bold_end}${color_reset}   :change custom command description
+${color_cyan}${bold_start}    -cc                   ${bold_end}${color_reset}   :change custom command
+${color_green}${bold_start}ai ${bold_end}${color_reset}[OPTION]                  :Use AI function(s). Supported AI: Google, ChatGPT
+${color_cyan}${bold_start}    -p ${bold_end}${color_reset}PROMPT_TEXT           :prompt to AI
+${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                      :start AI chat session
+${color_cyan}${bold_start}    -i ${bold_end}${color_reset}                      :show AI information
+${color_cyan}${bold_start}    -s ${bold_end}${color_reset}                      :set AI config
+${color_cyan}${bold_start}    -ct ${bold_end}${color_reset}                     :change AI type
+${color_cyan}${bold_start}    -cm ${bold_end}${color_reset}                     :change AI model
+${color_cyan}${bold_start}    -ca ${bold_end}${color_reset}                     :change AI api key
+${color_green}${bold_start}open ${bold_end}${color_reset}PACKAGES...             :Open package(s)
+${color_green}${bold_start}kill ${bold_end}${color_reset}NAMES...                :Kill package(s) process
+${color_green}${bold_start}ins ${bold_end}${color_reset}PACKAGES...              :Install package(s)
+${color_green}${bold_start}rm ${bold_end}${color_reset}PACKAGES...               :Remove package(s)
+${color_green}${bold_start}upg ${bold_end}${color_reset}[PACKAGES...]            :Upgrade package(s)
+${color_green}${bold_start}srch ${bold_end}${color_reset}TEXT...                 :Search for the given keyword(s) using a terminal browser
+${color_green}${bold_start}au ${bold_end}${color_reset}[OPTION]                  :Use audio function(s)
+${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                      :show audio cards
+${color_cyan}${bold_start}    -p ${bold_end}${color_reset}AUDIO_FILEPATHS...    :play audio
+${color_green}${bold_start}img ${bold_end}${color_reset}OPTION                   :Use image function(s)
+${color_cyan}${bold_start}    -s ${bold_end}${color_reset}IMAGE_FILEPATHS...    :show image
+${color_green}${bold_start}vid ${bold_end}${color_reset}OPTION                   :Use video function(s)
+${color_cyan}${bold_start}    -p ${bold_end}${color_reset}VIDEO_FILEPATH        :play video
+${color_green}${bold_start}bth ${bold_end}${color_reset}                         :Open bluetooth manager
+${color_green}${bold_start}batt ${bold_end}${color_reset}OPTION                  :Use battery function(s)
+${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                      :show battery capacity
+${color_green}${bold_start}repl ${bold_end}${color_reset}OPTION                  :Use replace function(s)
+${color_cyan}${bold_start}    -if ${bold_end}${color_reset}OLD NEW FILEPATHS... :replace in files
+${color_green}${bold_start}dev ${bold_end}${color_reset}                         :Show available device(s)
+${color_green}${bold_start}reso ${bold_end}${color_reset}[DEVICE RESOLUTION]     :Set screen resolution
+${color_green}${bold_start}bri ${bold_end}${color_reset}[DEVICE BRIGHTNESS]      :Set screen brightness
+${color_green}${bold_start}tcpd ${bold_end}${color_reset}                        :Configure touchpad device
+${color_green}${bold_start}wifi ${bold_end}${color_reset}[SSID]                  :Scan or connect to a Wi-Fi using nmcli
+${color_green}${bold_start}thttp ${bold_end}${color_reset}OPTIONS...             :Test and benchmark HTTP URL
+${color_cyan}${bold_start}    -c ${bold_end}${color_reset}NUM                   :concurrent
+${color_cyan}${bold_start}    -r ${bold_end}${color_reset}NUM                   :retry
+${color_cyan}${bold_start}    -t ${bold_end}${color_reset}SECONDS               :time duration
+${color_cyan}${bold_start}    -header ${bold_end}${color_reset}TEXT             :header
+${color_cyan}${bold_start}    -userAgent ${bold_end}${color_reset}TEXT          :user agent
+${color_cyan}${bold_start}    -contentType ${bold_end}${color_reset}TEXT        :content type
+${color_cyan}${bold_start}    -u ${bold_end}${color_reset}URL                   :url
+${color_green}${bold_start}ss ${bold_end}${color_reset}[OPTION]                  :Take a screenshot
+${color_cyan}${bold_start}    -a ${bold_end}${color_reset}                      :area
+${color_cyan}${bold_start}    -f ${bold_end}${color_reset}                      :fullscreen
+${color_green}${bold_start}stp ${bold_end}${color_reset}OPTION                   :Use setup function(s)
+${color_cyan}${bold_start}    -fa ${bold_end}${color_reset}                     :setup fresh Arch Linux installation
+${color_cyan}${bold_start}    -fai3 ${bold_end}${color_reset}                   :setup i3wm on a fresh Arch Linux installation
+${color_cyan}${bold_start}    -d ${bold_end}${color_reset}                      :install developer tools: DataGrip, GoLand, PyCharm, IDEA, WebStorm, \
 RustRover, Go, NVM, Rust, PyEnv, Postman, Docker, Git, Vim, Meld, Sublime Text
-${color_cyan}${bold_start}    -ag ${bold_end}${color_reset}                  :install gaming tools on Arch Linux: Steam, Graphical Drivers
-${color_green}${bold_start}intmb ${bold_end}${color_reset}OPTION              :Use Intel MacBook function(s)
-${color_cyan}${bold_start}    -a ${bold_end}${color_reset}                   :configure audio
-${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                   :configure camera
-${color_cyan}${bold_start}    -b ${bold_end}${color_reset}                   :configure bluetooth
-${color_cyan}${bold_start}    -f ${bold_end}${color_reset}[SPEED]            :set fan speed
+${color_cyan}${bold_start}    -ag ${bold_end}${color_reset}                     :install gaming tools on Arch Linux: Steam, Graphical Drivers
+${color_green}${bold_start}intmb ${bold_end}${color_reset}OPTION                 :Use Intel MacBook function(s)
+${color_cyan}${bold_start}    -a ${bold_end}${color_reset}                      :configure audio
+${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                      :configure camera
+${color_cyan}${bold_start}    -b ${bold_end}${color_reset}                      :configure bluetooth
+${color_cyan}${bold_start}    -f ${bold_end}${color_reset}[SPEED]               :set fan speed
         " | while IFS=: read -r name description; do
             printout_no_enter "$name"
-            printout "$description" | fold -s -w $(($(tput cols) - 27)) | sed '2,$s/^/                           /'
+            printout "$description" | fold -s -w $(($(tput cols) - 30)) | sed '2,$s/^/                              /'
         done
 
         printout "$(printout "\
@@ -968,6 +970,55 @@ command_batt() {
         fi
 
         return 0
+    fi
+
+    printout "Aborted!"
+}
+
+command_repl() {
+    if is_no_argument "$@"; then
+        printout_exit "An option is required!"
+    fi
+
+    if is_equal "$1" "-if"; then
+        shift
+
+        if is_empty "$1" || is_empty "$2"; then
+            printout_exit "Invalid input!"
+        fi
+
+        _old="$1"
+        _new="$2"
+
+        shift
+        shift
+
+        if is_no_argument "$@"; then
+            printout_exit "The targeted filepath is required!"
+        fi
+
+        printout_blank_line
+        printout "You're about to"
+        printout_blank_line
+        printout "\
+Replace: $_old
+With: $_new
+In: $*"
+
+        printout_no_enter "
+Are you sure? [N/y] "
+
+        _confirmation=$(read_input)
+
+        if ! is_equal "$_confirmation" "y"; then
+            printout_exit "Aborted!"
+        fi
+
+        sed -i "s/$_old/$_new/g" $@
+
+        printout "Ok"
+
+        return
     fi
 
     printout "Aborted!"
