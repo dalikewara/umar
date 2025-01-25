@@ -2,8 +2,9 @@
 
 ## 2025
 
-- **v3.3.0** (2025-01-25)
+- **v3.3.0 - v3.3.1** (2025-01-25)
   - Add `repl` command
+  - Fix some issues
 
 - **v3.2.11** (2025-01-24)
   - Fix some issues
