@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.3.1"
+version="v3.3.2"
 pid=$$
 distro=""
 de=""
@@ -102,6 +102,7 @@ ${color_green}${bold_start}batt ${bold_end}${color_reset}OPTION                 
 ${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                      :show battery capacity
 ${color_green}${bold_start}repl ${bold_end}${color_reset}OPTION                  :Use replace function(s)
 ${color_cyan}${bold_start}    -if ${bold_end}${color_reset}OLD NEW FILEPATHS... :replace in files
+${color_cyan}${bold_start}    -id ${bold_end}${color_reset}OLD NEW DIR_PATHS... :replace in directories
 ${color_green}${bold_start}dev ${bold_end}${color_reset}                         :Show available device(s)
 ${color_green}${bold_start}reso ${bold_end}${color_reset}[DEVICE] [RESOLUTION]   :Set screen resolution
 ${color_green}${bold_start}bri ${bold_end}${color_reset}[DEVICE] [BRIGHTNESS]    :Set screen brightness
@@ -980,7 +981,11 @@ command_repl() {
         printout_exit "An option is required!"
     fi
 
-    if is_equal "$1" "-if"; then
+    _option="$1"
+    _old=""
+    _new=""
+
+    if is_equal "$_option" "-if" || is_equal "$_option" "-id"; then
         shift
 
         if is_empty "$1" || is_empty "$2"; then
@@ -994,18 +999,36 @@ command_repl() {
         shift
 
         if is_no_argument "$@"; then
-            printout_exit "The targeted filepath is required!"
+            if is_equal "$_option" "-if"; then
+                printout_exit "The targeted filepath is required!"
+            fi
+
+            if is_equal "$_option" "-id"; then
+                printout_exit "The targeted directory is required!"
+            fi
         fi
+
+        _target_paths="$*"
 
         printout_blank_line
         printout "You're about to"
         printout_blank_line
         printout "\
-Replace: $_old
-With: $_new
-In: $*"
+Replace: ${bold_start}$_old${bold_end}
+With: ${bold_start}$_new${bold_end}
+Targets: ${bold_start}$_target_paths${bold_end}"
+
+        if is_equal "$_option" "-id"; then
+            _target_dirs="$_target_paths"
+            _target_paths=$(get_files_from_directories $_target_dirs)
+
+            printout "\
+Filepaths: ${bold_start}$_target_paths${bold_end}"
+        fi
 
         printout_no_enter "
+${color_red}${bold_start}WARNING!!! MAY BREAK YOUR SYSTEM!!! Don't do this if you're not aware!!!${bold_end}${color_reset}
+
 Are you sure? [N/y] "
 
         _confirmation=$(read_input)
@@ -1014,7 +1037,7 @@ Are you sure? [N/y] "
             printout_exit "Aborted!"
         fi
 
-        sed -i "s/$_old/$_new/g" $@
+        sed -i "s/$_old/$_new/g" $_target_paths
 
         printout "Ok"
 
@@ -2597,6 +2620,38 @@ get_tmp_value() {
     read_file_content "$__tmp_filepath"
 
     clear_tmp_value
+}
+
+get_files_from_directory() {
+    find "$1" -print0 | while IFS= read -r -d $'' __filepath; do
+        if is_file_exist "$__filepath"; then
+            __tmp_filepath_content="$(get_tmp_value)"
+
+            if is_empty "$__tmp_filepath_content"; then
+                write_to_tmp_value_file "$__filepath"
+            else
+                write_to_tmp_value_file "$__tmp_filepath_content $__filepath"
+            fi
+        fi
+    done
+
+    get_tmp_value
+}
+
+get_files_from_directories() {
+    __dir_filepaths=""
+
+    while [ $# -gt 0 ]; do
+        __found_filepath=$(get_files_from_directory "$1")
+
+        if ! is_empty "$__found_filepath"; then
+            __dir_filepaths="$__dir_filepaths $__found_filepath"
+        fi
+
+        shift
+    done
+
+    echo "$__dir_filepaths"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
