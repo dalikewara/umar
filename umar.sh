@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.3.3"
+version="v3.3.4"
 pid=$$
 distro=""
 de=""
@@ -239,7 +239,7 @@ command_run() {
                 continue
             fi
 
-            printf "${color_green}%-20s ${color_reset}%-30s ${color_cyan}%b${color_reset}\n\n" "$_name" "$_description" "$(head -n 5 -v $_command)"
+            printf "${color_green}${bold_start}%-20s ${bold_end}${color_reset}%-30s ${color_cyan}%b${color_reset}\n\n" "$_name" "$_description" "$(head -n 5 -v $_command)"
         done
 
         return 0
@@ -442,7 +442,7 @@ command_run() {
 
                 write_to_tmp_value_file "exist"
 
-                printout "\n${color_green}$_name${color_reset} >_ ${color_cyan}$(head -n 5 -v $_command)${color_reset}\n"
+                printout "\n${color_green}${bold_start}$_name${bold_end}${color_reset} >_ ${color_cyan}$(head -n 5 -v $_command)${color_reset}\n"
 
                 execute_eval "$_command"
 
@@ -453,7 +453,7 @@ command_run() {
         done
 
         if ! is_equal "$(get_tmp_value)" "exist"; then
-            printout "${color_green}$_arg${color_reset} command not found!"
+            printout "${color_green}${bold_start}$_arg${bold_end}${color_reset} command not found!"
         fi
     done
 }
