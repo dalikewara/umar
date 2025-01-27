@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.3.2"
+version="v3.3.3"
 pid=$$
 distro=""
 de=""
@@ -221,8 +221,10 @@ command_run() {
         printout_exit "An option or command(s) is required!"
     fi
 
+    _cfg_dir="$HOME/.umar/run"
     _cfg_filepath="$HOME/.umar/run-list.cfg"
 
+    create_dir "$_cfg_dir"
     create_file "$_cfg_filepath"
 
     if is_equal "$1" "-l"; then
@@ -237,7 +239,7 @@ command_run() {
                 continue
             fi
 
-            printf "${color_green}%-20s ${color_reset}%-30s ${color_cyan}%b${color_reset}\n" "$_name" "$_description" "$_command"
+            printf "${color_green}%-20s ${color_reset}%-30s ${color_cyan}%b${color_reset}\n\n" "$_name" "$_description" "$(head -n 5 -v $_command)"
         done
 
         return 0
@@ -294,17 +296,22 @@ command_run() {
             printout_exit "The description can't contain a colon!"
         fi
 
-        printout_no_enter "Enter the execution command... "
+        _command="$_cfg_dir/$_name.sh"
 
-        _command=$(read_input)
+        create_file "$_command"
 
-        if is_empty "$_command"; then
-            printout_exit "The execution command can't be empty!"
-        fi
+        write_to_file "\
+#!/bin/sh
 
+" "$_command"
+        
+        chmod +x "$_command"
+        
         _cfg=$(append_content_to_file "$_name:$_description:$_command" "$_cfg_filepath")
 
         write_to_file "$_cfg" "$_cfg_filepath"
+
+        vim + "$_command"
 
         printout "Ok"
         
@@ -322,6 +329,7 @@ command_run() {
             read_file_content "$_cfg_filepath" | while IFS=: read -r _name_config _ _; do
                 if is_equal "$_arg" "$_name_config" && ! is_empty "$_name_config"; then
                     delete_line_from_file_by_keyword "$_name_config:" "$_cfg_filepath"
+                    rm "$_cfg_dir/$_name_config.sh"
 
                     break
                 fi
@@ -398,21 +406,7 @@ command_run() {
             printout_exit "${color_green}$_name${color_reset} command not found!"
         fi
 
-        printout_no_enter "Enter the execution command... "
-
-        _command=$(read_input)
-
-        if is_empty "$_command"; then
-            printout_exit "The execution command can't be empty!"
-        fi
-
-        read_file_content "$_cfg_filepath" | while IFS=: read -r _name_config _description_config _; do
-            if is_equal "$_name" "$_name_config" && ! is_empty "$_name_config"; then
-                change_file_content_line_by_keyword "$_name_config:" "$_name_config:$_description_config:$_command" "$_cfg_filepath"
-                
-                break
-            fi
-        done
+        vim "$_cfg_dir/$_name.sh"
 
         return 0
     fi
@@ -448,7 +442,7 @@ command_run() {
 
                 write_to_tmp_value_file "exist"
 
-                printout "\n${color_green}$_name${color_reset} >_ ${color_cyan}$_command${color_reset}\n"
+                printout "\n${color_green}$_name${color_reset} >_ ${color_cyan}$(head -n 5 -v $_command)${color_reset}\n"
 
                 execute_eval "$_command"
 

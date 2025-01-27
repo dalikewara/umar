@@ -2,6 +2,9 @@
 
 ## 2025
 
+- **v3.3.3** (2025-01-27)
+  - Fix some issues
+
 - **v3.3.2** (2025-01-26)
   - Add option `-id` on `repl` command
   - Fix some issues
