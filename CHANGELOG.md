@@ -2,6 +2,10 @@
 
 ## 2025
 
+- **v3.4.0** (2025-02-01)
+  - Add `pdf` command
+  - Fix some issues
+
 - **v3.3.3 - v3.3.4** (2025-01-27)
   - Fix some issues
 

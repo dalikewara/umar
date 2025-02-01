@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.3.4"
+version="v3.4.0"
 pid=$$
 distro=""
 de=""
@@ -91,18 +91,20 @@ ${color_green}${bold_start}rm ${bold_end}${color_reset}PACKAGES...              
 ${color_green}${bold_start}upg ${bold_end}${color_reset}[PACKAGES...]            :Upgrade package(s)
 ${color_green}${bold_start}srch ${bold_end}${color_reset}TEXT...                 :Search for the given keyword(s) using a terminal browser
 ${color_green}${bold_start}au ${bold_end}${color_reset}[OPTION]                  :Use audio function(s)
-${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                      :show audio cards
-${color_cyan}${bold_start}    -p ${bold_end}${color_reset}AUDIO_FILEPATHS...    :play audio
+${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                      :show audio card(s)
+${color_cyan}${bold_start}    -p ${bold_end}${color_reset}AUDIO_FILEPATHS...    :play audio(s)
 ${color_green}${bold_start}img ${bold_end}${color_reset}OPTION                   :Use image function(s)
-${color_cyan}${bold_start}    -s ${bold_end}${color_reset}IMAGE_FILEPATHS...    :show image
+${color_cyan}${bold_start}    -s ${bold_end}${color_reset}IMAGE_FILEPATHS...    :show image(s)
 ${color_green}${bold_start}vid ${bold_end}${color_reset}OPTION                   :Use video function(s)
 ${color_cyan}${bold_start}    -p ${bold_end}${color_reset}VIDEO_FILEPATH        :play video
 ${color_green}${bold_start}bth ${bold_end}${color_reset}                         :Open bluetooth manager
 ${color_green}${bold_start}batt ${bold_end}${color_reset}OPTION                  :Use battery function(s)
 ${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                      :show battery capacity
 ${color_green}${bold_start}repl ${bold_end}${color_reset}OPTION                  :Use replace function(s)
-${color_cyan}${bold_start}    -if ${bold_end}${color_reset}OLD NEW FILEPATHS... :replace in files
+${color_cyan}${bold_start}    -if ${bold_end}${color_reset}OLD NEW FILEPATHS... :replace in file(s)
 ${color_cyan}${bold_start}    -id ${bold_end}${color_reset}OLD NEW DIR_PATHS... :replace in directories
+${color_green}${bold_start}pdf ${bold_end}${color_reset}OPTION                   :Use PDF function(s)
+${color_cyan}${bold_start}    -o ${bold_end}${color_reset}PDF_FILEPATHS...      :open PDF(s)
 ${color_green}${bold_start}dev ${bold_end}${color_reset}                         :Show available device(s)
 ${color_green}${bold_start}reso ${bold_end}${color_reset}[DEVICE] [RESOLUTION]   :Set screen resolution
 ${color_green}${bold_start}bri ${bold_end}${color_reset}[DEVICE] [BRIGHTNESS]    :Set screen brightness
@@ -1039,6 +1041,28 @@ Are you sure? [N/y] "
     fi
 
     printout "Aborted!"
+}
+
+command_pdf() {
+    if is_no_argument "$@"; then
+        printout_exit "An option is required!"
+    fi
+
+    check_requirements "deepin-reader"
+
+    if is_equal "$1" "-o"; then
+        shift
+
+        if is_no_argument "$@"; then
+            printout_exit "You didn't provide any pdf(s) to open!"
+        fi
+
+        deepin-reader "$@" > /dev/null 2>&1 &
+
+        return 0
+    fi
+
+    printout_exit "Aborted!"
 }
 
 command_dev() {
