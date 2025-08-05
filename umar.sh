@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.4.5"
+version="v3.4.6"
 pid=$$
 distro=""
 de=""
@@ -51,6 +51,10 @@ umar() {
         de="lxde"
     elif is_file_exist "/usr/share/xsessions/i3.desktop"; then
         de="i3wm"
+    fi
+
+    if ! is_dir_exist "$HOME"; then
+        create_dir "$HOME"
     fi
 
     create_dir "$HOME/.umar"
