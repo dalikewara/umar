@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.4.11"
+version="v3.4.12"
 pid=$$
 distro=""
 de=""
@@ -1929,6 +1929,8 @@ killall xfconfd || true
         sed -i 's/xclock/\#xclock/g' "$_xinitrc_filepath"
         sed -i 's/\"\$exec xterm/\#\"\$exec xterm/g' "$_xinitrc_filepath"
         sed -i 's/\$exec xterm/\#\$exec xterm/g' "$_xinitrc_filepath"
+        sed -i 's/exec \"\$xterm/\#exec \"\$xterm/g' "$_xinitrc_filepath"
+        sed -i 's/exec \"xterm/\#exec \"xterm/g' "$_xinitrc_filepath"
         sed -i 's/exec xterm/\#exec xterm/g' "$_xinitrc_filepath"
         sed -i 's/\"\$xterm/\#\"\$xterm/g' "$_xinitrc_filepath"
         sed -i 's/\$xterm/\#\$xterm/g' "$_xinitrc_filepath"
