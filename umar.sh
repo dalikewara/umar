@@ -1915,9 +1915,13 @@ killall xfconfd || true
 
         printout "Configuring .xinitrc..."
 
+        sed -i 's/\$twm \&/\#\$twm \&/g' "$_xinitrc_filepath"
         sed -i 's/twm \&/\#twm \&/g' "$_xinitrc_filepath"
+        sed -i 's/\$xclock/\#\$xclock/g' "$_xinitrc_filepath"
         sed -i 's/xclock/\#xclock/g' "$_xinitrc_filepath"
+        sed -i 's/\$exec xterm/\#\$exec xterm/g' "$_xinitrc_filepath"
         sed -i 's/exec xterm/\#exec xterm/g' "$_xinitrc_filepath"
+        sed -i 's/\$xterm/\#\$xterm/g' "$_xinitrc_filepath"
         sed -i 's/xterm/\#xterm/g' "$_xinitrc_filepath"
 
         if ! grep -qF "$_config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_launch_filepath &" "$_xinitrc_filepath"; then
