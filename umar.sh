@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.4.3"
+version="v3.4.4"
 pid=$$
 distro=""
 de=""
@@ -1870,7 +1870,7 @@ killall xfconfd || true
         check_requirements "tar" "wget" "gzip"
 
         if is_arch; then
-            install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "make" "openssh" "docker" "docker-compose"
+            install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "make" "openssh" "docker" "docker-compose" || printout_exit "Aborted!"
         elif is_debian; then
             install_package "ca-certificates" "curl"
 
@@ -1882,9 +1882,9 @@ killall xfconfd || true
                 $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
             
             install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "make" "openssh" \
-                "docker-ce" "docker-ce-cli" "containerd.io" "docker-buildx-plugin" "docker-compose-plugin"
+                "docker-ce" "docker-ce-cli" "containerd.io" "docker-buildx-plugin" "docker-compose-plugin" || printout_exit "Aborted!"
         else
-            install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "make" "openssh"
+            install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "make" "openssh" || printout_exit "Aborted!"
         fi
 
         printout "Configuring ssh..."
@@ -2241,7 +2241,7 @@ killall xfconfd || true
 
         install_package "xdg-desktop-portal" "lib32-systemd" "xf86-video-vesa" "lib32-mesa" "lib32-vulkan-radeon" "lib32-amdvlk" \
             "lib32-vulkan-intel" "lib32-nvidia-utils" "ttf-liberation" "steam" "nvidia-utils" "vulkan-nouveau" "lib32-vulkan-nouveau" \
-            "vulkan-radeon" "amdvlk" "vulkan-swrast" "lib32-vulkan-swrast" "vulkan-tools" "vulkan-icd-loader" "lib32-vulkan-icd-loader"
+            "vulkan-radeon" "amdvlk" "vulkan-swrast" "lib32-vulkan-swrast" "vulkan-tools" "vulkan-icd-loader" "lib32-vulkan-icd-loader" || printout_exit "Aborted!"
 
         printout "Ok"
 
