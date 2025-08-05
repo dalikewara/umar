@@ -1830,6 +1830,7 @@ fi
         sed -i 's/format\-prefix \= \"RAM \"/format\-prefix \= \"R\"/g' "$_config_polybar_filepath"
         sed -i 's/format\-prefix \= \"CPU \"/format\-prefix \= \"C\"/g' "$_config_polybar_filepath"
         sed -i 's/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%essid\% \%local_ip\%/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%essid\:0\:10\:\.\.\.\% \%local_ip\%\nlabel\-maxlen \= 40/g' "$_config_polybar_filepath"
+        sed -i 's/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%local_ip\%\nlabel\-maxlen \= 40/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%local_ip\%/g' "$_config_polybar_filepath"
         sed -i 's/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%local_ip\%/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%local_ip\%\nlabel\-maxlen \= 40/g' "$_config_polybar_filepath"
         sed -i 's/date \= \%H\:\%M/date \= \%Y\-\%m\-\%d \%H\:\%M\:\%S/g' "$_config_polybar_filepath"
 
