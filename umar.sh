@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.4.2"
+version="v3.4.3"
 pid=$$
 distro=""
 de=""
@@ -1425,7 +1425,7 @@ command_stp() {
             "xf86-video-nouveau" "freetype2" "libglvnd" "deepin-reader" "cpio" "imagemagick" "bluez" "bluez-utils" "linux-firmware-qlogic" \
             "linux-firmware-bnx2x" "linux-firmware-liquidio" "linux-firmware-mellanox" "linux-firmware-nfp" "gcc" "linux-lts-headers" "dkms" \
             "vulkan-tools" "vulkan-icd-loader" "nvidia-utils" "vulkan-nouveau" "amdvlk" "vulkan-swrast" "yad" "linux" "linux-headers" \
-            "xfce4-screenshooter"
+            "xfce4-screenshooter" "gtk3" || printout_exit "Aborted!"
 
         printout "Configuring ssh..."
 
@@ -1508,7 +1508,7 @@ command_stp() {
 gtk-icon-theme-name = Adwaita
 gtk-theme-name = Adwaita
 gtk-font-name = DejaVu Sans 11
-gtk-application-prefer-dark-theme = true
+gtk-application-prefer-dark-theme = 1
 " >> "$_config_gtk3_filepath"
         fi
 
@@ -1563,7 +1563,7 @@ gtk-application-prefer-dark-theme = true
         install_package "i3" "xorg" "xorg-xinit" "xfce4-terminal" "polybar" "pavucontrol" "xorg-server" "xorg-xrandr" "xorg-xinput" "bluez-utils" "yad" \
             "libinput" "xf86-input-libinput" "amd-ucode" "intel-ucode" "intel-media-driver" "mesa" "xf86-video-amdgpu" "libva-intel-driver" \
             "vulkan-intel" "xf86-video-ati" "libva-mesa-driver" "vulkan-radeon" "xf86-video-nouveau" "vulkan-tools" "vulkan-icd-loader" "nvidia-utils" \
-            "vulkan-nouveau" "amdvlk" "vulkan-swrast"
+            "vulkan-nouveau" "amdvlk" "vulkan-swrast" "gtk3" || printout_exit "Aborted!"
         
         printout "Copying .xinitrc..."
 
@@ -1607,6 +1607,26 @@ fi
             if ! grep -qF "[[ \$- != *i* ]] && return" "$_bashrc_filepath"; then
                 echo "[[ \$- != *i* ]] && return" >> "$_bashrc_filepath"
             fi
+        fi
+
+        printout "Configuring dark theme..."
+
+        if ! is_dir_exist "$_config_gtk3_dir"; then
+            create_dir "$_config_gtk3_dir"
+        fi
+
+        if ! is_file_exist "$_config_gtk3_filepath"; then
+            create_file "$_config_gtk3_filepath"
+        fi
+
+        if ! grep -qF "[Settings]" "$_config_gtk3_filepath"; then
+            echo "\
+[Settings]
+gtk-icon-theme-name = Adwaita
+gtk-theme-name = Adwaita
+gtk-font-name = DejaVu Sans 11
+gtk-application-prefer-dark-theme = 1
+" >> "$_config_gtk3_filepath"
         fi
 
         printout "Configuring i3wm..."
