@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.4.6"
+version="v3.4.7"
 pid=$$
 distro=""
 de=""
