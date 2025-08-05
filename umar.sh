@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.4.8"
+version="v3.4.9"
 pid=$$
 distro=""
 de=""
@@ -1918,7 +1918,7 @@ killall xfconfd || true
         sed -i 's/\"\$twm \&/\#\"\$twm \&/g' "$_xinitrc_filepath"
         sed -i 's/\$twm \&/\#\$twm \&/g' "$_xinitrc_filepath"
         sed -i 's/twm \&/\#twm \&/g' "$_xinitrc_filepath"
-        sed -i 's/\"\$twm /\#\"\$twm /g' "$_xinitrc_filepath"
+        sed -i 's/\"\$twm/\#\"\$twm/g' "$_xinitrc_filepath"
         sed -i 's/\"\$xclock/\#\"\$xclock/g' "$_xinitrc_filepath"
         sed -i 's/\$xclock/\#\$xclock/g' "$_xinitrc_filepath"
         sed -i 's/xclock/\#xclock/g' "$_xinitrc_filepath"
