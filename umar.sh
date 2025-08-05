@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.4.0"
+version="v3.4.2"
 pid=$$
 distro=""
 de=""
@@ -1421,7 +1421,7 @@ command_stp() {
             "xorg-server" "xorg-xinput" "polkit" "pulsemixer" "xfce4-terminal" "networkmanager" "amd-ucode" "intel-ucode" "lm_sensors" "bc" "base-devel" \
             "linux-lts" "pipewire" "pipewire-audio" "pipewire-pulse" "wget" "xsensors" "unzip" "sof-firmware" "alsa-firmware" "pipewire-alsa" \
             "pipewire-jack" "wireplumber" "pavucontrol" "alsa-card-profiles" "openssh" "sudo" "xorg" "xorg-xinit" "intel-media-driver" "mesa" \
-            "xf86-video-amdgpu" "xf86-video-vmware" "libva-intel-driver" "vulkan-intel" "xf86-video-ati" "libva-mesa-driver" "vulkan-radeon" \
+            "xf86-video-amdgpu" "libva-intel-driver" "vulkan-intel" "xf86-video-ati" "libva-mesa-driver" "vulkan-radeon" \
             "xf86-video-nouveau" "freetype2" "libglvnd" "deepin-reader" "cpio" "imagemagick" "bluez" "bluez-utils" "linux-firmware-qlogic" \
             "linux-firmware-bnx2x" "linux-firmware-liquidio" "linux-firmware-mellanox" "linux-firmware-nfp" "gcc" "linux-lts-headers" "dkms" \
             "vulkan-tools" "vulkan-icd-loader" "nvidia-utils" "vulkan-nouveau" "amdvlk" "vulkan-swrast" "yad" "linux" "linux-headers" \
@@ -1561,7 +1561,7 @@ gtk-application-prefer-dark-theme = true
         sudo echo "Configuring..."
 
         install_package "i3" "xorg" "xorg-xinit" "xfce4-terminal" "polybar" "pavucontrol" "xorg-server" "xorg-xrandr" "xorg-xinput" "bluez-utils" "yad" \
-            "libinput" "xf86-input-libinput" "amd-ucode" "intel-ucode" "intel-media-driver" "mesa" "xf86-video-amdgpu" "xf86-video-vmware" "libva-intel-driver" \
+            "libinput" "xf86-input-libinput" "amd-ucode" "intel-ucode" "intel-media-driver" "mesa" "xf86-video-amdgpu" "libva-intel-driver" \
             "vulkan-intel" "xf86-video-ati" "libva-mesa-driver" "vulkan-radeon" "xf86-video-nouveau" "vulkan-tools" "vulkan-icd-loader" "nvidia-utils" \
             "vulkan-nouveau" "amdvlk" "vulkan-swrast"
         
