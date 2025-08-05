@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.4.4"
+version="v3.4.5"
 pid=$$
 distro=""
 de=""
@@ -1324,6 +1324,8 @@ command_stp() {
     _config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_launch_filepath="$HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-terminal-launch.sh"
     _config_gtk3_dir="$HOME/.config/gtk-3.0"
     _config_gtk3_filepath="$HOME/.config/gtk-3.0/settings.ini"
+    _config_udiskie_dir="$HOME/.config/udiskie"
+    _config_udiskie_filepath="$HOME/.config/udiskie/config.yml"
     _config_vim_filepath="$HOME/.vimrc"
     _datagrip_dir="$HOME/.umar/datagrip"
     _datagrip_version_dir="$HOME/.umar/datagrip/DataGrip-2024.3.2"
@@ -1425,7 +1427,7 @@ command_stp() {
             "xf86-video-nouveau" "freetype2" "libglvnd" "deepin-reader" "cpio" "imagemagick" "bluez" "bluez-utils" "linux-firmware-qlogic" \
             "linux-firmware-bnx2x" "linux-firmware-liquidio" "linux-firmware-mellanox" "linux-firmware-nfp" "gcc" "linux-lts-headers" "dkms" \
             "vulkan-tools" "vulkan-icd-loader" "nvidia-utils" "vulkan-nouveau" "amdvlk" "vulkan-swrast" "yad" "linux" "linux-headers" \
-            "xfce4-screenshooter" "gtk3" || printout_exit "Aborted!"
+            "xfce4-screenshooter" "gtk3" "udisks2" "udiskie" "gvfs" "ntfs-3g" "dunst" "arandr" "autorandr" || printout_exit "Aborted!"
 
         printout "Configuring ssh..."
 
@@ -1480,6 +1482,11 @@ command_stp() {
         sudo systemctl start systemd-oomd.service || true
         sudo systemctl enable systemd-oomd.service || true
 
+        printout "Configuring input..."
+
+        sudo systemctl status systemd-udevd || true
+        sudo modprobe usbhid || true
+
         if is_file_exist "$_grub_filepath"; then
             printout "Configuring grub..."
 
@@ -1510,6 +1517,34 @@ gtk-theme-name = Adwaita
 gtk-font-name = DejaVu Sans 11
 gtk-application-prefer-dark-theme = 1
 " >> "$_config_gtk3_filepath"
+        fi
+
+        printout "Configuring udiskie..."
+
+        if ! is_dir_exist "$_config_udiskie_dir"; then
+            create_dir "$_config_udiskie_dir"
+        fi
+
+        if ! is_file_exist "$_config_udiskie_filepath"; then
+            create_file "$_config_udiskie_filepath"
+        fi
+
+        if ! grep -qF "program_options:" "$_config_udiskie_filepath"; then
+            echo "\
+program_options:
+  tray: true
+  automount: true
+  notify: true
+  smart-tray: true
+" >> "$_config_udiskie_filepath"
+        fi
+
+        if ! grep -qF "filter_options:" "$_config_udiskie_filepath"; then
+            echo "\
+filter_options:
+  ignore_internal: true
+  ignore_fs: false
+" >> "$_config_udiskie_filepath"
         fi
 
         printout "Configuring vim..."
@@ -1629,6 +1664,34 @@ gtk-application-prefer-dark-theme = 1
 " >> "$_config_gtk3_filepath"
         fi
 
+        printout "Configuring udiskie..."
+
+        if ! is_dir_exist "$_config_udiskie_dir"; then
+            create_dir "$_config_udiskie_dir"
+        fi
+
+        if ! is_file_exist "$_config_udiskie_filepath"; then
+            create_file "$_config_udiskie_filepath"
+        fi
+
+        if ! grep -qF "program_options:" "$_config_udiskie_filepath"; then
+            echo "\
+program_options:
+  tray: true
+  automount: true
+  notify: true
+  smart-tray: true
+" >> "$_config_udiskie_filepath"
+        fi
+
+        if ! grep -qF "filter_options:" "$_config_udiskie_filepath"; then
+            echo "\
+filter_options:
+  ignore_internal: true
+  ignore_fs: false
+" >> "$_config_udiskie_filepath"
+        fi
+
         printout "Configuring i3wm..."
 
         create_dir "$_config_dir"
@@ -1739,13 +1802,25 @@ fi
             echo "exec_always --no-startup-id $_config_polybar_launch_filepath" >> "$_config_i3_filepath"
         fi
 
+        if ! grep -qF "exec_always --no-startup-id udiskie --tray" "$_config_i3_filepath"; then
+            echo "exec_always --no-startup-id udiskie --tray" >> "$_config_i3_filepath"
+        fi
+
+        if ! grep -qF "exec_always --no-startup-id dunst" "$_config_i3_filepath"; then
+            echo "exec_always --no-startup-id dunst" >> "$_config_i3_filepath"
+        fi
+
+        if ! grep -qF "exec_always --no-startup-id autorandr --change" "$_config_i3_filepath"; then
+            echo "exec_always --no-startup-id autorandr --change" >> "$_config_i3_filepath"
+        fi
+
         sed -i 's/background \= \#282A2E/background \= \#000000/g' "$_config_polybar_filepath"
         sed -i 's/background\-alt \= \#373B41/background\-alt \= \#000000/g' "$_config_polybar_filepath"
         sed -i 's/\[bar\/example\]/\[bar\/bar\]/g' "$_config_polybar_filepath"
         sed -i 's/height \= 24pt/height \= 18pt/g' "$_config_polybar_filepath"
         sed -i 's/radius \= 6/radius \= 0/g' "$_config_polybar_filepath"
         sed -i 's/line\-size \= 3pt/line\-size \= 1pt/g' "$_config_polybar_filepath"
-        sed -i 's/modules\-right \= filesystem pulseaudio xkeyboard memory cpu wlan eth date/modules\-right \= filesystem pulseaudio xkeyboard memory cpu battery wlan eth bluetooth date/g' "$_config_polybar_filepath"
+        sed -i 's/modules\-right \= filesystem pulseaudio xkeyboard memory cpu wlan eth date/modules\-right \= systray filesystem pulseaudio xkeyboard memory cpu battery wlan eth bluetooth date/g' "$_config_polybar_filepath"
         sed -i 's/label \= \%title\:0\:60\:\.\.\.\%/label \= \%title\:0\:40\:\.\.\.\%\nlabel\-maxlen \= 40/g' "$_config_polybar_filepath"
         sed -i 's/format\-volume\-prefix \= \"VOL \"/format\-volume\-prefix \= \"AV\"/g' "$_config_polybar_filepath"
         sed -i 's/format\-prefix \= \"RAM \"/format\-prefix \= \"R\"/g' "$_config_polybar_filepath"
