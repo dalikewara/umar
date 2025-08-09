@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.4.13"
+version="v3.4.14"
 pid=$$
 distro=""
 de=""
@@ -1433,7 +1433,7 @@ command_stp() {
             "vulkan-tools" "vulkan-icd-loader" "nvidia-utils" "vulkan-nouveau" "amdvlk" "vulkan-swrast" "yad" "linux" "linux-headers" \
             "xfce4-screenshooter" "gtk3" "udisks2" "udiskie" "gvfs" "ntfs-3g" "dunst" "arandr" "autorandr"
 
-        check_requirements "git" "openssh"
+        check_requirements "git" "ssh"
 
         printout "Configuring ssh..."
 
@@ -2608,6 +2608,10 @@ check_requirements() {
 
         if is_equal "$__arg" "pactl"; then
             __arg="pulseaudio-utils"
+        fi
+
+        if is_equal "$__arg" "ssh"; then
+            __arg="openssh"
         fi
 
         if is_equal "$__arg" "xinput"; then
