@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.4.14"
+version="v3.4.15"
 pid=$$
 distro=""
 de=""
@@ -2805,22 +2805,22 @@ get_files_from_directories() {
 
 install_package() {
     if is_arch; then
-        sudo pacman -S "$@"
+        sudo pacman -S "$@" || printout_exit "Aborted!"
     fi
 
     if is_debian; then
         sudo apt update
-        sudo apt install "$@"
+        sudo apt install "$@" || printout_exit "Aborted!"
     fi
 
     if is_fedora; then
-        sudo dnf install "$@"
+        sudo dnf install "$@" || printout_exit "Aborted!"
     fi
 }
 
 install_package_arg_split() {
     # shellcheck disable=SC2068
-    install_package $@
+    install_package $@ || printout_exit "Aborted!"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
