@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.1"
+version="v3.5.2"
 pid=$$
 distro=""
 de=""
@@ -1459,7 +1459,7 @@ command_stp() {
             fi
         fi
 
-        install_package "git" "vim" "curl" "htop" "neofetch" "bash" "zsh" "chromium" "make" "xorg-xrandr" "libinput" "xf86-input-libinput" \
+        install_package "git" "vim" "curl" "htop" "bash" "zsh" "chromium" "make" "xorg-xrandr" "libinput" "xf86-input-libinput" \
             "xorg-server" "xorg-xinput" "polkit" "pulsemixer" "xfce4-terminal" "networkmanager" "amd-ucode" "intel-ucode" "lm_sensors" "bc" "base-devel" \
             "linux-lts" "pipewire" "pipewire-audio" "pipewire-pulse" "wget" "xsensors" "unzip" "sof-firmware" "alsa-firmware" "pipewire-alsa" \
             "pipewire-jack" "wireplumber" "pavucontrol" "alsa-card-profiles" "openssh" "sudo" "xorg" "xorg-xinit" "intel-media-driver" "mesa" \
@@ -1981,7 +1981,7 @@ killall xfconfd || true
         check_requirements "tar" "wget" "gzip"
 
         if is_arch; then
-            install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "make" "openssh" "docker" "docker-compose" || printout_exit "Aborted!"
+            install_package "git" "vim" "curl" "meld" "htop" "bash" "zsh" "make" "openssh" "docker" "docker-compose" || printout_exit "Aborted!"
         elif is_debian; then
             install_package "ca-certificates" "curl"
 
@@ -1992,10 +1992,10 @@ killall xfconfd || true
             echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
                 $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
             
-            install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "make" "openssh" \
+            install_package "git" "vim" "curl" "meld" "htop" "bash" "zsh" "make" "openssh" \
                 "docker-ce" "docker-ce-cli" "containerd.io" "docker-buildx-plugin" "docker-compose-plugin" || printout_exit "Aborted!"
         else
-            install_package "git" "vim" "curl" "meld" "htop" "neofetch" "bash" "zsh" "make" "openssh" || printout_exit "Aborted!"
+            install_package "git" "vim" "curl" "meld" "htop" "bash" "zsh" "make" "openssh" || printout_exit "Aborted!"
         fi
 
         printout "Configuring ssh..."
