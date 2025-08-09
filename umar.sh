@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.4.12"
+version="v3.4.13"
 pid=$$
 distro=""
 de=""
@@ -1431,7 +1431,9 @@ command_stp() {
             "xf86-video-nouveau" "freetype2" "libglvnd" "deepin-reader" "cpio" "imagemagick" "bluez" "bluez-utils" "linux-firmware-qlogic" \
             "linux-firmware-bnx2x" "linux-firmware-liquidio" "linux-firmware-mellanox" "linux-firmware-nfp" "gcc" "linux-lts-headers" "dkms" \
             "vulkan-tools" "vulkan-icd-loader" "nvidia-utils" "vulkan-nouveau" "amdvlk" "vulkan-swrast" "yad" "linux" "linux-headers" \
-            "xfce4-screenshooter" "gtk3" "udisks2" "udiskie" "gvfs" "ntfs-3g" "dunst" "arandr" "autorandr" || printout_exit "Aborted!"
+            "xfce4-screenshooter" "gtk3" "udisks2" "udiskie" "gvfs" "ntfs-3g" "dunst" "arandr" "autorandr"
+
+        check_requirements "git" "openssh"
 
         printout "Configuring ssh..."
 
@@ -1602,7 +1604,7 @@ filter_options:
         install_package "i3" "xorg" "xorg-xinit" "xfce4-terminal" "polybar" "pavucontrol" "xorg-server" "xorg-xrandr" "xorg-xinput" "bluez-utils" "yad" \
             "libinput" "xf86-input-libinput" "amd-ucode" "intel-ucode" "intel-media-driver" "mesa" "xf86-video-amdgpu" "libva-intel-driver" \
             "vulkan-intel" "xf86-video-ati" "libva-mesa-driver" "vulkan-radeon" "xf86-video-nouveau" "vulkan-tools" "vulkan-icd-loader" "nvidia-utils" \
-            "vulkan-nouveau" "amdvlk" "vulkan-swrast" "gtk3" || printout_exit "Aborted!"
+            "vulkan-nouveau" "amdvlk" "vulkan-swrast" "gtk3"
         
         printout "Copying .xinitrc..."
 
