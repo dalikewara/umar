@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.4.15"
+version="v3.5.0"
 pid=$$
 distro=""
 de=""
@@ -125,6 +125,9 @@ ${color_cyan}${bold_start}    -u ${bold_end}${color_reset}URL                   
 ${color_green}${bold_start}ss ${bold_end}${color_reset}[OPTION]                  :Take a screenshot
 ${color_cyan}${bold_start}    -a ${bold_end}${color_reset}                      :area
 ${color_cyan}${bold_start}    -f ${bold_end}${color_reset}                      :fullscreen
+${color_green}${bold_start}d2un ${bold_end}${color_reset}OPTION                  :Use dos2unix function(s)
+${color_cyan}${bold_start}    -f ${bold_end}${color_reset}FILEPATHS...          :Convert Windows file(s) to Unix format
+${color_cyan}${bold_start}    -d ${bold_end}${color_reset}DIRPATHS...           :Convert all Windows dir(s) contents to Unix format
 ${color_green}${bold_start}stp ${bold_end}${color_reset}OPTION                   :Use setup function(s)
 ${color_cyan}${bold_start}    -fa ${bold_end}${color_reset}                     :setup fresh Arch Linux installation
 ${color_cyan}${bold_start}    -fai3 ${bold_end}${color_reset}                   :setup i3wm on a fresh Arch Linux installation
@@ -162,6 +165,39 @@ but I'm not sure. ${color_red}**DON'T EXECUTE ANYTHING IF YOU'RE NOT SURE, IT MA
 # Provides available Umar's command(s)
 #
 # ---------------------------------------------------------------------------------------------------------------------
+
+command_d2un() {
+    if is_equal "$1" "-f"; then
+        check_requirements "dos2unix"
+
+        shift
+
+        if is_no_argument "$@"; then
+            printout_exit "You didn't provide any file(s) to convert!"
+        fi
+
+        dos2unix "$@"
+        printout "Ok"
+        return 0
+    elif is_equal "$1" "-d"; then
+        check_requirements "dos2unix"
+
+        shift
+
+        if is_no_argument "$@"; then
+            printout_exit "You didn't provide any dir(s) to procees!"
+        fi
+
+        for _arg in "$@"; do
+            find "$_arg" -type f -exec dos2unix {} \;
+        done
+
+        printout "Ok"
+        return 0
+    fi
+
+    printout_exit "Invalid option!"
+}
 
 command_u() {
     check_requirements "curl" "sudo"
@@ -1507,13 +1543,9 @@ command_stp() {
 
         printout "Configuring dark theme..."
 
-        if ! is_dir_exist "$_config_gtk3_dir"; then
-            create_dir "$_config_gtk3_dir"
-        fi
-
-        if ! is_file_exist "$_config_gtk3_filepath"; then
-            create_file "$_config_gtk3_filepath"
-        fi
+        create_dir "$_config_dir"
+        create_dir "$_config_gtk3_dir"
+        create_file "$_config_gtk3_filepath"
 
         if ! grep -qF "[Settings]" "$_config_gtk3_filepath"; then
             echo "\
@@ -1527,13 +1559,9 @@ gtk-application-prefer-dark-theme = 1
 
         printout "Configuring udiskie..."
 
-        if ! is_dir_exist "$_config_udiskie_dir"; then
-            create_dir "$_config_udiskie_dir"
-        fi
-
-        if ! is_file_exist "$_config_udiskie_filepath"; then
-            create_file "$_config_udiskie_filepath"
-        fi
+        create_dir "$_config_dir"
+        create_dir "$_config_udiskie_dir"
+        create_file "$_config_udiskie_filepath"
 
         if ! grep -qF "program_options:" "$_config_udiskie_filepath"; then
             echo "\
@@ -1555,9 +1583,7 @@ filter_options:
 
         printout "Configuring vim..."
 
-        if ! is_file_exist "$_config_vim_filepath"; then
-            create_file "$_config_vim_filepath"
-        fi
+         create_file "$_config_vim_filepath"
 
         if ! grep -qF "set tabstop=4" "$_config_vim_filepath"; then
             echo "set tabstop=4" >> "$_config_vim_filepath"
@@ -1652,13 +1678,9 @@ fi
 
         printout "Configuring dark theme..."
 
-        if ! is_dir_exist "$_config_gtk3_dir"; then
-            create_dir "$_config_gtk3_dir"
-        fi
-
-        if ! is_file_exist "$_config_gtk3_filepath"; then
-            create_file "$_config_gtk3_filepath"
-        fi
+        create_dir "$_config_dir"
+        create_dir "$_config_gtk3_dir"
+        create_file "$_config_gtk3_filepath"
 
         if ! grep -qF "[Settings]" "$_config_gtk3_filepath"; then
             echo "\
@@ -1672,13 +1694,9 @@ gtk-application-prefer-dark-theme = 1
 
         printout "Configuring udiskie..."
 
-        if ! is_dir_exist "$_config_udiskie_dir"; then
-            create_dir "$_config_udiskie_dir"
-        fi
-
-        if ! is_file_exist "$_config_udiskie_filepath"; then
-            create_file "$_config_udiskie_filepath"
-        fi
+        create_dir "$_config_dir"
+        create_dir "$_config_udiskie_dir"
+        create_file "$_config_udiskie_filepath"
 
         if ! grep -qF "program_options:" "$_config_udiskie_filepath"; then
             echo "\
@@ -1700,7 +1718,6 @@ filter_options:
 
         printout "Configuring i3wm..."
 
-        create_dir "$_config_dir"
         create_dir "$_config_i3_dir"
         create_dir "$_config_i3status_dir"
         create_dir "$_config_polybar_dir"
@@ -1883,10 +1900,7 @@ format-foreground = \${colors.primary}
         create_dir "$_config_xfce4_dir"
         create_dir "$_config_xfce4_xfconf_dir"
         create_dir "$_config_xfce4_xfconf_xfce_perchannel_xml_dir"
-
-        if ! is_file_exist "$_config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_filepath"; then
-            create_file "$_config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_filepath"
-        fi
+        create_file "$_config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_filepath"
 
         if ! is_file_exist "$_config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_launch_filepath"; then
             create_file "$_config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_launch_filepath"
@@ -1996,9 +2010,7 @@ killall xfconfd || true
 
         printout "Configuring vim..."
 
-        if ! is_file_exist "$_config_vim_filepath"; then
-            create_file "$_config_vim_filepath"
-        fi
+        create_file "$_config_vim_filepath"
 
         if ! grep -qF "set tabstop=4" "$_config_vim_filepath"; then
             echo "set tabstop=4" >> "$_config_vim_filepath"
@@ -2850,6 +2862,17 @@ remove_trailing_comma() {
 
 # ---------------------------------------------------------------------------------------------------------------------
 #
+# `clean`
+# Cleans something
+#
+# ---------------------------------------------------------------------------------------------------------------------
+
+clean_fancy_quotes() {
+    echo "$1" | tr '‘’“”' "\'\'\"\""
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
+#
 # `upgrade`
 # Upgrades something
 #
@@ -2989,14 +3012,18 @@ delete_line_from_file_by_keyword() {
 # ---------------------------------------------------------------------------------------------------------------------
 
 create_dir() {
-    if ! is_dir_exist "$1"; then
-        mkdir "$1"
+    __dir_to_be_created="$(clean_fancy_quotes "$1")"
+
+    if ! is_dir_exist "$__dir_to_be_created"; then
+        mkdir "$__dir_to_be_created"
     fi
 }
 
 create_file() {
-    if ! is_file_exist "$1"; then
-        touch "$1" || echo "" > "$1"
+    __file_to_be_created="$(clean_fancy_quotes "$1")"
+
+    if ! is_file_exist "$__file_to_be_created"; then
+        touch "$__file_to_be_created" || echo "" > "$__file_to_be_created"
     fi
 }
 
