@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.4"
+version="v3.5.5"
 pid=$$
 distro=""
 de=""
@@ -1507,6 +1507,7 @@ command_stp() {
 
         sudo modprobe btusb
         sudo usermod -G lp -a "$(whoami)" || true
+        sudo groupadd bluetooth || true
         sudo usermod -G bluetooth -a "$(whoami)" || true
         sudo usermod -G lp -a root || true
         sudo usermod -G bluetooth -a root || true
