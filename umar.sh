@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.5"
+version="v3.5.6"
 pid=$$
 distro=""
 de=""
@@ -1843,6 +1843,8 @@ fi
             echo "exec_always --no-startup-id xfce4-terminal" >> "$_config_i3_filepath"
         fi
 
+        sed -i 's/\%percentage_used\:2\%\%/\%percentage_used\%\%/g' "$_config_polybar_filepath"
+        sed -i 's/\%percentage\:2\%\%/\%percentage\%\%/g' "$_config_polybar_filepath"
         sed -i 's/label\-mounted \= \%{F\#F0C674}\%mountpoint\%\%{F\-} \%percentage_used\%\%/label\-mounted \= 📂 \%percentage_used\%\%/g' "$_config_polybar_filepath"
         sed -i 's/font\-0 \= monospace\;2/font\-0 \= monospace\:style\=Regular\:size\=10\nfont\-1 \= Noto Color Emoji\:scale\=10/g' "$_config_polybar_filepath"
         sed -i 's/background \= \#282A2E/background \= \#000000/g' "$_config_polybar_filepath"
