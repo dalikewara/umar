@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.7"
+version="v3.5.8"
 pid=$$
 distro=""
 de=""
@@ -1655,15 +1655,19 @@ filter_options:
         create_file "$_config_starship_filepath"
 
         echo "\
-\"$schema\" = 'https://starship.rs/config-schema.json'
+\"\$schema\" = 'https://starship.rs/config-schema.json'
 
-add_newline = false
+add_newline = true
+
+format = ': 📌 \$all'
 
 [character]
-success_symbol = '[➜](bold green)'
-
-[package]
-disabled = true
+success_symbol = ': [❯](bold green)'
+error_symbol = ': [❯](bold red)'
+vimcmd_symbol = ': [❮](bold green)'
+vimcmd_replace_one_symbol = ': [❮](bold purple)'
+vimcmd_replace_symbol = ': [❮](bold purple)'
+vimcmd_visual_symbol = ': [❮](bold yellow)'
 " > "$_config_starship_filepath"
         
         printout "Copying .xinitrc..."
