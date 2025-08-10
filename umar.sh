@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.3"
+version="v3.5.4"
 pid=$$
 distro=""
 de=""
@@ -1630,7 +1630,8 @@ filter_options:
         install_package "i3" "xorg" "xorg-xinit" "xfce4-terminal" "polybar" "pavucontrol" "xorg-server" "xorg-xrandr" "xorg-xinput" "bluez-utils" "yad" \
             "libinput" "xf86-input-libinput" "amd-ucode" "intel-ucode" "intel-media-driver" "mesa" "xf86-video-amdgpu" "libva-intel-driver" \
             "vulkan-intel" "xf86-video-ati" "libva-mesa-driver" "vulkan-radeon" "xf86-video-nouveau" "vulkan-tools" "vulkan-icd-loader" "nvidia-utils" \
-            "vulkan-nouveau" "amdvlk" "vulkan-swrast" "gtk3" "noto-fonts" "noto-fonts-emoji" "noto-fonts-cjk"
+            "vulkan-nouveau" "amdvlk" "vulkan-swrast" "gtk3" "udisks2" "udiskie" "gvfs" "ntfs-3g" "dunst" "arandr" "autorandr" "noto-fonts" \
+            "noto-fonts-emoji" "noto-fonts-cjk"
         
         printout "Copying .xinitrc..."
 
@@ -1837,6 +1838,12 @@ fi
             echo "exec_always --no-startup-id autorandr --change" >> "$_config_i3_filepath"
         fi
 
+        if ! grep -qF "exec_always --no-startup-id xfce4-terminal" "$_config_i3_filepath"; then
+            echo "exec_always --no-startup-id xfce4-terminal" >> "$_config_i3_filepath"
+        fi
+
+        sed -i 's/label\-mounted \= \%{F\#F0C674}\%mountpoint\%\%{F\-} \%percentage_used\%\%/label\-mounted \= 📂 \%percentage_used\%\%/g' "$_config_polybar_filepath"
+        sed -i 's/font\-0 \= monospace\;2/font\-0 \= monospace\:style\=Regular\:size\=10\nfont\-1 \= Noto Color Emoji\:scale\=10/g' "$_config_polybar_filepath"
         sed -i 's/background \= \#282A2E/background \= \#000000/g' "$_config_polybar_filepath"
         sed -i 's/background\-alt \= \#373B41/background\-alt \= \#000000/g' "$_config_polybar_filepath"
         sed -i 's/\[bar\/example\]/\[bar\/bar\]/g' "$_config_polybar_filepath"
@@ -1845,16 +1852,11 @@ fi
         sed -i 's/line\-size \= 3pt/line\-size \= 1pt/g' "$_config_polybar_filepath"
         sed -i 's/modules\-right \= filesystem pulseaudio xkeyboard memory cpu wlan eth date/modules\-right \= systray filesystem pulseaudio xkeyboard memory cpu battery wlan eth bluetooth date/g' "$_config_polybar_filepath"
         sed -i 's/label \= \%title\:0\:60\:\.\.\.\%/label \= \%title\:0\:40\:\.\.\.\%\nlabel\-maxlen \= 40/g' "$_config_polybar_filepath"
-        sed -i 's/format\-volume\-prefix \= \"VOL \"/format\-volume\-prefix \= \"AV\"/g' "$_config_polybar_filepath"
-        sed -i 's/format\-prefix \= \"RAM \"/format\-prefix \= \"R\"/g' "$_config_polybar_filepath"
-        sed -i 's/format\-prefix \= \"CPU \"/format\-prefix \= \"C\"/g' "$_config_polybar_filepath"
-        sed -i 's/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%essid\% \%local_ip\%/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%essid\:0\:10\:\.\.\.\% \%local_ip\%\nlabel\-maxlen \= 40/g' "$_config_polybar_filepath"
-        sed -i '/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%local_ip\%/ {
-N
-s/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%local_ip\%\nlabel\-maxlen \= 40/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%local_ip\%/
-}' "$_config_polybar_filepath"
-
-        sed -i 's/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%local_ip\%/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%local_ip\%\nlabel\-maxlen \= 40/g' "$_config_polybar_filepath"
+        sed -i 's/format\-volume\-prefix \= \"VOL \"/format\-volume\-prefix \= \"🔊 \"/g' "$_config_polybar_filepath"
+        sed -i 's/format\-prefix \= \"RAM \"/format\-prefix \= \"💾 \"/g' "$_config_polybar_filepath"
+        sed -i 's/format\-prefix \= \"CPU \"/format\-prefix \= \"🖥 \"/g' "$_config_polybar_filepath"
+        sed -i 's/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%essid\% \%local_ip\%/label\-connected \= 🌏 \%essid\:0\:10\:\.\.\.\%\nlabel\-maxlen \= 40/g' "$_config_polybar_filepath"
+        sed -i 's/label\-connected \= \%{F\#F0C674}\%ifname\%\%{F\-} \%local_ip\%/label\-connected \= 🌐 \%{F\#F0C674}\%ifname\%\%{F\-}\nlabel\-maxlen \= 40/g' "$_config_polybar_filepath"
         sed -i 's/date \= \%H\:\%M/date \= \%Y\-\%m\-\%d \%H\:\%M\:\%S/g' "$_config_polybar_filepath"
 
         if ! grep -qF "[module/battery]" "$_config_polybar_filepath"; then
@@ -1868,13 +1870,13 @@ battery = BAT0
 adapter = ADP1
 poll-interval = 5
 time-format = \"%H:%M\"
-format-charging-prefix = \"BC\"
+format-charging-prefix = \"⚡🔋\"
 format-charging-prefix-foreground = \${colors.primary}
-format-discharging-prefix = \"BD\"
+format-discharging-prefix = \"🔋\"
 format-discharging-prefix-foreground = \${colors.primary}
-format-full = \"BF\"
+format-full = \"🔋\"
 format-full-foreground = \${colors.primary}
-format-low-prefix = \"BL\"
+format-low-prefix = \"⚠🔋\"
 format-low-prefix-foreground = \${colors.primary}
 label-charging = %percentage%%
 label-discharging = %percentage%%
