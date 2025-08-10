@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.6"
+version="v3.5.7"
 pid=$$
 distro=""
 de=""
@@ -1366,6 +1366,7 @@ command_stp() {
     _config_gtk3_filepath="$HOME/.config/gtk-3.0/settings.ini"
     _config_udiskie_dir="$HOME/.config/udiskie"
     _config_udiskie_filepath="$HOME/.config/udiskie/config.yml"
+    _config_starship_filepath="$HOME/.config/starship.toml"
     _config_vim_filepath="$HOME/.vimrc"
     _datagrip_dir="$HOME/.umar/datagrip"
     _datagrip_version_dir="$HOME/.umar/datagrip/DataGrip-2024.3.2"
@@ -1633,6 +1634,37 @@ filter_options:
             "vulkan-intel" "xf86-video-ati" "libva-mesa-driver" "vulkan-radeon" "xf86-video-nouveau" "vulkan-tools" "vulkan-icd-loader" "nvidia-utils" \
             "vulkan-nouveau" "amdvlk" "vulkan-swrast" "gtk3" "udisks2" "udiskie" "gvfs" "ntfs-3g" "dunst" "arandr" "autorandr" "noto-fonts" \
             "noto-fonts-emoji" "noto-fonts-cjk"
+
+        printout "Configuring starship..."
+
+        curl -sS https://starship.rs/install.sh | sh -s -- --yes || true
+
+        if is_file_exist "$_bashrc_filepath"; then
+            if ! grep -qF "eval \"\$(starship init bash)\"" "$_bashrc_filepath"; then
+                echo "eval \"\$(starship init bash)\"" >> "$_bashrc_filepath"
+            fi
+        fi
+
+        if is_file_exist "$_zshrc_filepath"; then
+            if ! grep -qF "eval \"\$(starship init zsh)\"" "$_bashrc_filepath"; then
+                echo "eval \"\$(starship init zsh)\"" >> "$_bashrc_filepath"
+            fi
+        fi
+
+        create_dir "$_config_dir"
+        create_file "$_config_starship_filepath"
+
+        echo "\
+\"$schema\" = 'https://starship.rs/config-schema.json'
+
+add_newline = false
+
+[character]
+success_symbol = '[➜](bold green)'
+
+[package]
+disabled = true
+" > "$_config_starship_filepath"
         
         printout "Copying .xinitrc..."
 
