@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.2"
+version="v3.5.3"
 pid=$$
 distro=""
 de=""
@@ -1467,7 +1467,7 @@ command_stp() {
             "xf86-video-nouveau" "freetype2" "libglvnd" "cpio" "imagemagick" "bluez" "bluez-utils" "linux-firmware-qlogic" \
             "linux-firmware-bnx2x" "linux-firmware-liquidio" "linux-firmware-mellanox" "linux-firmware-nfp" "gcc" "linux-lts-headers" "dkms" \
             "vulkan-tools" "vulkan-icd-loader" "nvidia-utils" "vulkan-nouveau" "amdvlk" "vulkan-swrast" "yad" "linux" "linux-headers" \
-            "xfce4-screenshooter" "gtk3" "udisks2" "udiskie" "gvfs" "ntfs-3g" "dunst" "arandr" "autorandr"
+            "xfce4-screenshooter" "gtk3" "udisks2" "udiskie" "gvfs" "ntfs-3g" "dunst" "arandr" "autorandr" "noto-fonts" "noto-fonts-emoji" "noto-fonts-cjk"
 
         check_requirements "git" "ssh"
 
@@ -1630,7 +1630,7 @@ filter_options:
         install_package "i3" "xorg" "xorg-xinit" "xfce4-terminal" "polybar" "pavucontrol" "xorg-server" "xorg-xrandr" "xorg-xinput" "bluez-utils" "yad" \
             "libinput" "xf86-input-libinput" "amd-ucode" "intel-ucode" "intel-media-driver" "mesa" "xf86-video-amdgpu" "libva-intel-driver" \
             "vulkan-intel" "xf86-video-ati" "libva-mesa-driver" "vulkan-radeon" "xf86-video-nouveau" "vulkan-tools" "vulkan-icd-loader" "nvidia-utils" \
-            "vulkan-nouveau" "amdvlk" "vulkan-swrast" "gtk3"
+            "vulkan-nouveau" "amdvlk" "vulkan-swrast" "gtk3" "noto-fonts" "noto-fonts-emoji" "noto-fonts-cjk"
         
         printout "Copying .xinitrc..."
 
