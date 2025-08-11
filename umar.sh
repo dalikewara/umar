@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.8"
+version="v3.5.9"
 pid=$$
 distro=""
 de=""
@@ -1793,11 +1793,11 @@ polybar bar 2>&1 | tee -a /tmp/polybar1.log & disown || true
 #!/bin/sh
 
 if [ \$(bluetoothctl show | grep \"Powered: yes\" | wc -c) -eq 0 ]; then
-    echo \"BTOFF\"
+    echo \"BLU ⚫\"
 elif [ \$(echo info | bluetoothctl | grep 'Device' | wc -c) -eq 0 ]; then
-    echo \"BTCON\"
+    echo \"BLU 🔵\"
 else
-    echo \"BTON\"
+    echo \"BLU ⚪\"
 fi
 " > "$_config_polybar_launch_bluetooth_filepath"
 
