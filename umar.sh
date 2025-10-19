@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.9"
+version="v3.5.10"
 pid=$$
 distro=""
 de=""
@@ -250,6 +250,10 @@ command_w() {
     elif is_start_with "$_command" "umar img" || is_start_with "$_command" "umar vid"; then
         execute_eval "$_command"
     elif is_start_with "$_command" "umar open" || is_start_with "$_command" "umar ss"; then
+        if is_start_with "$_command" "umar open"; then
+            _command="$_command --from-command-w"
+        fi
+        
         $_command
     elif is_start_with "$_command" "umar srch" || is_start_with "$_command" "umar au" || is_start_with "$_command" "umar bth"; then
         open_terminal_and_execute "$_command"
@@ -834,8 +838,15 @@ command_open() {
     fi
 
     _not_exist=""
+    _is_from_command_w=""
 
     for _arg in "$@"; do
+        if is_equal "$_arg" "--from-command-w"; then
+            _is_from_command_w="yes"
+
+            continue
+        fi
+
         if is_package_exist "$_arg" || is_user_package_exist "$_arg"; then
             execute_async_no_std_out "$_arg"
 
@@ -846,6 +857,10 @@ command_open() {
 
         printout "${color_red}**$_arg** ${color_reset}package not found!" | markdown_parse
     done
+
+    if is_equal "$_is_from_command_w" "yes"; then
+        return 0
+    fi
 
     if ! is_equal "$_not_exist" "yes"; then
         clear_shell
@@ -1585,7 +1600,7 @@ filter_options:
 
         printout "Configuring vim..."
 
-         create_file "$_config_vim_filepath"
+        create_file "$_config_vim_filepath"
 
         if ! grep -qF "set tabstop=4" "$_config_vim_filepath"; then
             echo "set tabstop=4" >> "$_config_vim_filepath"

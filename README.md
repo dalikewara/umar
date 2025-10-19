@@ -7,8 +7,10 @@ Little Linux assistant.
 To install or upgrade **umar** to the latest version, run the following command:
 
 ```sh
-curl -L https://raw.githubusercontent.com/dalikewara/umar/master/install.sh | sh
+curl --proto '=https' --tlsv1.2 -L https://dalikewara.com/umar/install.sh | sh
 ```
+
+> See [https://www.dalikewara.com/docs/umar/getting-started/#installation](https://www.dalikewara.com/docs/umar/getting-started/#installation) for more information about the installation.
 
 If you already have **umar** installed, simply run the following command to upgrade to the latest version:
 
@@ -24,7 +26,7 @@ To use **umar**, just run this command:
 umar
 ```
 
-It will show you any information you need.
+It will show you any information you need. More information can be found at the [docs](https://www.dalikewara.com/docs/umar/).
 
 ## Release
 
