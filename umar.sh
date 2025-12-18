@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.15"
+version="v3.5.16"
 pid=$$
 distro=""
 de=""
@@ -1027,7 +1027,7 @@ command_vid() {
 
 command_bth() {
     if is_equal "$1" "-g"; then
-        check_requirements "blueman"
+        check_requirements "blueman-manager"
 
         blueman-manager
 
@@ -2722,6 +2722,10 @@ check_requirements() {
 
         if is_equal "$__arg" "xrandr"; then
             __arg="xorg-xrandr"
+        fi
+
+        if is_equal "$__arg" "blueman-manager"; then
+            __arg="blueman"
         fi
 
         if is_equal "$__arg" "bluetoothctl"; then
