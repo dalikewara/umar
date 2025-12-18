@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.11"
+version="v3.5.12"
 pid=$$
 distro=""
 de=""
@@ -97,6 +97,8 @@ ${color_green}${bold_start}srch ${bold_end}${color_reset}TEXT...                
 ${color_green}${bold_start}au ${bold_end}${color_reset}[OPTION]                  :Use audio function(s)
 ${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                      :show audio card(s)
 ${color_cyan}${bold_start}    -p ${bold_end}${color_reset}AUDIO_FILEPATHS...    :play audio(s)
+${color_cyan}${bold_start}    -v ${bold_end}${color_reset}                      :open audio volume control
+${color_cyan}${bold_start}    -g ${bold_end}${color_reset}                      :open audio graph control
 ${color_green}${bold_start}img ${bold_end}${color_reset}OPTION                   :Use image function(s)
 ${color_cyan}${bold_start}    -s ${bold_end}${color_reset}IMAGE_FILEPATHS...    :show image(s)
 ${color_green}${bold_start}vid ${bold_end}${color_reset}OPTION                   :Use video function(s)
@@ -957,6 +959,22 @@ command_au() {
         fi
 
         mpg123 -v "$@"
+
+        return 0
+    fi
+
+    if is_equal "$1" "-v"; then
+        check_requirements "pavucontrol"
+
+        pavucontrol &
+
+        return 0
+    fi
+
+    if is_equal "$1" "-g"; then
+        check_requirements "qpwgraph"
+
+        qpwgraph &
 
         return 0
     fi

@@ -1,8 +1,9 @@
 # Changelogs
 
 ## 2025
-- **v3.5.11** (2025-12-18)
+- **v3.5.11 - v3.5.12** (2025-12-18 - 2025-12-19)
   - Add `-cond` option to `batt` command
+  - Add `-v` & `-g` option to `au` command
 
 - **v3.4.1 - v3.5.10** (2025-10-19)
   - Fix some issues
