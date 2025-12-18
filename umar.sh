@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.16"
+version="v3.5.17"
 pid=$$
 distro=""
 de=""
@@ -253,7 +253,7 @@ command_w() {
         open_terminal_and_execute_wait "umar"
     elif is_start_with "$_command" "umar img" || is_start_with "$_command" "umar vid"; then
         execute_eval "$_command"
-    elif is_start_with "$_command" "umar open" || is_start_with "$_command" "umar ss"; then
+    elif is_start_with "$_command" "umar open" || is_start_with "$_command" "umar ss" || is_start_with "$_command" "umar au -v" || is_start_with "$_command" "umar au -g" || is_start_with "$_command" "umar bth -g"; then
         if is_start_with "$_command" "umar open"; then
             _command="$_command --from-command-w"
         fi
