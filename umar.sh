@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.14"
+version="v3.5.15"
 pid=$$
 distro=""
 de=""
@@ -967,7 +967,7 @@ command_au() {
     if is_equal "$1" "-v"; then
         check_requirements "pavucontrol"
 
-        pavucontrol &
+        pavucontrol
 
         return 0
     fi
@@ -975,7 +975,7 @@ command_au() {
     if is_equal "$1" "-g"; then
         check_requirements "qpwgraph"
 
-        qpwgraph &
+        qpwgraph
 
         return 0
     fi
@@ -1026,10 +1026,10 @@ command_vid() {
 }
 
 command_bth() {
-    if is_equal "-g"; then
+    if is_equal "$1" "-g"; then
         check_requirements "blueman"
 
-        blueman-manager &
+        blueman-manager
 
         return 0
     fi
