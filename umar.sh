@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.13"
+version="v3.5.14"
 pid=$$
 distro=""
 de=""
@@ -1027,7 +1027,7 @@ command_vid() {
 
 command_bth() {
     if is_equal "-g"; then
-        check_requirements "blueman-manager"
+        check_requirements "blueman"
 
         blueman-manager &
 
