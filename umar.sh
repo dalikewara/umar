@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.12"
+version="v3.5.13"
 pid=$$
 distro=""
 de=""
@@ -94,17 +94,18 @@ ${color_green}${bold_start}ins ${bold_end}${color_reset}PACKAGES...             
 ${color_green}${bold_start}rm ${bold_end}${color_reset}PACKAGES...               :Remove package(s)
 ${color_green}${bold_start}upg ${bold_end}${color_reset}[PACKAGES...]            :Upgrade package(s)
 ${color_green}${bold_start}srch ${bold_end}${color_reset}TEXT...                 :Search for the given keyword(s) using a terminal browser
-${color_green}${bold_start}au ${bold_end}${color_reset}[OPTION]                  :Use audio function(s)
-${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                      :show audio card(s)
-${color_cyan}${bold_start}    -p ${bold_end}${color_reset}AUDIO_FILEPATHS...    :play audio(s)
-${color_cyan}${bold_start}    -v ${bold_end}${color_reset}                      :open audio volume control
-${color_cyan}${bold_start}    -g ${bold_end}${color_reset}                      :open audio graph control
-${color_green}${bold_start}img ${bold_end}${color_reset}OPTION                   :Use image function(s)
-${color_cyan}${bold_start}    -s ${bold_end}${color_reset}IMAGE_FILEPATHS...    :show image(s)
-${color_green}${bold_start}vid ${bold_end}${color_reset}OPTION                   :Use video function(s)
-${color_cyan}${bold_start}    -p ${bold_end}${color_reset}VIDEO_FILEPATH        :play video
-${color_green}${bold_start}bth ${bold_end}${color_reset}                         :Open bluetooth manager
-${color_green}${bold_start}batt ${bold_end}${color_reset}OPTION                  :Use battery function(s)
+${color_green}${bold_start}au ${bold_end}${color_reset}[OPTION]                  :Audio function(s)
+${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                      :Show audio card(s)
+${color_cyan}${bold_start}    -p ${bold_end}${color_reset}AUDIO_FILEPATHS...    :Play audio(s)
+${color_cyan}${bold_start}    -v ${bold_end}${color_reset}                      :Open audio volume control
+${color_cyan}${bold_start}    -g ${bold_end}${color_reset}                      :Open audio graph control
+${color_green}${bold_start}img ${bold_end}${color_reset}OPTION                   :Image function(s)
+${color_cyan}${bold_start}    -s ${bold_end}${color_reset}IMAGE_FILEPATHS...    :Show image(s)
+${color_green}${bold_start}vid ${bold_end}${color_reset}OPTION                   :Video function(s)
+${color_cyan}${bold_start}    -p ${bold_end}${color_reset}VIDEO_FILEPATH        :Play video
+${color_green}${bold_start}bth ${bold_end}${color_reset}                         :Bluetooth function(s)
+${color_cyan}${bold_start}    -g ${bold_end}${color_reset}                      :Open bluetooth manager (GUI)
+${color_green}${bold_start}batt ${bold_end}${color_reset}OPTION                  :Battery function(s)
 ${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                      :show battery capacity
 ${color_cyan}${bold_start}    -cond ${bold_end}${color_reset}                   :show battery condition
 ${color_green}${bold_start}repl ${bold_end}${color_reset}OPTION                  :Use replace function(s)
@@ -1025,6 +1026,14 @@ command_vid() {
 }
 
 command_bth() {
+    if is_equal "-g"; then
+        check_requirements "blueman-manager"
+
+        blueman-manager &
+
+        return 0
+    fi
+
     check_requirements "bluetoothctl"
 
     bluetoothctl
