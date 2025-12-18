@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.10"
+version="v3.5.11"
 pid=$$
 distro=""
 de=""
@@ -104,6 +104,7 @@ ${color_cyan}${bold_start}    -p ${bold_end}${color_reset}VIDEO_FILEPATH        
 ${color_green}${bold_start}bth ${bold_end}${color_reset}                         :Open bluetooth manager
 ${color_green}${bold_start}batt ${bold_end}${color_reset}OPTION                  :Use battery function(s)
 ${color_cyan}${bold_start}    -c ${bold_end}${color_reset}                      :show battery capacity
+${color_cyan}${bold_start}    -cond ${bold_end}${color_reset}                   :show battery condition
 ${color_green}${bold_start}repl ${bold_end}${color_reset}OPTION                  :Use replace function(s)
 ${color_cyan}${bold_start}    -if ${bold_end}${color_reset}OLD NEW FILEPATHS... :replace in file(s)
 ${color_cyan}${bold_start}    -id ${bold_end}${color_reset}OLD NEW DIR_PATHS... :replace in directories
@@ -1021,6 +1022,12 @@ command_batt() {
             cat "/sys/class/power_supply/BAT0/capacity"
         fi
 
+        return 0
+    fi
+
+    if is_equal "$1" "-cond"; then
+        upower -i /org/freedesktop/UPower/devices/battery_BAT0
+        
         return 0
     fi
 
