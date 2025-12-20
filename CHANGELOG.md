@@ -1,13 +1,13 @@
 # Changelogs
 
 ## 2025
-- **v3.5.11 - v3.5.20** (2025-12-18 - 2025-12-21)
+- **v3.5.11 - v3.5.21** (2025-12-18 - 2025-12-21)
   - Add `-cond` option to `batt` command
   - Add `-v` & `-g` option to `au` command
   - Add `-g` option to `bth` command
   - Add `ext` command
   - Adjust `stp -d` command, change the provided tools
-  - Add `rsync` package (to be installed) on the `stp -d` command
+  - Add `rsync` & `pipx` package (to be installed) on the `stp -d` command
   - Fix dark theme
   - Fix some issue
 

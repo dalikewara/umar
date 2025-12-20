@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.20"
+version="v3.5.21"
 pid=$$
 distro=""
 de=""
@@ -2058,7 +2058,8 @@ killall xfconfd || true
         check_requirements "tar" "wget" "gzip"
 
         if is_arch; then
-            install_package "git" "vim" "curl" "meld" "htop" "bash" "zsh" "make" "openssh" "docker" "docker-compose" "rsync" || printout_exit "Aborted!"
+            install_package "git" "vim" "curl" "meld" "htop" "bash" "zsh" "make" "openssh" "docker" "docker-compose" \
+                "rsync" "python-pipx" || printout_exit "Aborted!"
         elif is_debian; then
             install_package "ca-certificates" "curl"
 
@@ -2071,9 +2072,9 @@ killall xfconfd || true
 
             install_package "git" "vim" "curl" "meld" "htop" "bash" "zsh" "make" "openssh" \
                 "docker-ce" "docker-ce-cli" "containerd.io" "docker-buildx-plugin" "docker-compose-plugin" \
-                "rsync" || printout_exit "Aborted!"
+                "rsync" "pipx" || printout_exit "Aborted!"
         else
-            install_package "git" "vim" "curl" "meld" "htop" "bash" "zsh" "make" "openssh" "rsync" || printout_exit "Aborted!"
+            install_package "git" "vim" "curl" "meld" "htop" "bash" "zsh" "make" "openssh" "rsync" "pipx" || printout_exit "Aborted!"
         fi
 
         printout "Configuring ssh..."
@@ -2305,6 +2306,13 @@ killall xfconfd || true
                 echo "[[ -d \$PYENV_ROOT/bin ]] && export PATH=\$PYENV_ROOT/bin:\$PATH" >> "$_zprofile_filepath"
             fi
         fi
+
+        export PYENV_ROOT="$_pyenv_home_dir"
+        export PATH="$PYENV_ROOT/bin:$PATH"
+        export PATH="$HOME/.local/bin:$PATH"
+
+        pipx ensurepath || true
+        pipx install cst-lsp --force || pipx upgrade cst-lsp || true
 
         printout "Ok"
 
