@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.18"
+version="v3.5.19"
 pid=$$
 distro=""
 de=""
@@ -132,11 +132,12 @@ ${color_cyan}${bold_start}    -f ${bold_end}${color_reset}                      
 ${color_green}${bold_start}d2un ${bold_end}${color_reset}OPTION                  :Use dos2unix function(s)
 ${color_cyan}${bold_start}    -f ${bold_end}${color_reset}FILEPATHS...          :Convert Windows file(s) to Unix format
 ${color_cyan}${bold_start}    -d ${bold_end}${color_reset}DIRPATHS...           :Convert all Windows dir(s) contents to Unix format
+${color_green}${bold_start}ext ${bold_end}${color_reset}OPTION                   :Extract function(s)
+${color_cyan}${bold_start}    -c ${bold_end}${color_reset}FILEPATHS...          :Extract file(s) into the current directory
 ${color_green}${bold_start}stp ${bold_end}${color_reset}OPTION                   :Use setup function(s)
 ${color_cyan}${bold_start}    -fa ${bold_end}${color_reset}                     :setup fresh Arch Linux installation
 ${color_cyan}${bold_start}    -fai3 ${bold_end}${color_reset}                   :setup i3wm on a fresh Arch Linux installation
-${color_cyan}${bold_start}    -d ${bold_end}${color_reset}                      :install developer tools: DataGrip, GoLand, PyCharm, IDEA, WebStorm, \
-RustRover, Go, NVM, Rust, PyEnv, Postman, Docker, Git, Vim, Meld, Sublime Text
+${color_cyan}${bold_start}    -d ${bold_end}${color_reset}                      :install developer tools: Go, NVM, Rust, PyEnv, Postman, Docker, Git, Vim, Meld, Zed, DBeaver
 ${color_cyan}${bold_start}    -ag ${bold_end}${color_reset}                     :install gaming tools on Arch Linux: Steam, Graphical Drivers
 ${color_green}${bold_start}intmb ${bold_end}${color_reset}OPTION                 :Use Intel MacBook function(s)
 ${color_cyan}${bold_start}    -a ${bold_end}${color_reset}                      :configure audio
@@ -169,6 +170,29 @@ but I'm not sure. ${color_red}**DON'T EXECUTE ANYTHING IF YOU'RE NOT SURE, IT MA
 # Provides available Umar's command(s)
 #
 # ---------------------------------------------------------------------------------------------------------------------
+
+command_ext() {
+    if is_equal "$1" "-c"; then
+        shift
+
+        if is_no_argument "$@"; then
+            printout_exit "You didn't provide any file(s) to extract!"
+        fi
+
+        for _arg in "$@"; do
+            _extracted_dir_name="$(get_filename $_arg)_extracted"
+            
+            create_dir "$_extracted_dir_name"
+            tar -v -C "$_extracted_dir_name" -xzf "$_arg" &
+        done
+
+        wait
+
+        return 0
+    fi
+
+    printout_exit "Invalid option!"
+}
 
 command_d2un() {
     if is_equal "$1" "-f"; then
@@ -1417,74 +1441,37 @@ command_stp() {
     _config_udiskie_filepath="$HOME/.config/udiskie/config.yml"
     _config_starship_filepath="$HOME/.config/starship.toml"
     _config_vim_filepath="$HOME/.vimrc"
-    _datagrip_dir="$HOME/.umar/datagrip"
-    _datagrip_version_dir="$HOME/.umar/datagrip/DataGrip-2024.3.2"
-    _datagrip_filepath="$HOME/.umar/datagrip/DataGrip-2024.3.2/bin/datagrip"
-    _datagrip_chrome_sandbox_filepath="$HOME/.umar/datagrip/DataGrip-2024.3.2/jbr/lib/chrome-sandbox"
-    _datagrip_downloaded_filepath="$HOME/.umar/datagrip/datagrip-2024.3.2.tar.gz"
-    _datagrip_sys_filepath="/usr/local/bin/datagrip"
-    _datagrip_download_url="https://download-cdn.jetbrains.com/datagrip/datagrip-2024.3.2.tar.gz"
-    _goland_dir="$HOME/.umar/goland"
-    _goland_version_dir="$HOME/.umar/goland/GoLand-2024.3"
-    _goland_filepath="$HOME/.umar/goland/GoLand-2024.3/bin/goland"
-    _goland_chrome_sandbox_filepath="$HOME/.umar/goland/GoLand-2024.3/jbr/lib/chrome-sandbox"
-    _goland_downloaded_filepath="$HOME/.umar/goland/goland-2024.3.tar.gz"
-    _goland_sys_filepath="/usr/local/bin/goland"
-    _goland_download_url="https://download-cdn.jetbrains.com/go/goland-2024.3.tar.gz"
-    _pycharm_dir="$HOME/.umar/pycharm"
-    _pycharm_version_dir="$HOME/.umar/pycharm/pycharm-2024.3"
-    _pycharm_filepath="$HOME/.umar/pycharm/pycharm-2024.3/bin/pycharm"
-    _pycharm_chrome_sandbox_filepath="$HOME/.umar/pycharm/pycharm-2024.3/jbr/lib/chrome-sandbox"
-    _pycharm_downloaded_filepath="$HOME/.umar/pycharm/pycharm-professional-2024.3.tar.gz"
-    _pycharm_sys_filepath="/usr/local/bin/pycharm"
-    _pycharm_download_url="https://download-cdn.jetbrains.com/python/pycharm-professional-2024.3.tar.gz"
-    _idea_dir="$HOME/.umar/idea"
-    _idea_version_dir="$HOME/.umar/idea/idea-IU-243.22562.145"
-    _idea_filepath="$HOME/.umar/idea/idea-IU-243.22562.145/bin/idea"
-    _idea_chrome_sandbox_filepath="$HOME/.umar/idea/idea-IU-243.22562.145/jbr/lib/chrome-sandbox"
-    _idea_downloaded_filepath="$HOME/.umar/idea/ideaIU-2024.3.1.tar.gz"
-    _idea_sys_filepath="/usr/local/bin/idea"
-    _idea_download_url="https://download-cdn.jetbrains.com/idea/ideaIU-2024.3.1.tar.gz"
-    _webstorm_dir="$HOME/.umar/webstorm"
-    _webstorm_version_dir="$HOME/.umar/webstorm/WebStorm-243.22562.112"
-    _webstorm_filepath="$HOME/.umar/webstorm/WebStorm-243.22562.112/bin/webstorm"
-    _webstorm_chrome_sandbox_filepath="$HOME/.umar/webstorm/WebStorm-243.22562.112/jbr/lib/chrome-sandbox"
-    _webstorm_downloaded_filepath="$HOME/.umar/webstorm/WebStorm-2024.3.1.tar.gz"
-    _webstorm_sys_filepath="/usr/local/bin/webstorm"
-    _webstorm_download_url="https://download-cdn.jetbrains.com/webstorm/WebStorm-2024.3.1.tar.gz"
-    _rustrover_dir="$HOME/.umar/rustrover"
-    _rustrover_version_dir="$HOME/.umar/rustrover/RustRover-2024.3"
-    _rustrover_filepath="$HOME/.umar/rustrover/RustRover-2024.3/bin/rustrover"
-    _rustrover_chrome_sandbox_filepath="$HOME/.umar/rustrover/RustRover-2024.3/jbr/lib/chrome-sandbox"
-    _rustrover_downloaded_filepath="$HOME/.umar/rustrover/RustRover-2024.3.tar.gz"
-    _rustrover_sys_filepath="/usr/local/bin/rustrover"
-    _rustrover_download_url="https://download-cdn.jetbrains.com/rustrover/RustRover-2024.3.tar.gz"
     _go_dir="$HOME/.umar/go"
     _go_home_dir="$HOME/go"
     _go_home_bin_dir="$HOME/go/bin"
     _go_home_pkg_dir="$HOME/go/pkg"
     _go_home_src_dir="$HOME/go/src"
-    _go_version_dir="$HOME/.umar/go/go1.23.2"
+    _go_version_dir="$HOME/.umar/go/go1.25.5"
     _go_extracted_dir="$HOME/.umar/go/go"
-    _go_downloaded_filepath="$HOME/.umar/go/go1.23.2.linux-amd64.tar.gz"
+    _go_downloaded_filepath="$HOME/.umar/go/go1.25.5.linux-amd64.tar.gz"
     _go_sys_dir="/usr/local/go"
     _go_bin_sys_dir="/usr/local/go/bin"
-    _go_download_url="https://go.dev/dl/go1.23.2.linux-amd64.tar.gz"
-    _nvm_download_url="https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh"
-    _nodejs_version="22"
+    _go_download_url="https://go.dev/dl/go1.25.5.linux-amd64.tar.gz"
+    _nvm_download_url="https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh"
+    _nodejs_version="24"
     _rust_download_url="https://sh.rustup.rs"
     _pyenv_home_dir="$HOME/.pyenv"
     _pyenv_download_url="https://pyenv.run"
     _postman_dir="$HOME/.umar/postman"
     _postman_filepath="$HOME/.umar/postman/Postman/app/Postman"
-    _postman_downloaded_filepath="$HOME/.umar/postman/postman.tar.gz"
     _postman_sys_filepath="/usr/local/bin/postman"
     _postman_download_url="https://dl.pstmn.io/download/latest/linux_64"
-    _sublimetext_dir="$HOME/.umar/sublimetext"
-    _sublimetext_filepath="$HOME/.umar/sublimetext/sublime_text/sublime_text"
-    _sublimetext_downloaded_filepath="$HOME/.umar/sublimetext/sublime_text_build_4180_x64.tar.xz"
-    _sublimetext_sys_filepath="/usr/local/bin/sublimetext"
-    _sublimetext_download_url="https://download.sublimetext.com/sublime_text_build_4180_x64.tar.xz"
+    _postman_downloaded_filepath="$HOME/.umar/postman/postman.tar.gz"
+    _zed_dir="$HOME/.umar/zed"
+    _zed_filepath="$HOME/.umar/zed/zed.app/bin/zed"
+    _zed_sys_filepath="/usr/local/bin/zed"
+    _zed_download_url="https://cloud.zed.dev/releases/stable/latest/download?asset=zed&arch=x86_64&os=linux&source=docs"
+    _zed_downloaded_filepath="$HOME/.umar/zed/zed-linux-x86_64.tar.gz"
+    _dbeaver_dir="$HOME/.umar/dbeaver"
+    _dbeaver_filepath="$HOME/.umar/dbeaver/dbeaver/dbeaver"
+    _dbeaver_sys_filepath="/usr/local/bin/dbeaver"
+    _dbeaver_download_url="https://dbeaver.io/files/dbeaver-ce-latest-linux.gtk.x86_64.tar.gz"
+    _dbeaver_downloaded_filepath="$HOME/.umar/dbeaver/dbeaver-ce-latest-linux.gtk.x86_64.tar.gz"
 
     if is_equal "$1" "-fa"; then
         if ! is_arch; then
@@ -2124,42 +2111,6 @@ killall xfconfd || true
 
         printout "Downloading tools..."
 
-        if ! is_dir_exist "$_datagrip_version_dir"; then
-            create_dir "$_datagrip_dir"
-
-            wget -c --timeout=10 --tries=1 -O "$_datagrip_downloaded_filepath" "$_datagrip_download_url" &
-        fi
-
-        if ! is_dir_exist "$_goland_version_dir"; then
-            create_dir "$_goland_dir"
-
-            wget -c --timeout=10 --tries=1 -O "$_goland_downloaded_filepath" "$_goland_download_url" &
-        fi
-
-        if ! is_dir_exist "$_pycharm_version_dir"; then
-            create_dir "$_pycharm_dir"
-
-            wget -c --timeout=10 --tries=1 -O "$_pycharm_downloaded_filepath" "$_pycharm_download_url" &
-        fi
-
-        if ! is_dir_exist "$_idea_version_dir"; then
-            create_dir "$_idea_dir"
-
-            wget -c --timeout=10 --tries=1 -O "$_idea_downloaded_filepath" "$_idea_download_url" &
-        fi
-
-        if ! is_dir_exist "$_webstorm_version_dir"; then
-            create_dir "$_webstorm_dir"
-
-            wget -c --timeout=10 --tries=1 -O "$_webstorm_downloaded_filepath" "$_webstorm_download_url" &
-        fi
-
-        if ! is_dir_exist "$_rustrover_version_dir"; then
-            create_dir "$_rustrover_dir"
-
-            wget -c --timeout=10 --tries=1 -O "$_rustrover_downloaded_filepath" "$_rustrover_download_url" &
-        fi
-
         if ! is_dir_exist "$_go_version_dir"; then
             create_dir "$_go_dir"
 
@@ -2167,12 +2118,13 @@ killall xfconfd || true
         fi
 
         create_dir "$_postman_dir"
-
         wget -c --timeout=10 --tries=1 -O "$_postman_downloaded_filepath" "$_postman_download_url" &
 
-        create_dir "$_sublimetext_dir"
+        create_dir "$_zed_dir"
+        wget -c --timeout=10 --tries=1 -O "$_zed_downloaded_filepath" "$_zed_download_url" &
 
-        wget -c --timeout=10 --tries=1 -O "$_sublimetext_downloaded_filepath" "$_sublimetext_download_url" &
+        create_dir "$_dbeaver_dir"
+        wget -c --timeout=10 --tries=1 -O "$_dbeaver_downloaded_filepath" "$_dbeaver_download_url" &
 
         wait
 
@@ -2188,30 +2140,6 @@ killall xfconfd || true
 
         printout "Extracting tools..."
 
-        if is_file_exist "$_datagrip_downloaded_filepath"; then
-            tar -v -C "$_datagrip_dir" -xzf "$_datagrip_downloaded_filepath" &
-        fi
-
-        if is_file_exist "$_goland_downloaded_filepath"; then
-            tar -v -C "$_goland_dir" -xzf "$_goland_downloaded_filepath" &
-        fi
-
-        if is_file_exist "$_pycharm_downloaded_filepath"; then
-            tar -v -C "$_pycharm_dir" -xzf "$_pycharm_downloaded_filepath" &
-        fi
-
-        if is_file_exist "$_idea_downloaded_filepath"; then
-            tar -v -C "$_idea_dir" -xzf "$_idea_downloaded_filepath" &
-        fi
-
-        if is_file_exist "$_webstorm_downloaded_filepath"; then
-            tar -v -C "$_webstorm_dir" -xzf "$_webstorm_downloaded_filepath" &
-        fi
-
-        if is_file_exist "$_rustrover_downloaded_filepath"; then
-            tar -v -C "$_rustrover_dir" -xzf "$_rustrover_downloaded_filepath" &
-        fi
-
         if is_file_exist "$_go_downloaded_filepath"; then
             tar -v -C "$_go_dir" -xzf "$_go_downloaded_filepath" &
         fi
@@ -2220,49 +2148,17 @@ killall xfconfd || true
             tar -v -C "$_postman_dir" -xzf "$_postman_downloaded_filepath" &
         fi
 
-        if is_file_exist "$_sublimetext_downloaded_filepath"; then
-            tar -v -C "$_sublimetext_dir" -xvf "$_sublimetext_downloaded_filepath" &
+        if is_file_exist "$_zed_downloaded_filepath"; then
+            tar -v -C "$_zed_dir" -xvf "$_zed_downloaded_filepath" &
+        fi
+
+        if is_file_exist "$_dbeaver_downloaded_filepath"; then
+            tar -v -C "$_dbeaver_dir" -xvf "$_dbeaver_downloaded_filepath" &
         fi
 
         wait
 
         printout "Configuring tools..."
-
-        sudo chmod 4755 "$_datagrip_chrome_sandbox_filepath"
-        sudo chmod 4755 "$_datagrip_version_dir"
-        sudo ln -sf "$_datagrip_filepath" "$_datagrip_sys_filepath" || sudo ln -sf "$_datagrip_filepath.sh" "$_datagrip_sys_filepath" || true
-
-        rm -rf "$_datagrip_downloaded_filepath"
-
-        sudo chmod 4755 "$_goland_chrome_sandbox_filepath"
-        sudo chmod 4755 "$_goland_version_dir"
-        sudo ln -sf "$_goland_filepath" "$_goland_sys_filepath" || sudo ln -sf "$_goland_filepath.sh" "$_goland_sys_filepath" || true
-
-        rm -rf "$_goland_downloaded_filepath"
-
-        sudo chmod 4755 "$_pycharm_chrome_sandbox_filepath"
-        sudo chmod 4755 "$_pycharm_version_dir"
-        sudo ln -sf "$_pycharm_filepath" "$_pycharm_sys_filepath" || sudo ln -sf "$_pycharm_filepath.sh" "$_pycharm_sys_filepath" || true
-
-        rm -rf "$_pycharm_downloaded_filepath"
-
-        sudo chmod 4755 "$_idea_chrome_sandbox_filepath"
-        sudo chmod 4755 "$_idea_version_dir"
-        sudo ln -sf "$_idea_filepath" "$_idea_sys_filepath" || sudo ln -sf "$_idea_filepath.sh" "$_idea_sys_filepath" || true
-
-        rm -rf "$_idea_downloaded_filepath"
-
-        sudo chmod 4755 "$_webstorm_chrome_sandbox_filepath"
-        sudo chmod 4755 "$_webstorm_version_dir"
-        sudo ln -sf "$_webstorm_filepath" "$_webstorm_sys_filepath" || sudo ln -sf "$_webstorm_filepath.sh" "$_webstorm_sys_filepath" || true
-
-        rm -rf "$_webstorm_downloaded_filepath"
-
-        sudo chmod 4755 "$_rustrover_chrome_sandbox_filepath"
-        sudo chmod 4755 "$_rustrover_version_dir"
-        sudo ln -sf "$_rustrover_filepath" "$_rustrover_sys_filepath" || sudo ln -sf "$_rustrover_filepath.sh" "$_rustrover_sys_filepath" || true
-
-        rm -rf "$_rustrover_downloaded_filepath"
 
         if is_file_exist "$_go_downloaded_filepath"; then
             mv "$_go_extracted_dir" "$_go_version_dir"
@@ -2272,19 +2168,18 @@ killall xfconfd || true
         mkdir "$_go_home_bin_dir" > /dev/null 2>&1 || true
         mkdir "$_go_home_pkg_dir" > /dev/null 2>&1 || true
         mkdir "$_go_home_src_dir" > /dev/null 2>&1 || true
-
         sudo rm -rf "$_go_sys_dir"
         sudo cp -rf "$_go_version_dir" "$_go_sys_dir"
-
         rm -rf "$_go_downloaded_filepath"
 
         sudo ln -sf "$_postman_filepath" "$_postman_sys_filepath" || true
-
         rm -rf "$_postman_downloaded_filepath"
 
-        sudo ln -sf "$_sublimetext_filepath" "$_sublimetext_sys_filepath" || true
+        sudo ln -sf "$_zed_filepath" "$_zed_sys_filepath" || true
+        rm -rf "$_zed_downloaded_filepath"
 
-        rm -rf "$_sublimetext_downloaded_filepath"
+        sudo ln -sf "$_dbeaver_filepath" "$_dbeaver_sys_filepath" || true
+        rm -rf "$_dbeaver_downloaded_filepath"
 
         sudo gpasswd -a $USER docker || true
         sudo systemctl start docker.socket || true
@@ -2900,6 +2795,10 @@ get_files_from_directories() {
     done
 
     echo "$__dir_filepaths"
+}
+
+get_filename() {
+    echo "${1##*/}"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------

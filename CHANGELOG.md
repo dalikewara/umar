@@ -1,10 +1,12 @@
 # Changelogs
 
 ## 2025
-- **v3.5.11 - v3.5.18** (2025-12-18 - 2025-12-19)
+- **v3.5.11 - v3.5.19** (2025-12-18 - 2025-12-20)
   - Add `-cond` option to `batt` command
   - Add `-v` & `-g` option to `au` command
   - Add `-g` option to `bth` command
+  - Add `ext` command
+  - Adjust `stp -d` command, change the provided tools
   - Fix dark theme
   - Fix some issue
 
