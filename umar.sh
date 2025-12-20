@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.21"
+version="v3.5.22"
 pid=$$
 distro=""
 de=""
@@ -2312,7 +2312,7 @@ killall xfconfd || true
         export PATH="$HOME/.local/bin:$PATH"
 
         pipx ensurepath || true
-        pipx install cst-lsp --force || pipx upgrade cst-lsp || true
+        pipx install "cst-lsp" --pip-args="pygls<2.0.0" --force || pipx upgrade cst-lsp --pip-args="pygls<2.0.0" || true
 
         printout "Ok"
 
