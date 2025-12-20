@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.19"
+version="v3.5.20"
 pid=$$
 distro=""
 de=""
@@ -181,7 +181,7 @@ command_ext() {
 
         for _arg in "$@"; do
             _extracted_dir_name="$(get_filename $_arg)_extracted"
-            
+
             create_dir "$_extracted_dir_name"
             tar -v -C "$_extracted_dir_name" -xzf "$_arg" &
         done
@@ -281,7 +281,7 @@ command_w() {
         if is_start_with "$_command" "umar open"; then
             _command="$_command --from-command-w"
         fi
-        
+
         $_command
     elif is_start_with "$_command" "umar srch" || is_start_with "$_command" "umar au" || is_start_with "$_command" "umar bth"; then
         open_terminal_and_execute "$_command"
@@ -378,9 +378,9 @@ command_run() {
 #!/bin/sh
 
 " "$_command"
-        
+
         chmod +x "$_command"
-        
+
         _cfg=$(append_content_to_file "$_name:$_description:$_command" "$_cfg_filepath")
 
         write_to_file "$_cfg" "$_cfg_filepath"
@@ -388,7 +388,7 @@ command_run() {
         vim + "$_command"
 
         printout "Ok"
-        
+
         return 0
     fi
 
@@ -449,7 +449,7 @@ command_run() {
         read_file_content "$_cfg_filepath" | while IFS=: read -r _name_config _ _command_config; do
             if is_equal "$_name" "$_name_config" && ! is_empty "$_name_config"; then
                 change_file_content_line_by_keyword "$_name_config:" "$_name_config:$_description:$_command_config" "$_cfg_filepath"
-                
+
                 break
             fi
         done
@@ -627,7 +627,7 @@ command_ai() {
             elif is_equal "$_type" "chatgpt"; then
                 _chat_prompt="{\"role\": \"user\", \"content\": \"$(printout "$_chat_prompt" | escape_json_string)\"},"
             fi
-            
+
             if is_empty "$_prompt"; then
                 _prompt="$_chat_prompt"
             else
@@ -666,7 +666,7 @@ command_ai() {
         fi
 
         printout "Type: ${color_yellow}$_type\n${color_reset}Model: ${color_yellow}$_model\n${color_reset}API key: ${color_blue}$_apikey${color_reset}"
-        
+
         return 0
     fi
 
@@ -678,7 +678,7 @@ AI type:
 2. ChatGPT
 
 Choose the AI type number... "
-        
+
         _type=$(read_input)
 
         if is_empty "$_type"; then
@@ -1078,7 +1078,7 @@ command_batt() {
 
     if is_equal "$1" "-cond"; then
         upower -i /org/freedesktop/UPower/devices/battery_BAT0
-        
+
         return 0
     fi
 
@@ -1642,7 +1642,7 @@ filter_options:
         if ! grep -qF "syntax on" "$_config_vim_filepath"; then
             echo "syntax on" >> "$_config_vim_filepath"
         fi
-        
+
         printout "Ok"
 
         return 0
@@ -1705,7 +1705,7 @@ vimcmd_replace_one_symbol = ': [❮](bold purple)'
 vimcmd_replace_symbol = ': [❮](bold purple)'
 vimcmd_visual_symbol = ': [❮](bold yellow)'
 " > "$_config_starship_filepath"
-        
+
         printout "Copying .xinitrc..."
 
         if ! is_file_exist "$_xinitrc_filepath"; then
@@ -2004,7 +2004,7 @@ format-foreground = \${colors.primary}
     <property name=\"misc-confirm-close\" type=\"bool\" value=\"false\"/>
 </channel>
 " > "$_config_xfce4_xfconf_xfce_perchannel_xml_xfce4_terminal_filepath"
-        
+
         echo "\
 #!/bin/sh
 
@@ -2058,7 +2058,7 @@ killall xfconfd || true
         check_requirements "tar" "wget" "gzip"
 
         if is_arch; then
-            install_package "git" "vim" "curl" "meld" "htop" "bash" "zsh" "make" "openssh" "docker" "docker-compose" || printout_exit "Aborted!"
+            install_package "git" "vim" "curl" "meld" "htop" "bash" "zsh" "make" "openssh" "docker" "docker-compose" "rsync" || printout_exit "Aborted!"
         elif is_debian; then
             install_package "ca-certificates" "curl"
 
@@ -2068,11 +2068,12 @@ killall xfconfd || true
 
             echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
                 $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-            
+
             install_package "git" "vim" "curl" "meld" "htop" "bash" "zsh" "make" "openssh" \
-                "docker-ce" "docker-ce-cli" "containerd.io" "docker-buildx-plugin" "docker-compose-plugin" || printout_exit "Aborted!"
+                "docker-ce" "docker-ce-cli" "containerd.io" "docker-buildx-plugin" "docker-compose-plugin" \
+                "rsync" || printout_exit "Aborted!"
         else
-            install_package "git" "vim" "curl" "meld" "htop" "bash" "zsh" "make" "openssh" || printout_exit "Aborted!"
+            install_package "git" "vim" "curl" "meld" "htop" "bash" "zsh" "make" "openssh" "rsync" || printout_exit "Aborted!"
         fi
 
         printout "Configuring ssh..."
@@ -2415,14 +2416,14 @@ command_intmb() {
         fi
 
         cd "$_config_camera_driver1_dir" || printout_exit "Camera driver1 not found!"
-        
+
         make clean
         make
 
         sudo make install
-        
+
         cd "$_config_camera_driver2_dir" || printout_exit "Camera driver2 not found!"
-        
+
         make clean
         make
 
