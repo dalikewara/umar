@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.22"
+version="v3.5.23"
 pid=$$
 distro=""
 de=""
@@ -2070,9 +2070,11 @@ killall xfconfd || true
             echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
                 $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-            install_package "git" "vim" "curl" "meld" "htop" "bash" "zsh" "make" "openssh" \
+            install_package "git" "vim" "curl" "meld" "htop" "bash" "zsh" "make" "ssh" \
                 "docker-ce" "docker-ce-cli" "containerd.io" "docker-buildx-plugin" "docker-compose-plugin" \
                 "rsync" "pipx" || printout_exit "Aborted!"
+        elif is_fedora; then
+            install_package "git" "vim" "curl" "meld" "htop" "bash" "zsh" "make" "sshd" "rsync" "pipx" || printout_exit "Aborted!"
         else
             install_package "git" "vim" "curl" "meld" "htop" "bash" "zsh" "make" "openssh" "rsync" "pipx" || printout_exit "Aborted!"
         fi
