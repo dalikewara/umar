@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.23"
+version="v3.5.24"
 pid=$$
 distro=""
 de=""
@@ -114,6 +114,10 @@ ${color_cyan}${bold_start}    -id ${bold_end}${color_reset}OLD NEW DIR_PATHS... 
 ${color_green}${bold_start}pdf ${bold_end}${color_reset}OPTION                   :Use PDF function(s)
 ${color_cyan}${bold_start}    -o ${bold_end}${color_reset}PDF_FILEPATHS...      :open PDF(s)
 ${color_green}${bold_start}dev ${bold_end}${color_reset}                         :Show available device(s)
+${color_green}${bold_start}cpu ${bold_end}${color_reset}OPTION                   :CPU function(s)
+${color_cyan}${bold_start}    -f ${bold_end}${color_reset}                      :Show CPU freq (All Cores)
+${color_cyan}${bold_start}    -sfmax ${bold_end}${color_reset}                  :Set max CPU freq (All Cores)
+${color_cyan}${bold_start}    -sfmin ${bold_end}${color_reset}                  :Set min CPU freq (All Cores)
 ${color_green}${bold_start}reso ${bold_end}${color_reset}[DEVICE] [RESOLUTION]   :Set screen resolution
 ${color_green}${bold_start}bri ${bold_end}${color_reset}[DEVICE] [BRIGHTNESS]    :Set screen brightness
 ${color_green}${bold_start}tcpd ${bold_end}${color_reset}                        :Configure touchpad device
@@ -170,6 +174,48 @@ but I'm not sure. ${color_red}**DON'T EXECUTE ANYTHING IF YOU'RE NOT SURE, IT MA
 # Provides available Umar's command(s)
 #
 # ---------------------------------------------------------------------------------------------------------------------
+
+command_cpu() {
+    if is_equal "$1" "-f"; then
+        printout "CPU info max freq (All Cores):"
+        cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_max_freq
+        printout "CPU scaling max freq (All Cores):"
+        cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq
+        printout "CPU scaling min freq (All Cores):"
+        cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_min_freq
+        printout "CPU scaling current freq (All Cores):"
+        cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq
+        return 0
+    fi
+
+    if is_equal "$1" "-sfmax"; then
+        shift
+
+        if is_empty "$1" || ! is_number "$1"; then
+            printout_exit "Invalid number!"
+            return 1
+        fi
+
+        echo "$1" | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq
+        printout_exit "Ok"
+        return 0
+    fi
+
+    if is_equal "$1" "-sfmin"; then
+        shift
+
+        if is_empty "$1" || ! is_number "$1"; then
+            printout_exit "Invalid number!"
+            return 1
+        fi
+
+        echo "$1" | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_min_freq
+        printout_exit "Ok"
+        return 0
+    fi
+
+    printout_exit "Invalid option!"
+}
 
 command_ext() {
     if is_equal "$1" "-c"; then
@@ -2711,6 +2757,14 @@ is_empty() {
 
 is_contain() {
     printout "$1" | grep -qF "$2"
+}
+
+is_number() {
+    if [[ "$1" =~ ^[+-]?[0-9]+([.][0-9]+)?$ ]]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
 is_start_with() {
