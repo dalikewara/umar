@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version="v3.5.24"
+version="v3.5.25"
 pid=$$
 distro=""
 de=""
@@ -2760,11 +2760,7 @@ is_contain() {
 }
 
 is_number() {
-    if [[ "$1" =~ ^[+-]?[0-9]+([.][0-9]+)?$ ]]; then
-        return 0
-    else
-        return 1
-    fi
+    echo "$1" | grep -Eq '^[+-]?[0-9]+(\.[0-9]+)?$'
 }
 
 is_start_with() {
